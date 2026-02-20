@@ -4010,6 +4010,7 @@ let state = (() => {
   try { const s = localStorage.getItem(STORAGE_KEY); return s ? { ...defaultState(), ...JSON.parse(s) } : defaultState(); }
   catch { return defaultState(); }
 })();
+window._state = state; // expose for tutorial check
 
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
@@ -4816,6 +4817,10 @@ function finishOnboarding() {
     state.xp = 0;
     saveState();
     launchAppEnhanced();
+    // Show R.O.B. tutorial for brand new users
+    if (typeof window._showTutorialAfterOnboard === 'function') {
+      window._showTutorialAfterOnboard();
+    }
   } catch(e) { console.error('finishOnboarding:', e); try { launchAppEnhanced(); } catch(e2) {} }
 }
 
@@ -7807,42 +7812,42 @@ function isIOS() {
   const TUTORIAL_STEPS = [
     {
       title: "HEY! NICE TO MEET YOU, FUTURE CHAMP! 👋",
-      body: "I\'m R.O.B. — your Robotic Operating Buddy! I\'ve been spinning gyros and launching rockets since 1985, and NOW I\'m here to spin you up into a TOP PLAYER! Before we dive in, let me show you everything this app has to offer. It\'s going to be great. Trust me — I\'m a robot! 🤖",
+      body: "I'm R.O.B. — your Robotic Operating Buddy! I've been spinning gyros and launching rockets since 1985, and NOW I'm here to spin you up into a TOP PLAYER! Before we dive in, let me show you everything this app has to offer. It's going to be great. Trust me — I'm a robot! 🤖",
       target: null,
       bubblePos: "center",
       navTo: null
     },
     {
       title: "YOUR HERO DASHBOARD ⚡",
-      body: "First stop — your hero dashboard! That big ring shows your Day count and overall 60-day progress. Your rank, streak, and today\'s quest count are all right here at a glance. This is home base! 🏠",
+      body: "First stop — your hero dashboard! That big ring shows your Day count and overall 60-day progress. Your rank, streak, and today's quest count are all right here at a glance. This is home base! 🏠",
       target: ".home-hero",
       bubblePos: "bottom",
       navTo: "today"
     },
     {
-      title: "TODAY\'S QUESTS — YOUR DAILY WORK 📋",
-      body: "Below the dashboard are your Today\'s Quests! These refresh every day. Check them off as you crush them — each one earns XP and gets you one step closer to being the player everyone\'s scared to face. No pressure... okay, a little pressure. You got this! 💪",
+      title: "TODAY'S QUESTS — YOUR DAILY WORK 📋",
+      body: "Below the dashboard are your Today's Quests! These refresh every day. Check them off as you crush them — each one earns XP and gets you one step closer to being the player everyone's scared to face. No pressure... okay, a little pressure. You got this! 💪",
       target: ".quest-list",
       bubblePos: "top",
       navTo: "today"
     },
     {
       title: "XP & RANKS — LEVEL UP FOR REAL! 🏆",
-      body: "See that rank badge up in the header? Every quest earns XP, and enough XP means a RANK UP! You start as a humble Recruit and can climb all the way to TOP PLAYER. Tap it anytime to see the full ladder. I\'ll be cheering you on from every rung! 📣",
+      body: "See that rank badge up in the header? Every quest earns XP, and enough XP means a RANK UP! You start as a humble Recruit and can climb all the way to TOP PLAYER. Tap it anytime to see the full ladder. I'll be cheering you on from every rung! 📣",
       target: ".hdr-rank-block",
       bubblePos: "bottom",
       navTo: "today"
     },
     {
       title: "STREAK COUNTER 🔥",
-      body: "That\'s your streak — consecutive days you\'ve completed your session. Miss a day and it resets. The fire emoji is NOT decorative. Protect. Your. Streak. I\'m watching... I mean, I\'m cheering! 👀",
+      body: "That's your streak — consecutive days you've completed your session. Miss a day and it resets. The fire emoji is NOT decorative. Protect. Your. Streak. I'm watching... I mean, I'm cheering! 👀",
       target: ".hdr-streak",
       bubblePos: "bottom",
       navTo: "today"
     },
     {
       title: "THE 10 PILLARS OF MASTERY 🏛️",
-      body: "Over here in the sidebar are your 10 Pillars — Tech, Neutral, Mental, Advantage, Disadvantage, Matchups, and more. Think of them like different muscle groups. You gotta train ALL of them. Yes, even the ones you\'ve been avoiding. Especially those. Sorry. Not sorry. 😅",
+      body: "Over here in the sidebar are your 10 Pillars — Tech, Neutral, Mental, Advantage, Disadvantage, Matchups, and more. Think of them like different muscle groups. You gotta train ALL of them. Yes, even the ones you've been avoiding. Especially those. Sorry. Not sorry. 😅",
       target: ".sidebar",
       bubblePos: "right",
       navTo: "today"
@@ -7856,49 +7861,49 @@ function isIOS() {
     },
     {
       title: "MATCHUP ANCHORS — SPY TIME ⚔️",
-      body: "Spy time! Build a personal scouting report on every character you face. Patterns, tendencies, what gets them when they\'re scared. Knowledge is power, and power is winning neutral, and winning neutral is winning. Fill these out after every match! 🚀",
+      body: "Spy time! Build a personal scouting report on every character you face. Patterns, tendencies, what gets them when they're scared. Knowledge is power, and power is winning neutral, and winning neutral is winning. Fill these out after every match! 🚀",
       target: ".tool-header",
       bubblePos: "bottom",
       navTo: "tool_matchups"
     },
     {
-      title: "VOD STATS — DATA DOESN\'T LIE 📊",
-      body: "Feelings are great, but DATA is better! Log your stats after review sessions — damage per opening, kill percents, dropped combos. The chart tracks improvement so you can literally SEE yourself getting better. It\'s so satisfying. Like \'I need to lie down\' satisfying. 😭",
+      title: "VOD STATS — DATA DOESN'T LIE 📊",
+      body: "Feelings are great, but DATA is better! Log your stats after review sessions — damage per opening, kill percents, dropped combos. The chart tracks improvement so you can literally SEE yourself getting better. It's so satisfying. Like 'I need to lie down' satisfying. 😭",
       target: ".tool-header",
       bubblePos: "bottom",
       navTo: "tool_vodstats"
     },
     {
       title: "VOD REVIEW — WATCH YOURSELF! 📹",
-      body: "Watching your own losses hurts. But top players LOVE their losses — losses are FREE coaching! Structured questions guide you through your footage. Answer them consistently and you\'ll spot patterns you never noticed. Game. Changer. 🎯",
+      body: "Watching your own losses hurts. But top players LOVE their losses — losses are FREE coaching! Structured questions guide you through your footage. Answer them consistently and you'll spot patterns you never noticed. Game. Changer. 🎯",
       target: ".tool-header",
       bubblePos: "bottom",
       navTo: "tool_vod"
     },
     {
       title: "MILESTONES JOURNAL — YOUR TROPHY CASE 🏅",
-      body: "Record your WINS here — not just match wins, but breakthrough moments! Finally hit that combo clean? WRITE IT DOWN. Figured out a matchup? WRITE IT DOWN! On bad days, come back and remember how far you\'ve come. Future you will thank past you! 🥹",
+      body: "Record your WINS here — not just match wins, but breakthrough moments! Finally hit that combo clean? WRITE IT DOWN. Figured out a matchup? WRITE IT DOWN! On bad days, come back and remember how far you've come. Future you will thank past you! 🥹",
       target: ".tool-header",
       bubblePos: "bottom",
       navTo: "tool_milestones"
     },
     {
       title: "LOCAL SCENE — KNOW YOUR RIVALS 👥",
-      body: "Add every player from your local scene right here. Their character, habits, threat level, your record against them. The more details, the more prepared you\'ll be in bracket. The players who study their opponents WIN. That\'s gonna be you! (Robots can feel. Probably.) 📈",
+      body: "Add every player from your local scene right here. Their character, habits, threat level, your record against them. The more details, the more prepared you'll be in bracket. The players who study their opponents WIN. That's gonna be you! (Robots can feel. Probably.) 📈",
       target: ".tool-header",
       bubblePos: "bottom",
       navTo: "tool_locals"
     },
     {
       title: "SQUAD MODE — BETTER TOGETHER 🤝",
-      body: "Training alone is hard. Training with friends who hold you accountable? WAY easier and more fun! Share your Squad Code and see each other\'s progress in real time. Nothing motivates like knowing your crew is watching. Who\'s gonna let their squad down? NOT YOU! 😤",
+      body: "Training alone is hard. Training with friends who hold you accountable? WAY easier and more fun! Share your Squad Code and see each other's progress in real time. Nothing motivates like knowing your crew is watching. Who's gonna let their squad down? NOT YOU! 😤",
       target: ".squad-panel",
       bubblePos: "bottom",
       navTo: "tool_squad"
     },
     {
-      title: "YOU\'RE ALL SET, CHAMP! 🎉",
-      body: "Phew! That\'s the whole tour! 60 days, 10 Pillars, one goal: becoming the player you know you can be. Hit R.O.B. Tutorial in the sidebar anytime for a refresher! Now stop reading tutorials and go START! The bracket is waiting... and so is your best self. LET\'S GOOOO!! 🚀🤖✨",
+      title: "YOU'RE ALL SET, CHAMP! 🎉",
+      body: "Phew! That's the whole tour! 60 days, 10 Pillars, one goal: becoming the player you know you can be. Hit R.O.B. Tutorial in the sidebar anytime for a refresher! Now stop reading tutorials and go START! The bracket is waiting... and so is your best self. LET'S GOOOO!! 🚀🤖✨",
       target: null,
       bubblePos: "center",
       navTo: "today"
@@ -8276,7 +8281,7 @@ function isIOS() {
       const nextEl = document.getElementById("robNext");
       const skipEl = document.getElementById("robSkip");
       prevEl.style.display = isFirst ? "none" : "";
-      nextEl.textContent   = isLast ? "LET\'S GO! 🚀" : "Next →";
+      nextEl.textContent   = isLast ? "LET'S GO! 🚀" : "Next →";
       nextEl.onclick       = isLast ? closeTutorial : nextStep;
       skipEl.textContent   = isLast ? "Done ✓" : "Skip tutorial";
 
@@ -8344,10 +8349,29 @@ function isIOS() {
   document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       try {
-        if (!localStorage.getItem("tpb_tutorial_done")) setTimeout(startTutorial, 2000);
+        // Only auto-show if: tutorial not done AND user has completed onboarding (has a startDate)
+        // We check after a delay so state has loaded
+        const tutorialDone = localStorage.getItem("tpb_tutorial_done");
+        if (!tutorialDone && window._state && window._state.startDate) {
+          setTimeout(startTutorial, 1800);
+        }
       } catch(e) {}
-    }, 500);
+    }, 800);
   });
+
+  // Hook into finishOnboarding so brand-new users get the tutorial right after setup
+  var _origFinishOnboard = window.finishOnboarding;
+  if (typeof finishOnboarding === "function") {
+    var _patchedFinish = false;
+    // We use a flag so the tutorial fires once after onboarding completes
+    window._showTutorialAfterOnboard = function() {
+      try {
+        if (!localStorage.getItem("tpb_tutorial_done")) {
+          setTimeout(startTutorial, 1800);
+        }
+      } catch(e) {}
+    };
+  }
 
   window.showROBTutorial = startTutorial;
   window.resetROBTutorial = function() {
@@ -8364,7 +8388,8 @@ function isIOS() {
   var spotlightBox;
 
 })();
-\nfunction isInStandaloneMode() {
+
+function isInStandaloneMode() {
   return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 }
 
