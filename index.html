@@ -7798,523 +7798,573 @@ function dismissInstallBanner() {
 function isIOS() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
 }
-
 // ═══════════════════════════════════════════════════════════════════════
-// R.O.B. TUTORIAL SYSTEM
+// R.O.B. TUTORIAL SYSTEM — SPOTLIGHT EDITION
 // ═══════════════════════════════════════════════════════════════════════
 
 (function() {
-  // Tutorial steps — each one spotlights a feature
+
   const TUTORIAL_STEPS = [
     {
       title: "HEY! NICE TO MEET YOU, FUTURE CHAMP! 👋",
-      body: "I'm R.O.B. — your Robotic Operating Buddy! I've been spinning gyros and launching rockets since 1985, and NOW I'm here to spin you up into a TOP PLAYER! Before we dive in, let me show you everything this app has to offer. It's going to be great. Trust me — I'm a robot! 🤖",
+      body: "I\'m R.O.B. — your Robotic Operating Buddy! I\'ve been spinning gyros and launching rockets since 1985, and NOW I\'m here to spin you up into a TOP PLAYER! Before we dive in, let me show you everything this app has to offer. It\'s going to be great. Trust me — I\'m a robot! 🤖",
       target: null,
-      position: 'center'
+      bubblePos: "center",
+      navTo: null
     },
     {
-      title: "YOUR DAILY MISSION HQ ⚡",
-      body: "Okay, first stop — Today's Quests! Every single day you wake up, fresh quests are waiting for you right here. Check 'em off as you crush them. Each one you finish fills up your progress ring and gets you one step closer to being the player everyone's scared to play. No pressure though... okay, maybe a little pressure. You got this! 💪",
-      target: '.home-hero',
-      position: 'below',
-      navTo: 'today'
+      title: "YOUR HERO DASHBOARD ⚡",
+      body: "First stop — your hero dashboard! That big ring shows your Day count and overall 60-day progress. Your rank, streak, and today\'s quest count are all right here at a glance. This is home base! 🏠",
+      target: ".home-hero",
+      bubblePos: "bottom",
+      navTo: "today"
+    },
+    {
+      title: "TODAY\'S QUESTS — YOUR DAILY WORK 📋",
+      body: "Below the dashboard are your Today\'s Quests! These refresh every day. Check them off as you crush them — each one earns XP and gets you one step closer to being the player everyone\'s scared to face. No pressure... okay, a little pressure. You got this! 💪",
+      target: ".quest-list",
+      bubblePos: "top",
+      navTo: "today"
     },
     {
       title: "XP & RANKS — LEVEL UP FOR REAL! 🏆",
-      body: "Every quest you complete earns you XP — and XP means RANK UPS! You start as a humble Recruit (no shame, we all start somewhere!), and you can climb all the way up to TOP PLAYER. Tap that little rank badge in the header whenever you want to see the full ladder. I'll be cheering you on from every rung! 📣",
-      target: '.hdr-rank-block',
-      position: 'below',
-      navTo: 'today'
+      body: "See that rank badge up in the header? Every quest earns XP, and enough XP means a RANK UP! You start as a humble Recruit and can climb all the way to TOP PLAYER. Tap it anytime to see the full ladder. I\'ll be cheering you on from every rung! 📣",
+      target: ".hdr-rank-block",
+      bubblePos: "bottom",
+      navTo: "today"
     },
     {
-      title: "MATCH SESSIONS — TRACK YOUR SETS! 🎮",
-      body: "Ooh, this one's my FAVORITE! Before you run a set, hit that START MATCH SESSION button. Type in your opponent's name, pick a focus for the session, and then take notes WHILE you play — tech issues, mental lapses, what they kept doing to you. When you're done, rate yourself honestly. Every session gets saved so future-you can learn from past-you. Science! 🔬",
-      target: null,
-      position: 'center',
-      navTo: 'today'
+      title: "STREAK COUNTER 🔥",
+      body: "That\'s your streak — consecutive days you\'ve completed your session. Miss a day and it resets. The fire emoji is NOT decorative. Protect. Your. Streak. I\'m watching... I mean, I\'m cheering! 👀",
+      target: ".hdr-streak",
+      bubblePos: "bottom",
+      navTo: "today"
     },
     {
       title: "THE 10 PILLARS OF MASTERY 🏛️",
-      body: "Check out the sidebar over there! Those are your 10 Pillars — Tech, Neutral, Mental, Advantage, Disadvantage, Matchups, and more. Think of them like the different muscle groups of a top player. You gotta train ALL of them over 60 days, not just the ones you're already good at. (Yes, that means you gotta work on the stuff you've been avoiding. I know. Sorry. Not sorry.) 😅",
-      target: '.sidebar',
-      position: 'right',
-      navTo: 'tech'
+      body: "Over here in the sidebar are your 10 Pillars — Tech, Neutral, Mental, Advantage, Disadvantage, Matchups, and more. Think of them like different muscle groups. You gotta train ALL of them. Yes, even the ones you\'ve been avoiding. Especially those. Sorry. Not sorry. 😅",
+      target: ".sidebar",
+      bubblePos: "right",
+      navTo: "today"
     },
     {
-      title: "MILESTONES — THE ACTUAL WORK 💎",
-      body: "Inside each Pillar are Milestones — these are the real drills, the real habits, the real breakthroughs. Click any milestone to expand it and see your tasks. Some are one-time things you unlock forever, some are daily reps you build over time. Little checkboxes, BIG growth. Every ✓ you click is a tiny version of you getting harder to beat! 🔥",
-      target: null,
-      position: 'center',
-      navTo: 'tech'
+      title: "MILESTONES — THE REAL DRILLS 💎",
+      body: "Inside each Pillar are Milestones — real drills, habits, and breakthroughs. Expand any one to see your tasks. Some are one-time unlocks, some are daily reps. Every little ✓ you click is a tiny version of you getting harder to beat! 🔥",
+      target: ".subsection",
+      bubblePos: "bottom",
+      navTo: "tech"
     },
     {
-      title: "MATCHUP ANCHORS — KNOW YOUR ENEMIES ⚔️",
-      body: "Okay, spy time! Matchup Anchors lets you build a personal scouting report on every character you face. What are their common patterns? What gets them? What do they do when they're scared? Knowledge is power, and power is winning neutral, and winning neutral is... winning. It's a whole thing. Fill these out after matches and watch your game IQ skyrocket! 🚀",
-      target: null,
-      position: 'center',
-      navTo: 'tool_matchups'
+      title: "MATCHUP ANCHORS — SPY TIME ⚔️",
+      body: "Spy time! Build a personal scouting report on every character you face. Patterns, tendencies, what gets them when they\'re scared. Knowledge is power, and power is winning neutral, and winning neutral is winning. Fill these out after every match! 🚀",
+      target: ".tool-header",
+      bubblePos: "bottom",
+      navTo: "tool_matchups"
     },
     {
-      title: "VOD STATS — THE NUMBERS DON'T LIE 📊",
-      body: "Feelings are great, but DATA is better! After VOD review sessions, log your stats — average damage per opening, kill percents, dropped combos, missed edgeguards. The chart tracks your improvement over time so you can SEE yourself getting better. It's incredibly satisfying. Like, 'I need to lie down, this is so good' satisfying. 😭",
-      target: null,
-      position: 'center',
-      navTo: 'tool_vodstats'
+      title: "VOD STATS — DATA DOESN\'T LIE 📊",
+      body: "Feelings are great, but DATA is better! Log your stats after review sessions — damage per opening, kill percents, dropped combos. The chart tracks improvement so you can literally SEE yourself getting better. It\'s so satisfying. Like \'I need to lie down\' satisfying. 😭",
+      target: ".tool-header",
+      bubblePos: "bottom",
+      navTo: "tool_vodstats"
     },
     {
       title: "VOD REVIEW — WATCH YOURSELF! 📹",
-      body: "I know, I know — watching your own losses is painful. But here's the thing: top players LOVE their losses because losses are just free coaching! This tool gives you structured questions to answer while you watch your footage. What was working against you? Where did your execution drop? Answer these consistently and you'll start seeing patterns you never noticed before. Game-changer! 🎯",
-      target: null,
-      position: 'center',
-      navTo: 'tool_vod'
+      body: "Watching your own losses hurts. But top players LOVE their losses — losses are FREE coaching! Structured questions guide you through your footage. Answer them consistently and you\'ll spot patterns you never noticed. Game. Changer. 🎯",
+      target: ".tool-header",
+      bubblePos: "bottom",
+      navTo: "tool_vod"
     },
     {
       title: "MILESTONES JOURNAL — YOUR TROPHY CASE 🏅",
-      body: "This is where you record your WINS — not just match wins, but breakthrough moments! Finally hit that combo clean? Write it down. Figured out a matchup that's been wrecking you for months? WRITE IT DOWN! On your bad days when nothing feels like it's working, come back here and remember how far you've come. Future you will thank past you. I promise! 🥹",
-      target: null,
-      position: 'center',
-      navTo: 'tool_milestones'
+      body: "Record your WINS here — not just match wins, but breakthrough moments! Finally hit that combo clean? WRITE IT DOWN. Figured out a matchup? WRITE IT DOWN! On bad days, come back and remember how far you\'ve come. Future you will thank past you! 🥹",
+      target: ".tool-header",
+      bubblePos: "bottom",
+      navTo: "tool_milestones"
     },
     {
-      title: "LOCAL SCENE — YOUR RIVALS LIVE HERE 👥",
-      body: "Tournament time! Add every player from your local scene right here — their character, their tendencies, their win/loss record against you, their threat level. The more details you add, the more prepared you'll be when you see them in bracket. The players who study their opponents WIN. And you're going to be one of those players. I can feel it! Well, I'm a robot, so I can't actually feel... but the data says so! 📈",
-      target: null,
-      position: 'center',
-      navTo: 'tool_locals'
+      title: "LOCAL SCENE — KNOW YOUR RIVALS 👥",
+      body: "Add every player from your local scene right here. Their character, habits, threat level, your record against them. The more details, the more prepared you\'ll be in bracket. The players who study their opponents WIN. That\'s gonna be you! (Robots can feel. Probably.) 📈",
+      target: ".tool-header",
+      bubblePos: "bottom",
+      navTo: "tool_locals"
     },
     {
       title: "SQUAD MODE — BETTER TOGETHER 🤝",
-      body: "Training alone is hard. Training with friends who hold you accountable? WAY easier and WAY more fun! Share your Squad Code with your training partners and you can all see each other's progress in real time. Nothing like a little friendly competition to make sure everyone shows up every day. Who's gonna let THEIR crew down? Not you! Not today! 😤",
-      target: null,
-      position: 'center',
-      navTo: 'tool_squad'
+      body: "Training alone is hard. Training with friends who hold you accountable? WAY easier and more fun! Share your Squad Code and see each other\'s progress in real time. Nothing motivates like knowing your crew is watching. Who\'s gonna let their squad down? NOT YOU! 😤",
+      target: ".squad-panel",
+      bubblePos: "bottom",
+      navTo: "tool_squad"
     },
     {
-      title: "YOU'RE ALL SET, CHAMP! 🎉",
-      body: "Phew! That was a lot — but YOU are ready! 60 days, 10 Pillars, one goal: becoming the player you know you can be. I'll always be here if you need a refresher (just hit R.O.B. Tutorial in the sidebar anytime!). Now stop reading tutorials and go START! The bracket is waiting... and so is your best self. Let's GO!! 🚀🤖✨",
+      title: "YOU\'RE ALL SET, CHAMP! 🎉",
+      body: "Phew! That\'s the whole tour! 60 days, 10 Pillars, one goal: becoming the player you know you can be. Hit R.O.B. Tutorial in the sidebar anytime for a refresher! Now stop reading tutorials and go START! The bracket is waiting... and so is your best self. LET\'S GOOOO!! 🚀🤖✨",
       target: null,
-      position: 'center',
-      navTo: 'today'
+      bubblePos: "center",
+      navTo: "today"
     }
   ];
 
+  // ── State ──────────────────────────────────────────────────────────
   let currentStep = 0;
-  let overlay, robImg, speechBubble, stepCounter, prevBtn, nextBtn, skipBtn;
+  let tutOverlay, tutCard, robImg, titleEl, bodyEl, prevBtn, nextBtn, skipBtn, stepCounterEl;
+  let spotlightSvg = null;
 
-  // R.O.B. image as base64 PNG (loaded from the uploaded image path)
-  const ROB_SRC = 'https://raw.githubusercontent.com/nicholasohrn/top-player-blueprint/main/rob.png';
+  // ── Styles ─────────────────────────────────────────────────────────
+  function injectStyles() {
+    if (document.getElementById("robTutorialStyles")) return;
+    const s = document.createElement("style");
+    s.id = "robTutorialStyles";
+    s.textContent = `
+      @keyframes robFloat {
+        0%,100% { transform: translateY(0) rotate(-1.5deg); }
+        50%      { transform: translateY(-10px) rotate(1.5deg); }
+      }
+      @keyframes robGlow {
+        0%,100% { filter: drop-shadow(0 0 6px rgba(255,60,60,.7)); }
+        50%      { filter: drop-shadow(0 0 16px rgba(255,60,60,1)); }
+      }
+      @keyframes robCardIn {
+        from { opacity:0; transform:scale(.88) translateY(20px); }
+        to   { opacity:1; transform:scale(1)  translateY(0); }
+      }
+      @keyframes robTextIn {
+        from { opacity:0; transform:translateX(14px); }
+        to   { opacity:1; transform:translateX(0); }
+      }
+      @keyframes robSpotPulse {
+        0%,100% { box-shadow: 0 0 0 4px rgba(255,200,60,.35), 0 0 0 8px rgba(255,200,60,.12); }
+        50%      { box-shadow: 0 0 0 6px rgba(255,200,60,.5),  0 0 0 12px rgba(255,200,60,.18); }
+      }
+      #robTutorialOverlay { box-sizing:border-box; }
+      #robTutorialOverlay * { box-sizing:border-box; }
+      .rob-spotlight-box {
+        position: fixed;
+        border-radius: 10px;
+        pointer-events: none;
+        z-index: 10001;
+        animation: robSpotPulse 2s ease-in-out infinite;
+        transition: top .4s ease, left .4s ease, width .4s ease, height .4s ease;
+      }
+      .rob-card {
+        position: fixed;
+        z-index: 10002;
+        background: #0e0e1a;
+        border: 1px solid #2a2a42;
+        border-radius: 16px;
+        overflow: hidden;
+        max-width: 400px;
+        width: calc(100vw - 32px);
+        box-shadow: 0 0 60px rgba(255,60,60,.15), 0 24px 60px rgba(0,0,0,.85);
+        animation: robCardIn .35s cubic-bezier(.34,1.56,.64,1);
+        transition: top .4s ease, left .4s ease, transform .4s ease;
+      }
+      .rob-top-bar {
+        height: 3px;
+        background: linear-gradient(90deg,#ff3c3c,#f5c842,#ff3c3c);
+      }
+      .rob-inner {
+        padding: 18px 20px 14px;
+      }
+      .rob-header-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .rob-avatar {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+        flex-shrink: 0;
+        animation: robFloat 3s ease-in-out infinite, robGlow 2s ease-in-out infinite;
+        image-rendering: pixelated;
+      }
+      .rob-bubble {
+        flex: 1;
+        background: #111122;
+        border: 1px solid #1e1e34;
+        border-radius: 10px 10px 10px 4px;
+        padding: 10px 14px;
+        position: relative;
+      }
+      .rob-bubble::before {
+        content: "";
+        position: absolute;
+        left: -8px; bottom: 12px;
+        border: 7px solid transparent;
+        border-right-color: #1e1e34;
+      }
+      .rob-bubble::after {
+        content: "";
+        position: absolute;
+        left: -6px; bottom: 13px;
+        border: 6px solid transparent;
+        border-right-color: #111122;
+      }
+      .rob-tag {
+        font-size: .42rem;
+        letter-spacing: .22em;
+        text-transform: uppercase;
+        color: #ff3c3c;
+        margin-bottom: 4px;
+        font-family: "DM Mono", monospace;
+      }
+      .rob-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: .1em;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 5px;
+      }
+      .rob-body {
+        font-family: "Crimson Pro", serif;
+        font-style: italic;
+        font-size: .88rem;
+        color: #9090b0;
+        line-height: 1.6;
+        animation: robTextIn .28s ease;
+      }
+      .rob-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px 16px;
+        gap: 8px;
+        border-top: 1px solid #14141e;
+      }
+      .rob-dots {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      .rob-dot {
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #1e1e34;
+        transition: all .2s;
+        flex-shrink: 0;
+      }
+      .rob-dot.done   { background: #2dcc70; }
+      .rob-dot.active { background: #ff3c3c; transform: scale(1.35); }
+      .rob-btns {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .rob-btn {
+        background: #14142a;
+        border: 1px solid #2a2a42;
+        color: #8888a8;
+        padding: 7px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: "DM Mono", monospace;
+        font-size: .6rem;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        transition: all .15s;
+        white-space: nowrap;
+      }
+      .rob-btn:hover { border-color:#3a3a58; color:#e8e8f0; }
+      .rob-btn-next {
+        background: #ff3c3c;
+        border-color: #ff3c3c;
+        color: #fff;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: .82rem;
+        letter-spacing: .14em;
+        padding: 8px 18px;
+      }
+      .rob-btn-next:hover { background:#ff5555; border-color:#ff5555; transform:translateY(-1px); }
+      .rob-skip {
+        font-size: .52rem;
+        color: #3a3a50;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-family: "DM Mono", monospace;
+        letter-spacing: .08em;
+        transition: color .15s;
+        padding: 4px;
+      }
+      .rob-skip:hover { color: #8888a8; }
+      /* Arrow pointer on spotlight box */
+      .rob-arrow {
+        position: fixed;
+        z-index: 10002;
+        pointer-events: none;
+        font-size: 1.6rem;
+        animation: robFloat 1.5s ease-in-out infinite;
+        text-shadow: 0 0 12px rgba(255,200,60,.8);
+      }
+    `;
+    document.head.appendChild(s);
+  }
 
+  // ── DOM Creation ───────────────────────────────────────────────────
   function createTutorialDOM() {
-    // Backdrop overlay
-    overlay = document.createElement('div');
-    overlay.id = 'robTutorialOverlay';
-    overlay.style.cssText = `
-      position: fixed; inset: 0; z-index: 10000;
-      background: rgba(4,4,12,0.88);
-      backdrop-filter: blur(3px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-      font-family: 'DM Mono', monospace;
-    `;
+    injectStyles();
 
-    // Central card
-    const card = document.createElement('div');
-    card.style.cssText = `
-      background: #0e0e1a;
-      border: 1px solid #242438;
-      border-radius: 16px;
-      padding: 0;
-      max-width: 540px;
-      width: 100%;
-      box-shadow: 0 0 80px rgba(255,60,60,0.12), 0 40px 100px rgba(0,0,0,0.8);
-      animation: robCardIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      overflow: hidden;
-      position: relative;
+    // Dim overlay (no pointer-events so user can kinda see the page)
+    tutOverlay = document.createElement("div");
+    tutOverlay.id = "robTutorialOverlay";
+    tutOverlay.style.cssText = `
+      position:fixed;inset:0;z-index:10000;
+      background:rgba(4,4,14,.78);
+      backdrop-filter:blur(2px);
+      pointer-events:none;
+      transition:opacity .3s;
     `;
+    document.body.appendChild(tutOverlay);
 
-    // Inject keyframes
-    if (!document.getElementById('robTutorialStyles')) {
-      const style = document.createElement('style');
-      style.id = 'robTutorialStyles';
-      style.textContent = `
-        @keyframes robCardIn {
-          from { opacity: 0; transform: scale(0.88) translateY(24px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        @keyframes robFloat {
-          0%, 100% { transform: translateY(0px) rotate(-1deg); }
-          50% { transform: translateY(-8px) rotate(1deg); }
-        }
-        @keyframes robEyeGlow {
-          0%, 100% { filter: drop-shadow(0 0 6px rgba(255,60,60,0.7)); }
-          50% { filter: drop-shadow(0 0 14px rgba(255,60,60,1)); }
-        }
-        @keyframes robStepIn {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes robScanline {
-          0% { background-position: 0 0; }
-          100% { background-position: 0 100%; }
-        }
-        #robTutorialOverlay * { box-sizing: border-box; }
-        .rob-step-content { animation: robStepIn 0.28s ease; }
-        .rob-btn {
-          background: #14142a;
-          border: 1px solid #242438;
-          color: #8888a8;
-          padding: 10px 20px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-family: 'DM Mono', monospace;
-          font-size: 0.65rem;
-          letter-spacing: 0.1em;
-          transition: all 0.15s;
-          text-transform: uppercase;
-        }
-        .rob-btn:hover { border-color: #3a3a50; color: #e8e8f0; }
-        .rob-btn-primary {
-          background: #ff3c3c;
-          border-color: #ff3c3c;
-          color: #fff;
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 0.95rem;
-          letter-spacing: 0.15em;
-          padding: 12px 28px;
-        }
-        .rob-btn-primary:hover { background: #ff5555; border-color: #ff5555; transform: translateY(-1px); }
-        .rob-dot {
-          width: 8px; height: 8px; border-radius: 50%;
-          background: #1c1c30; transition: all 0.2s; flex-shrink: 0;
-        }
-        .rob-dot.active { background: #ff3c3c; transform: scale(1.3); }
-        .rob-dot.done { background: #2dcc70; }
-      `;
-      document.head.appendChild(style);
-    }
+    // Spotlight highlight box (drawn over the target element)
+    spotlightBox = document.createElement("div");
+    spotlightBox.className = "rob-spotlight-box";
+    spotlightBox.style.display = "none";
+    document.body.appendChild(spotlightBox);
 
-    // Scanline top bar
-    const topBar = document.createElement('div');
-    topBar.style.cssText = `
-      height: 3px;
-      background: linear-gradient(90deg, #ff3c3c, #f5c842, #ff3c3c);
-      background-size: 200% 100%;
+    // R.O.B. card
+    tutCard = document.createElement("div");
+    tutCard.className = "rob-card";
+
+    tutCard.innerHTML = `
+      <div class="rob-top-bar"></div>
+      <div class="rob-inner">
+        <div class="rob-header-row">
+          <img class="rob-avatar" id="robAvatar" alt="R.O.B."
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080810'/%3E%3Ctext y='80' font-size='78' x='8'%3E🤖%3C/text%3E%3C/svg%3E">
+          <div class="rob-bubble">
+            <div class="rob-tag">◉ R.O.B. — TUTORIAL GUIDE</div>
+            <div class="rob-title" id="robTitle"></div>
+            <div class="rob-body"  id="robBody"></div>
+          </div>
+        </div>
+      </div>
+      <div class="rob-footer">
+        <button class="rob-skip" id="robSkip">Skip tutorial</button>
+        <div class="rob-dots" id="robDots"></div>
+        <div class="rob-btns">
+          <button class="rob-btn" id="robPrev">← Back</button>
+          <button class="rob-btn rob-btn-next" id="robNext">Next →</button>
+        </div>
+      </div>
     `;
-    card.appendChild(topBar);
+    document.body.appendChild(tutCard);
 
-    // Header with R.O.B.
-    const header = document.createElement('div');
-    header.style.cssText = `
-      display: flex;
-      align-items: flex-end;
-      gap: 0;
-      padding: 28px 32px 0;
-      background: linear-gradient(135deg, #0a0a18, #0f0f22);
-    `;
+    // Wire buttons (pointer-events needed on card)
+    tutCard.style.pointerEvents = "all";
+    document.getElementById("robSkip").onclick = closeTutorial;
+    document.getElementById("robPrev").onclick = prevStep;
+    document.getElementById("robNext").onclick = nextStep;
 
-    // R.O.B. image
-    robImg = document.createElement('img');
-    robImg.style.cssText = `
-      width: 110px;
-      height: 110px;
-      object-fit: contain;
-      animation: robFloat 3s ease-in-out infinite, robEyeGlow 2s ease-in-out infinite;
-      transform-origin: center bottom;
-      flex-shrink: 0;
-      margin-bottom: -4px;
-      image-rendering: pixelated;
-    `;
-    // Use a data URI for R.O.B. — inline SVG placeholder that looks like R.O.B.
-    // We'll load from the uploaded image
-    robImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080810'/%3E%3Ctext y='80' font-size='80' x='5'%3E🤖%3C/text%3E%3C/svg%3E";
-    robImg.alt = 'R.O.B.';
-
-    // Speech bubble area (right of R.O.B.)
-    speechBubble = document.createElement('div');
-    speechBubble.style.cssText = `
-      flex: 1;
-      background: #111120;
-      border: 1px solid #1c1c30;
-      border-radius: 12px 12px 12px 4px;
-      padding: 16px 20px;
-      margin-left: 16px;
-      position: relative;
-      margin-bottom: 8px;
-    `;
-
-    const bubbleTail = document.createElement('div');
-    bubbleTail.style.cssText = `
-      position: absolute;
-      left: -9px; bottom: 16px;
-      width: 0; height: 0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-right: 9px solid #1c1c30;
-    `;
-    const bubbleTailInner = document.createElement('div');
-    bubbleTailInner.style.cssText = `
-      position: absolute;
-      left: -7px; bottom: 16px;
-      width: 0; height: 0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-right: 9px solid #111120;
-    `;
-    speechBubble.appendChild(bubbleTail);
-    speechBubble.appendChild(bubbleTailInner);
-
-    const robLabel = document.createElement('div');
-    robLabel.style.cssText = `
-      font-size: 0.45rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #ff3c3c;
-      margin-bottom: 6px;
-    `;
-    robLabel.textContent = '◉ R.O.B. — TUTORIAL GUIDE';
-    speechBubble.appendChild(robLabel);
-
-    const stepTitle = document.createElement('div');
-    stepTitle.id = 'robStepTitle';
-    stepTitle.style.cssText = `
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 0.12em;
-      color: #fff;
-      line-height: 1;
-      margin-bottom: 8px;
-    `;
-    speechBubble.appendChild(stepTitle);
-
-    const stepBody = document.createElement('div');
-    stepBody.id = 'robStepBody';
-    stepBody.style.cssText = `
-      font-family: 'Crimson Pro', serif;
-      font-style: italic;
-      font-size: 0.92rem;
-      color: #8888a8;
-      line-height: 1.65;
-    `;
-    speechBubble.appendChild(stepBody);
-
-    header.appendChild(robImg);
-    header.appendChild(speechBubble);
-    card.appendChild(header);
-
-    // Progress dots
-    const dotsRow = document.createElement('div');
-    dotsRow.id = 'robDots';
-    dotsRow.style.cssText = `
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      padding: 20px 32px 8px;
-      flex-wrap: wrap;
-    `;
+    // Build dots
+    const dotsEl = document.getElementById("robDots");
     TUTORIAL_STEPS.forEach((_, i) => {
-      const dot = document.createElement('div');
-      dot.className = 'rob-dot';
-      dot.id = `robdot_${i}`;
-      dotsRow.appendChild(dot);
-    });
-    card.appendChild(dotsRow);
-
-    // Step counter
-    stepCounter = document.createElement('div');
-    stepCounter.id = 'robStepCounter';
-    stepCounter.style.cssText = `
-      text-align: center;
-      font-size: 0.48rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #3a3a50;
-      padding-bottom: 4px;
-    `;
-    card.appendChild(stepCounter);
-
-    // Bottom nav row
-    const nav = document.createElement('div');
-    nav.style.cssText = `
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 32px 28px;
-      gap: 12px;
-    `;
-
-    skipBtn = document.createElement('button');
-    skipBtn.className = 'rob-btn';
-    skipBtn.textContent = 'Skip Tutorial';
-    skipBtn.onclick = closeTutorial;
-
-    prevBtn = document.createElement('button');
-    prevBtn.className = 'rob-btn';
-    prevBtn.textContent = '← Back';
-    prevBtn.onclick = prevStep;
-
-    nextBtn = document.createElement('button');
-    nextBtn.className = 'rob-btn rob-btn-primary';
-    nextBtn.textContent = 'Next →';
-    nextBtn.onclick = nextStep;
-
-    nav.appendChild(skipBtn);
-    const rightBtns = document.createElement('div');
-    rightBtns.style.cssText = 'display:flex;gap:10px;align-items:center;';
-    rightBtns.appendChild(prevBtn);
-    rightBtns.appendChild(nextBtn);
-    nav.appendChild(rightBtns);
-    card.appendChild(nav);
-
-    overlay.appendChild(card);
-
-    // Close on backdrop click
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) closeTutorial();
+      const d = document.createElement("div");
+      d.className = "rob-dot";
+      d.id = "robdot_" + i;
+      dotsEl.appendChild(d);
     });
 
-    document.body.appendChild(overlay);
-  }
-
-  function renderStep() {
-    const step = TUTORIAL_STEPS[currentStep];
-    const isLast = currentStep === TUTORIAL_STEPS.length - 1;
-    const isFirst = currentStep === 0;
-
-    // Navigate app to relevant section
-    if (step.navTo && typeof showSection === 'function') {
-      setTimeout(() => showSection(step.navTo), 50);
-    }
-
-    // Wrap content in animation container
-    const titleEl = document.getElementById('robStepTitle');
-    const bodyEl = document.getElementById('robStepBody');
-
-    // Animate content swap
-    titleEl.parentElement.classList.remove('rob-step-content');
-    void titleEl.parentElement.offsetWidth; // reflow
-    titleEl.parentElement.classList.add('rob-step-content');
-
-    titleEl.textContent = step.title;
-    bodyEl.textContent = step.body;
-
-    // Update dots
-    TUTORIAL_STEPS.forEach((_, i) => {
-      const dot = document.getElementById(`robdot_${i}`);
-      if (!dot) return;
-      dot.className = 'rob-dot';
-      if (i < currentStep) dot.classList.add('done');
-      else if (i === currentStep) dot.classList.add('active');
-    });
-
-    // Update counter
-    document.getElementById('robStepCounter').textContent = `Step ${currentStep + 1} of ${TUTORIAL_STEPS.length}`;
-
-    // Update buttons
-    prevBtn.style.display = isFirst ? 'none' : '';
-    nextBtn.textContent = isLast ? 'LAUNCH! 🚀' : 'Next →';
-    nextBtn.className = isLast ? 'rob-btn rob-btn-primary' : 'rob-btn rob-btn-primary';
-    if (isLast) nextBtn.onclick = closeTutorial;
-    else nextBtn.onclick = nextStep;
-
-    skipBtn.textContent = isLast ? 'Done' : 'Skip Tutorial';
-  }
-
-  function nextStep() {
-    if (currentStep < TUTORIAL_STEPS.length - 1) {
-      currentStep++;
-      renderStep();
-    }
-  }
-
-  function prevStep() {
-    if (currentStep > 0) {
-      currentStep--;
-      renderStep();
-    }
-  }
-
-  function closeTutorial() {
-    if (overlay) {
-      overlay.style.transition = 'opacity 0.3s ease';
-      overlay.style.opacity = '0';
-      setTimeout(() => {
-        if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-      }, 300);
-    }
-    // Mark as seen
-    try { localStorage.setItem('tpb_tutorial_done', '1'); } catch(e) {}
-    // Return to today
-    if (typeof showSection === 'function') showSection('today');
-  }
-
-  function loadRobImage() {
-    // Try to use the uploaded PNG image
-    // Since we're in GitHub Pages, use relative path
-    const imgPaths = ['rob.png', './rob.png', 'assets/rob.png'];
-    let loaded = false;
-    
-    function tryNext(paths, idx) {
-      if (idx >= paths.length || loaded) return;
-      const testImg = new Image();
-      testImg.onload = function() {
-        if (!loaded && robImg) {
-          loaded = true;
-          robImg.src = this.src;
-        }
-      };
-      testImg.onerror = function() { tryNext(paths, idx + 1); };
-      testImg.src = paths[idx];
-    }
-    tryNext(imgPaths, 0);
-  }
-
-  function startTutorial() {
-    // Only show tutorial once
-    try {
-      if (localStorage.getItem('tpb_tutorial_done')) return;
-    } catch(e) {}
-
-    currentStep = 0;
-    createTutorialDOM();
-    renderStep();
+    // Load real R.O.B. image
     loadRobImage();
   }
 
-  // Hook into app launch — show tutorial after first-time onboarding
-  var _origFinishOnboarding = window.finishOnboarding;
-  // We catch new users via: after launchAppEnhanced completes for first time
-  // Patch launchAppEnhanced to show tutorial for brand new users
-  var _isNewUser = false;
-  var _origFinish = window.finishOnboarding;
-  if (typeof finishOnboarding === 'function') {
-    window.finishOnboarding = function() {
-      _isNewUser = true;
-      finishOnboarding.apply(this, arguments);
-    };
+  // ── Spotlight positioning ──────────────────────────────────────────
+  function positionCard(targetEl, bubblePos) {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const cardW = Math.min(400, vw - 32);
+    const cardH = tutCard.offsetHeight || 220;
+    const PAD = 16;
+
+    if (!targetEl) {
+      // Centered
+      tutCard.style.left  = Math.round((vw - cardW) / 2) + "px";
+      tutCard.style.top   = Math.round((vh - cardH) / 2) + "px";
+      tutCard.style.transform = "none";
+      spotlightBox.style.display = "none";
+      return;
+    }
+
+    const r = targetEl.getBoundingClientRect();
+
+    // Show spotlight
+    const PAD_SPOT = 6;
+    spotlightBox.style.display = "block";
+    spotlightBox.style.top    = (r.top    - PAD_SPOT) + "px";
+    spotlightBox.style.left   = (r.left   - PAD_SPOT) + "px";
+    spotlightBox.style.width  = (r.width  + PAD_SPOT * 2) + "px";
+    spotlightBox.style.height = (r.height + PAD_SPOT * 2) + "px";
+
+    // Create a "hole" in the dim overlay using clip-path
+    const ox = r.left   - PAD_SPOT;
+    const oy = r.top    - PAD_SPOT;
+    const ow = r.width  + PAD_SPOT * 2;
+    const oh = r.height + PAD_SPOT * 2;
+    tutOverlay.style.clipPath = `polygon(
+      0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%,
+      ${ox}px ${oy}px,
+      ${ox}px ${oy + oh}px,
+      ${ox + ow}px ${oy + oh}px,
+      ${ox + ow}px ${oy}px,
+      ${ox}px ${oy}px
+    )`;
+
+    // Place the card
+    let top, left;
+    if (bubblePos === "bottom") {
+      top  = Math.min(r.bottom + PAD, vh - cardH - PAD);
+      left = Math.max(PAD, Math.min(r.left, vw - cardW - PAD));
+    } else if (bubblePos === "top") {
+      top  = Math.max(PAD, r.top - cardH - PAD);
+      left = Math.max(PAD, Math.min(r.left, vw - cardW - PAD));
+    } else if (bubblePos === "right") {
+      top  = Math.max(PAD, Math.min(r.top, vh - cardH - PAD));
+      left = Math.min(r.right + PAD, vw - cardW - PAD);
+    } else if (bubblePos === "left") {
+      top  = Math.max(PAD, Math.min(r.top, vh - cardH - PAD));
+      left = Math.max(PAD, r.left - cardW - PAD);
+    } else {
+      top  = Math.round((vh - cardH) / 2);
+      left = Math.round((vw - cardW) / 2);
+    }
+
+    // Clamp
+    top  = Math.max(PAD, Math.min(top,  vh - cardH - PAD));
+    left = Math.max(PAD, Math.min(left, vw - cardW - PAD));
+
+    tutCard.style.top       = top  + "px";
+    tutCard.style.left      = left + "px";
+    tutCard.style.transform = "none";
   }
 
-  // Wait for app to boot, then decide whether to show tutorial
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-      // Check if tutorial hasn't been seen yet
+  // ── Render a step ──────────────────────────────────────────────────
+  function renderStep() {
+    const step   = TUTORIAL_STEPS[currentStep];
+    const isLast  = currentStep === TUTORIAL_STEPS.length - 1;
+    const isFirst = currentStep === 0;
+
+    // Navigate
+    if (step.navTo && typeof showSection === "function") {
+      showSection(step.navTo);
+    }
+
+    // Give the DOM time to update, then position
+    setTimeout(() => {
+      // Animate text
+      const bodyDiv = document.getElementById("robBody");
+      bodyDiv.style.animation = "none";
+      void bodyDiv.offsetWidth;
+      bodyDiv.style.animation = "";
+
+      document.getElementById("robTitle").textContent = step.title;
+      document.getElementById("robBody").textContent  = step.body;
+
+      // Dots
+      TUTORIAL_STEPS.forEach((_, i) => {
+        const d = document.getElementById("robdot_" + i);
+        if (!d) return;
+        d.className = "rob-dot" + (i < currentStep ? " done" : i === currentStep ? " active" : "");
+      });
+
+      // Buttons
+      const prevEl = document.getElementById("robPrev");
+      const nextEl = document.getElementById("robNext");
+      const skipEl = document.getElementById("robSkip");
+      prevEl.style.display = isFirst ? "none" : "";
+      nextEl.textContent   = isLast ? "LET\'S GO! 🚀" : "Next →";
+      nextEl.onclick       = isLast ? closeTutorial : nextStep;
+      skipEl.textContent   = isLast ? "Done ✓" : "Skip tutorial";
+
+      // Clear old clip
+      if (!step.target) {
+        tutOverlay.style.clipPath = "none";
+        spotlightBox.style.display = "none";
+      }
+
+      // Scroll target into view, then position
+      const targetEl = step.target ? document.querySelector(step.target) : null;
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTimeout(() => positionCard(targetEl, step.bubblePos), 380);
+      } else {
+        positionCard(null, "center");
+      }
+    }, step.navTo ? 160 : 50);
+  }
+
+  function nextStep() {
+    if (currentStep < TUTORIAL_STEPS.length - 1) { currentStep++; renderStep(); }
+  }
+  function prevStep() {
+    if (currentStep > 0) { currentStep--; renderStep(); }
+  }
+
+  function closeTutorial() {
+    [tutOverlay, tutCard, spotlightBox].forEach(el => {
+      if (el) {
+        el.style.transition = "opacity .3s";
+        el.style.opacity = "0";
+        setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 320);
+      }
+    });
+    try { localStorage.setItem("tpb_tutorial_done", "1"); } catch(e) {}
+    if (typeof showSection === "function") showSection("today");
+  }
+
+  function loadRobImage() {
+    const img = document.getElementById("robAvatar");
+    if (!img) return;
+    const paths = ["rob.png", "./rob.png"];
+    let loaded = false;
+    paths.forEach(p => {
+      if (loaded) return;
+      const t = new Image();
+      t.onload = () => { if (!loaded) { loaded = true; img.src = p; } };
+      t.src = p;
+    });
+  }
+
+  function startTutorial() {
+    try { if (localStorage.getItem("tpb_tutorial_done")) return; } catch(e) {}
+    currentStep = 0;
+    createTutorialDOM();
+    renderStep();
+    window.addEventListener("resize", () => {
+      const step = TUTORIAL_STEPS[currentStep];
+      const targetEl = step && step.target ? document.querySelector(step.target) : null;
+      positionCard(targetEl, step ? step.bubblePos : "center");
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
       try {
-        if (!localStorage.getItem('tpb_tutorial_done')) {
-          // Show tutorial after a brief pause post-launch
-          setTimeout(startTutorial, 2000);
-        }
+        if (!localStorage.getItem("tpb_tutorial_done")) setTimeout(startTutorial, 2000);
       } catch(e) {}
     }, 500);
   });
 
-  // Expose globally so user can retrigger it (e.g. help button)
   window.showROBTutorial = startTutorial;
   window.resetROBTutorial = function() {
-    try { localStorage.removeItem('tpb_tutorial_done'); } catch(e) {}
+    try { localStorage.removeItem("tpb_tutorial_done"); } catch(e) {}
+    // Remove any existing overlay
+    ["robTutorialOverlay","rob-spotlight-box"].forEach(id => {
+      const el = document.getElementById(id) || document.querySelector(".rob-spotlight-box") || document.querySelector(".rob-card");
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+    });
+    document.querySelectorAll(".rob-card,.rob-spotlight-box").forEach(el => el.parentNode && el.parentNode.removeChild(el));
     startTutorial();
   };
 
+  var spotlightBox;
+
 })();
-function isInStandaloneMode() {
+\nfunction isInStandaloneMode() {
   return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 }
 
