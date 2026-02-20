@@ -7833,7 +7833,7 @@ var robTutorial = (function() {
     {
       title: "TODAY'S QUESTS — YOUR DAILY WORK",
       body: "These refresh every day. Check them off as you crush them — each one earns XP and gets you closer to being the player everyone is scared to face. You got this!",
-      sel: ".quest-list", pos: "top", nav: "today"
+      sel: "#todayQuestList", pos: "bottom", nav: "today"
     },
     {
       title: "XP AND RANKS — LEVEL UP FOR REAL!",
@@ -7842,43 +7842,43 @@ var robTutorial = (function() {
     },
     {
       title: "THE 10 PILLARS OF MASTERY",
-      body: "Over here in the sidebar — 10 Pillars. Tech, Neutral, Mental, Advantage, and more. Train ALL of them. Yes, even the ones you've been avoiding. Especially those. Sorry. Not sorry.",
-      sel: ".sidebar", pos: "right", nav: "today"
+      body: "10 Pillars to train: Tech, Neutral, Mental, Advantage, and more. They're in the nav — tap any one to start drilling. Train ALL of them. Yes, even the ones you've been avoiding. Especially those.",
+      sel: "#sidebarNav, #bottomNav", pos: "top", nav: "today"
     },
     {
       title: "MILESTONES — THE REAL DRILLS",
-      body: "Inside each Pillar are Milestones — real drills and habits. Expand any one to see tasks. Every checkmark is a tiny version of you getting harder to beat!",
-      sel: ".subsection", pos: "bottom", nav: "tech"
+      body: "Inside each Pillar are Milestones — real drills and habits. Tap the header to expand and see tasks. Every checkmark is a tiny version of you getting harder to beat!",
+      sel: "#sec_tech .sub-header", pos: "bottom", nav: "tech"
     },
     {
       title: "MATCHUP ANCHORS — SPY TIME",
       body: "Build a scouting report on every character you face. Their patterns, tendencies, what beats them. Knowledge is power, and power is winning neutral, and winning neutral is winning.",
-      sel: ".tool-header", pos: "bottom", nav: "tool_matchups"
+      sel: "#sec_tool_matchups .tool-header", pos: "bottom", nav: "tool_matchups"
     },
     {
       title: "VOD STATS — DATA NEVER LIES",
       body: "Log your stats after VOD sessions — damage per opening, kill percents, dropped combos. Watch yourself literally get better on a chart. It's incredibly satisfying.",
-      sel: ".tool-header", pos: "bottom", nav: "tool_vodstats"
+      sel: "#sec_tool_vodstats .tool-header", pos: "bottom", nav: "tool_vodstats"
     },
     {
       title: "VOD REVIEW — WATCH YOURSELF",
       body: "Watching losses hurts. But top players LOVE losses — they're free coaching! Structured questions guide you to the patterns you'd never catch otherwise. Game changer.",
-      sel: ".tool-header", pos: "bottom", nav: "tool_vod"
+      sel: "#sec_tool_vod .tool-header", pos: "bottom", nav: "tool_vod"
     },
     {
       title: "MILESTONES JOURNAL — YOUR TROPHY CASE",
       body: "Record your breakthrough moments here. Finally hit that combo? WRITE IT DOWN. On bad days, come back and see how far you've come. Future you will thank past you.",
-      sel: ".tool-header", pos: "bottom", nav: "tool_milestones"
+      sel: "#sec_tool_milestones .tool-header", pos: "bottom", nav: "tool_milestones"
     },
     {
       title: "LOCAL SCENE — KNOW YOUR RIVALS",
       body: "Add every player from your local scene. Character, habits, threat level, your record vs them. The more details, the more prepared you'll be in bracket. That's gonna be you!",
-      sel: ".tool-header", pos: "bottom", nav: "tool_locals"
+      sel: "#sec_tool_locals .tool-header", pos: "bottom", nav: "tool_locals"
     },
     {
       title: "SQUAD MODE — BETTER TOGETHER",
       body: "Share your Squad Code with training partners and see each other's progress in real time. Nothing motivates like knowing your crew is watching. Who's gonna let their squad down? NOT YOU!",
-      sel: ".squad-panel", pos: "bottom", nav: "tool_squad"
+      sel: "#sec_tool_squad .squad-panel", pos: "bottom", nav: "tool_squad"
     },
     {
       title: "YOU'RE ALL SET, CHAMP!",
@@ -7993,7 +7993,18 @@ var robTutorial = (function() {
       return;
     }
 
-    var el = document.querySelector(s.sel);
+    var el = null;
+    if (s.sel) {
+      // Try comma-separated selectors, pick first visible one
+      var sels = s.sel.split(',').map(function(x) { return x.trim(); });
+      for (var si = 0; si < sels.length; si++) {
+        var candidate = document.querySelector(sels[si]);
+        if (candidate) {
+          var cr = candidate.getBoundingClientRect();
+          if (cr.width > 0 && cr.height > 0) { el = candidate; break; }
+        }
+      }
+    }
     if (!el) {
       overlay.style.clipPath = 'none';
       spotBox.style.display = 'none';
@@ -8056,7 +8067,14 @@ var robTutorial = (function() {
 
     var delay = s.nav ? 180 : 60;
     setTimeout(function() {
-      var el = s.sel ? document.querySelector(s.sel) : null;
+      var el = null;
+      if (s.sel) {
+        var sels2 = s.sel.split(',').map(function(x) { return x.trim(); });
+        for (var si2 = 0; si2 < sels2.length; si2++) {
+          var c2 = document.querySelector(sels2[si2]);
+          if (c2) { var r2 = c2.getBoundingClientRect(); if (r2.width > 0 && r2.height > 0) { el = c2; break; } }
+        }
+      }
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(function() { position(s); }, el ? 350 : 0);
     }, delay);
