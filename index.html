@@ -92,6 +92,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px;
+  padding-top: calc(24px + env(safe-area-inset-top));
 }
 #onboardScreen.hidden { display: none; }
 
@@ -234,6 +235,7 @@ body {
   background: linear-gradient(135deg, #0a0a18 0%, #0f0f20 100%);
   border-bottom: 1px solid var(--border);
   padding: 16px 24px;
+  padding-top: calc(16px + env(safe-area-inset-top));
   position: sticky;
   top: 0;
   z-index: 100;
