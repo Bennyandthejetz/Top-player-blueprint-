@@ -2473,6 +2473,173 @@ body::before {
 .vod-stat-cancel { flex: 1; background: transparent; border: 1px solid var(--border2); color: var(--text2); padding: 14px; border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 0.65rem; cursor: pointer; transition: all 0.2s; }
 .vod-stat-cancel:hover { border-color: var(--text); color: var(--text); }
 
+/* VOD Result Displays */
+.vod-stat-result-display {
+  background: rgba(168,85,247,0.1);
+  border: 2px solid rgba(168,85,247,0.3);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: var(--purple);
+  margin: 8px 0;
+  letter-spacing: 0.05em;
+}
+
+/* Calculator Grid (smaller inputs, more compact) */
+.calc-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.calc-input-small {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  padding: 6px 4px;
+  outline: none;
+  text-align: center;
+  width: 100%;
+}
+.calc-input-small:focus {
+  border-color: var(--purple);
+  background: var(--card2);
+}
+
+/* Counter Inputs (for ratio-based stats) */
+.vod-stat-counter {
+  background: rgba(168,85,247,0.05);
+  border: 1px solid rgba(168,85,247,0.2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 10px;
+}
+.counter-row {
+  display: flex;
+  gap: 12px;
+}
+.counter-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.counter-label {
+  font-size: 0.58rem;
+  color: var(--text2);
+  letter-spacing: 0.05em;
+}
+.counter-input {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  padding: 10px;
+  outline: none;
+  text-align: center;
+  font-weight: 600;
+}
+.counter-input:focus {
+  border-color: var(--purple);
+  background: var(--card2);
+}
+
+/* Clicker Counter Styling */
+.vod-counter-clicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin: 12px 0;
+}
+.counter-display {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  padding: 16px 24px;
+  min-width: 80px;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+.counter-increment,
+.counter-decrement {
+  background: var(--purple);
+  border: none;
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+}
+.counter-increment:hover {
+  background: #b968ff;
+  transform: translateY(-2px);
+}
+.counter-decrement:hover {
+  background: #8b3fd9;
+  transform: translateY(-2px);
+}
+.counter-increment:active,
+.counter-decrement:active {
+  transform: scale(0.95);
+}
+.counter-next-stock-btn {
+  background: var(--blue);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 12px;
+}
+.counter-next-stock-btn:hover {
+  background: #5aabff;
+  transform: translateY(-2px);
+}
+.stock-history {
+  margin-top: 12px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.65rem;
+  color: var(--text2);
+}
+.stock-pill {
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-family: 'DM Mono', monospace;
+}
+.counter-row-clicker {
+  display: flex;
+  gap: 20px;
+}
+.counter-item-clicker {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* VOD Charts Styling */
 .vod-chart-card {
   background: var(--card);
@@ -3603,53 +3770,159 @@ body { overscroll-behavior-x: none; }
       <input class="vod-stat-input" id="vodSessionName" placeholder="e.g. Ranked Grind Session 1" />
     </div>
     
+    <!-- AVG DAMAGE PER OPENING CALCULATOR -->
     <div class="vod-stat-field">
-      <label class="vod-stat-label">Avg Damage Per Opening (%)</label>
-      <input type="number" class="vod-stat-input" id="vodAvgDamage" placeholder="e.g. 45" />
-      <div class="vod-stat-hint">When you hit them, how much damage do you get?</div>
-    </div>
-    
-    <div class="vod-stat-field">
-      <label class="vod-stat-label">Openings Per Stock</label>
-      <input type="number" step="0.1" class="vod-stat-input" id="vodOpeningsPerStock" placeholder="e.g. 2.5" />
-      <div class="vod-stat-hint">How many clean openings before you take the stock?</div>
-    </div>
-    
-    <div class="vod-stat-field">
-      <label class="vod-stat-label">Average Kill Percent (%)</label>
-      <input type="number" class="vod-stat-input" id="vodAvgKillPercent" placeholder="e.g. 118" />
-      <div class="vod-stat-hint">What % do you usually kill at?</div>
+      <label class="vod-stat-label">Avg Damage Per Opening</label>
+      <div class="vod-stat-result-display" id="avgDamageDisplay">—%</div>
+      <div class="vod-stat-hint">Enter damage % for each clean opening you got</div>
       <div class="vod-stat-calculator">
-        <div class="calc-title">Quick Calculator: <span style="color:var(--text3);font-size:0.55rem;">(enter up to 13 kill %s — one per stock in a Bo5)</span></div>
-        <div class="calc-inputs" id="killPercentInputs">
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
-          <input type="number" class="calc-input" placeholder="%" />
+        <div class="calc-title">Opening Damage %s <span style="color:var(--text3);font-size:0.55rem;">(up to 20 openings)</span></div>
+        <div class="calc-inputs-grid" id="damageOpeningInputs">
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgDamage()" />
         </div>
-        <button class="calc-btn" onclick="calculateAvgKillPercent()">Calculate Average</button>
       </div>
     </div>
     
+    <!-- OPENINGS PER STOCK CALCULATOR -->
     <div class="vod-stat-field">
-      <label class="vod-stat-label">Dropped Combo Rate (%)</label>
-      <input type="number" class="vod-stat-input" id="vodDroppedCombo" placeholder="e.g. 15" />
-      <div class="vod-stat-hint">Clean openings where you dropped the combo</div>
+      <label class="vod-stat-label">Openings Per Stock</label>
+      <div class="vod-stat-result-display" id="openingsPerStockDisplay">—</div>
+      <div class="vod-stat-hint">Click ↑ each time you get an opening. Click "Next Stock" when stock is taken.</div>
+      <div class="vod-stat-calculator">
+        <div class="calc-title">Current Stock Openings <span style="color:var(--text3);font-size:0.55rem;">(live counter)</span></div>
+        <div class="vod-counter-clicker">
+          <button class="counter-decrement" onclick="adjustCurrentStockOpenings(-1)">▼</button>
+          <div class="counter-display" id="currentStockOpenings">0</div>
+          <button class="counter-increment" onclick="adjustCurrentStockOpenings(1)">▲</button>
+        </div>
+        <button class="counter-next-stock-btn" onclick="nextStock()">→ NEXT STOCK</button>
+        <div class="stock-history" id="stockHistory"></div>
+      </div>
     </div>
     
+    <!-- AVG KILL PERCENT CALCULATOR -->
     <div class="vod-stat-field">
-      <label class="vod-stat-label">Dropped Edgeguard Rate (%)</label>
-      <input type="number" class="vod-stat-input" id="vodDroppedEdgeguard" placeholder="e.g. 30" />
-      <div class="vod-stat-hint">Times opponent got back to stage/ledge when offstage</div>
+      <label class="vod-stat-label">Average Kill Percent</label>
+      <div class="vod-stat-result-display" id="avgKillPercentDisplay">—%</div>
+      <div class="vod-stat-hint">What % did you kill at for each stock?</div>
+      <div class="vod-stat-calculator">
+        <div class="calc-title">Kill %s <span style="color:var(--text3);font-size:0.55rem;">(up to 13 stocks in Bo5)</span></div>
+        <div class="calc-inputs-grid" id="killPercentInputs">
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+          <input type="number" class="calc-input-small" placeholder="%" oninput="calcAvgKillPercent()" />
+        </div>
+      </div>
+    </div>
+    
+    <!-- DROPPED COMBO RATE COUNTER -->
+    <div class="vod-stat-field">
+      <label class="vod-stat-label">Dropped Combo Rate</label>
+      <div class="vod-stat-result-display" id="droppedComboDisplay">—%</div>
+      <div class="vod-stat-hint">Click ↑ when you get a combo attempt. Click ↑ on dropped when you drop one.</div>
+      <div class="vod-stat-counter">
+        <div class="counter-row-clicker">
+          <div class="counter-item-clicker">
+            <label class="counter-label">Total Combo Attempts</label>
+            <div class="vod-counter-clicker">
+              <button class="counter-decrement" onclick="adjustComboCounter('total', -1)">▼</button>
+              <div class="counter-display" id="totalCombos">0</div>
+              <button class="counter-increment" onclick="adjustComboCounter('total', 1)">▲</button>
+            </div>
+          </div>
+          <div class="counter-item-clicker">
+            <label class="counter-label">Dropped Combos</label>
+            <div class="vod-counter-clicker">
+              <button class="counter-decrement" onclick="adjustComboCounter('dropped', -1)">▼</button>
+              <div class="counter-display" id="droppedCombos">0</div>
+              <button class="counter-increment" onclick="adjustComboCounter('dropped', 1)">▲</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- DROPPED EDGEGUARD RATE COUNTER -->
+    <div class="vod-stat-field">
+      <label class="vod-stat-label">Dropped Edgeguard Rate</label>
+      <div class="vod-stat-result-display" id="droppedEdgeguardDisplay">—%</div>
+      <div class="vod-stat-hint">Click ↑ when they go offstage. Click ↑ on "got back" if they make it back.</div>
+      <div class="vod-stat-counter">
+        <div class="counter-row-clicker">
+          <div class="counter-item-clicker">
+            <label class="counter-label">Total Edgeguard Attempts</label>
+            <div class="vod-counter-clicker">
+              <button class="counter-decrement" onclick="adjustEdgeguardCounter('total', -1)">▼</button>
+              <div class="counter-display" id="totalEdgeguards">0</div>
+              <button class="counter-increment" onclick="adjustEdgeguardCounter('total', 1)">▲</button>
+            </div>
+          </div>
+          <div class="counter-item-clicker">
+            <label class="counter-label">Times They Got Back</label>
+            <div class="vod-counter-clicker">
+              <button class="counter-decrement" onclick="adjustEdgeguardCounter('failed', -1)">▼</button>
+              <div class="counter-display" id="failedEdgeguards">0</div>
+              <button class="counter-increment" onclick="adjustEdgeguardCounter('failed', 1)">▲</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- NEUTRAL WIN RATE (NEW) -->
+    <div class="vod-stat-field">
+      <label class="vod-stat-label">Neutral Win Rate <span style="color:var(--gold);font-size:0.6rem;">(NEW)</span></label>
+      <div class="vod-stat-result-display" id="neutralWinRateDisplay">—%</div>
+      <div class="vod-stat-hint">Click ↑ on total for each neutral exchange. Click ↑ on wins when you win it.</div>
+      <div class="vod-stat-counter">
+        <div class="counter-row-clicker">
+          <div class="counter-item-clicker">
+            <label class="counter-label">Total Neutral Interactions</label>
+            <div class="vod-counter-clicker">
+              <button class="counter-decrement" onclick="adjustNeutralCounter('total', -1)">▼</button>
+              <div class="counter-display" id="totalNeutral">0</div>
+              <button class="counter-increment" onclick="adjustNeutralCounter('total', 1)">▲</button>
+            </div>
+          </div>
+          <div class="counter-item-clicker">
+            <label class="counter-label">Neutral Wins</label>
+            <div class="vod-counter-clicker">
+              <button class="counter-decrement" onclick="adjustNeutralCounter('wins', -1)">▼</button>
+              <div class="counter-display" id="neutralWins">0</div>
+              <button class="counter-increment" onclick="adjustNeutralCounter('wins', 1)">▲</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     
     <div class="vod-stat-field">
@@ -7178,48 +7451,171 @@ if (state.startDate) {
 
 function openVODStatModal() {
   document.getElementById('vodStatModal').classList.remove('hidden');
+  // Reset displays
+  document.getElementById('avgDamageDisplay').textContent = '—%';
+  document.getElementById('openingsPerStockDisplay').textContent = '—';
+  document.getElementById('avgKillPercentDisplay').textContent = '—%';
+  document.getElementById('droppedComboDisplay').textContent = '—%';
+  document.getElementById('droppedEdgeguardDisplay').textContent = '—%';
+  document.getElementById('neutralWinRateDisplay').textContent = '—%';
 }
 
 function closeVODStatModal() {
   document.getElementById('vodStatModal').classList.add('hidden');
+  // Clear session name
   document.getElementById('vodSessionName').value = '';
-  document.getElementById('vodAvgDamage').value = '';
-  document.getElementById('vodOpeningsPerStock').value = '';
-  document.getElementById('vodAvgKillPercent').value = '';
-  document.getElementById('vodDroppedCombo').value = '';
-  document.getElementById('vodDroppedEdgeguard').value = '';
+  // Clear all calculator inputs
+  document.querySelectorAll('#damageOpeningInputs input').forEach(inp => inp.value = '');
+  document.querySelectorAll('#killPercentInputs input').forEach(inp => inp.value = '');
+  // Reset clicker counters
+  stockOpeningsData = [];
+  currentStockOpeningsCount = 0;
+  document.getElementById('currentStockOpenings').textContent = '0';
+  document.getElementById('stockHistory').innerHTML = '';
+  comboCounters = { total: 0, dropped: 0 };
+  document.getElementById('totalCombos').textContent = '0';
+  document.getElementById('droppedCombos').textContent = '0';
+  edgeguardCounters = { total: 0, failed: 0 };
+  document.getElementById('totalEdgeguards').textContent = '0';
+  document.getElementById('failedEdgeguards').textContent = '0';
+  neutralCounters = { total: 0, wins: 0 };
+  document.getElementById('totalNeutral').textContent = '0';
+  document.getElementById('neutralWins').textContent = '0';
+  // Clear notes
   document.getElementById('vodNotes').value = '';
-  document.querySelectorAll('.calc-input').forEach(inp => inp.value = '');
+  // Reset displays
+  document.getElementById('avgDamageDisplay').textContent = '—%';
+  document.getElementById('openingsPerStockDisplay').textContent = '—';
+  document.getElementById('avgKillPercentDisplay').textContent = '—%';
+  document.getElementById('droppedComboDisplay').textContent = '—%';
+  document.getElementById('droppedEdgeguardDisplay').textContent = '—%';
+  document.getElementById('neutralWinRateDisplay').textContent = '—%';
 }
 
-function calculateAvgKillPercent() {
-  const inputs = document.querySelectorAll('.calc-input');
+// NEW: Avg Damage Per Opening Calculator
+function calcAvgDamage() {
+  const inputs = document.querySelectorAll('#damageOpeningInputs input');
   let sum = 0, count = 0;
   inputs.forEach(input => {
     const val = parseFloat(input.value);
     if (!isNaN(val) && val > 0) { sum += val; count++; }
   });
-  if (count > 0) {
-    const avg = Math.round(sum / count);
-    document.getElementById('vodAvgKillPercent').value = avg;
-    showToast(`✓ Average: ${avg}%`, 'info');
+  const avg = count > 0 ? Math.round((sum / count) * 10) / 10 : 0;
+  document.getElementById('avgDamageDisplay').textContent = count > 0 ? `${avg}%` : '—%';
+}
+
+// NEW: Openings Per Stock Clicker System
+let stockOpeningsData = [];
+let currentStockOpeningsCount = 0;
+
+function adjustCurrentStockOpenings(delta) {
+  currentStockOpeningsCount = Math.max(0, currentStockOpeningsCount + delta);
+  document.getElementById('currentStockOpenings').textContent = currentStockOpeningsCount;
+}
+
+function nextStock() {
+  if (currentStockOpeningsCount > 0) {
+    stockOpeningsData.push(currentStockOpeningsCount);
+    
+    // Update history display
+    const historyDiv = document.getElementById('stockHistory');
+    historyDiv.innerHTML = stockOpeningsData.map((count, i) => 
+      `<span class="stock-pill">Stock ${i+1}: ${count}</span>`
+    ).join('');
+    
+    // Calculate and update average
+    const avg = stockOpeningsData.reduce((a,b) => a+b, 0) / stockOpeningsData.length;
+    document.getElementById('openingsPerStockDisplay').textContent = Math.round(avg * 10) / 10;
+    
+    // Reset current counter
+    currentStockOpeningsCount = 0;
+    document.getElementById('currentStockOpenings').textContent = '0';
   }
+}
+
+// NEW: Avg Kill Percent Calculator
+function calcAvgKillPercent() {
+  const inputs = document.querySelectorAll('#killPercentInputs input');
+  let sum = 0, count = 0;
+  inputs.forEach(input => {
+    const val = parseFloat(input.value);
+    if (!isNaN(val) && val > 0) { sum += val; count++; }
+  });
+  const avg = count > 0 ? Math.round(sum / count) : 0;
+  document.getElementById('avgKillPercentDisplay').textContent = count > 0 ? `${avg}%` : '—%';
+}
+
+// NEW: Dropped Combo Rate Clicker
+let comboCounters = { total: 0, dropped: 0 };
+
+function adjustComboCounter(type, delta) {
+  comboCounters[type] = Math.max(0, comboCounters[type] + delta);
+  document.getElementById(type === 'total' ? 'totalCombos' : 'droppedCombos').textContent = comboCounters[type];
+  calcDroppedComboRate();
+}
+
+function calcDroppedComboRate() {
+  const total = comboCounters.total;
+  const dropped = comboCounters.dropped;
+  const rate = total > 0 ? Math.round((dropped / total) * 100) : 0;
+  document.getElementById('droppedComboDisplay').textContent = total > 0 ? `${rate}%` : '—%';
+}
+
+// NEW: Dropped Edgeguard Rate Clicker
+let edgeguardCounters = { total: 0, failed: 0 };
+
+function adjustEdgeguardCounter(type, delta) {
+  edgeguardCounters[type] = Math.max(0, edgeguardCounters[type] + delta);
+  document.getElementById(type === 'total' ? 'totalEdgeguards' : 'failedEdgeguards').textContent = edgeguardCounters[type];
+  calcDroppedEdgeguardRate();
+}
+
+function calcDroppedEdgeguardRate() {
+  const total = edgeguardCounters.total;
+  const failed = edgeguardCounters.failed;
+  const rate = total > 0 ? Math.round((failed / total) * 100) : 0;
+  document.getElementById('droppedEdgeguardDisplay').textContent = total > 0 ? `${rate}%` : '—%';
+}
+
+// NEW: Neutral Win Rate Clicker
+let neutralCounters = { total: 0, wins: 0 };
+
+function adjustNeutralCounter(type, delta) {
+  neutralCounters[type] = Math.max(0, neutralCounters[type] + delta);
+  document.getElementById(type === 'total' ? 'totalNeutral' : 'neutralWins').textContent = neutralCounters[type];
+  calcNeutralWinRate();
+}
+
+function calcNeutralWinRate() {
+  const total = neutralCounters.total;
+  const wins = neutralCounters.wins;
+  const rate = total > 0 ? Math.round((wins / total) * 100) : 0;
+  document.getElementById('neutralWinRateDisplay').textContent = total > 0 ? `${rate}%` : '—%';
 }
 
 function saveVODEntry() {
   const sessionName = document.getElementById('vodSessionName').value.trim();
   if (!sessionName) { showToast('Enter session name', 'warning'); return; }
   
+  // Get calculated values from displays
+  const avgDamageText = document.getElementById('avgDamageDisplay').textContent;
+  const openingsPerStockText = document.getElementById('openingsPerStockDisplay').textContent;
+  const avgKillPercentText = document.getElementById('avgKillPercentDisplay').textContent;
+  const droppedComboText = document.getElementById('droppedComboDisplay').textContent;
+  const droppedEdgeguardText = document.getElementById('droppedEdgeguardDisplay').textContent;
+  const neutralWinRateText = document.getElementById('neutralWinRateDisplay').textContent;
+  
   const entry = {
     id: 'vod_' + Date.now(),
     date: new Date().toISOString(),
     day: currentDay,
     sessionName,
-    avgDamagePerOpening: parseFloat(document.getElementById('vodAvgDamage').value) || 0,
-    openingsPerStock: parseFloat(document.getElementById('vodOpeningsPerStock').value) || 0,
-    avgKillPercent: parseFloat(document.getElementById('vodAvgKillPercent').value) || 0,
-    droppedComboRate: parseFloat(document.getElementById('vodDroppedCombo').value) || 0,
-    droppedEdgeguardRate: parseFloat(document.getElementById('vodDroppedEdgeguard').value) || 0,
+    avgDamagePerOpening: avgDamageText !== '—%' ? parseFloat(avgDamageText) : 0,
+    openingsPerStock: openingsPerStockText !== '—' ? parseFloat(openingsPerStockText) : 0,
+    avgKillPercent: avgKillPercentText !== '—%' ? parseFloat(avgKillPercentText) : 0,
+    droppedComboRate: droppedComboText !== '—%' ? parseFloat(droppedComboText) : 0,
+    droppedEdgeguardRate: droppedEdgeguardText !== '—%' ? parseFloat(droppedEdgeguardText) : 0,
+    neutralWinRate: neutralWinRateText !== '—%' ? parseFloat(neutralWinRateText) : 0,
     notes: document.getElementById('vodNotes').value.trim()
   };
   
@@ -7231,6 +7627,11 @@ function saveVODEntry() {
   if (vodQuest && !state.dayCompletions[`quest_${currentDay}_${vodQuest.id}`]) {
     toggleQuestDone(vodQuest.id, vodQuest.xp);
   }
+  
+  closeVODStatModal();
+  showToast('📊 VOD stats saved!', 'success');
+  if (activeSection && activeSection.includes('tool')) showSection(activeSection);
+}
   
   closeVODStatModal();
   showToast('📊 VOD stats saved!', 'success');
@@ -7274,6 +7675,11 @@ function renderVODCharts() {
         <div class="vod-chart-subtitle">Lower = better edgeguards</div>
         <canvas id="vodChartDroppedEdgeguard" style="height:200px;"></canvas>
       </div>
+      <div class="vod-chart-card">
+        <div class="vod-chart-title">Neutral Win Rate</div>
+        <div class="vod-chart-subtitle">Higher = better spacing/neutral</div>
+        <canvas id="vodChartNeutralWin" style="height:200px;"></canvas>
+      </div>
     </div>
     <div class="vod-history-section">
       <div class="vod-history-title">📋 Session History</div>
@@ -7289,6 +7695,7 @@ function renderVODCharts() {
             <div class="vod-stat-item"><div class="vod-stat-value">${e.avgKillPercent}%</div><div class="vod-stat-label">Kill %</div></div>
             <div class="vod-stat-item"><div class="vod-stat-value">${e.droppedComboRate}%</div><div class="vod-stat-label">Drop Combo</div></div>
             <div class="vod-stat-item"><div class="vod-stat-value">${e.droppedEdgeguardRate}%</div><div class="vod-stat-label">Drop EG</div></div>
+            <div class="vod-stat-item"><div class="vod-stat-value">${e.neutralWinRate || 0}%</div><div class="vod-stat-label">Neutral Win</div></div>
           </div>
           ${e.notes ? `<div class="vod-history-notes">${escHtml(e.notes)}</div>` : ''}
         </div>
@@ -7307,6 +7714,7 @@ function initVODCharts() {
     renderChart('vodChartKillPercent', labels, entries.map(e => e.avgKillPercent), 'Kill %', 'rgb(45,204,112)');
     renderChart('vodChartDroppedCombo', labels, entries.map(e => e.droppedComboRate), 'Drop %', 'rgb(255,60,60)');
     renderChart('vodChartDroppedEdgeguard', labels, entries.map(e => e.droppedEdgeguardRate), 'Drop %', 'rgb(255,140,0)');
+    renderChart('vodChartNeutralWin', labels, entries.map(e => e.neutralWinRate || 0), 'Win %', 'rgb(245,200,66)');
   }, 100);
 }
 
