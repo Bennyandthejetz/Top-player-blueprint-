@@ -2916,6 +2916,33 @@ body::before {
   border-radius: 10px;
   padding: 16px;
 }
+.vod-chart-main {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.vod-chart-container {
+  margin-bottom: 32px;
+}
+.vod-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.65rem;
+  color: var(--text2);
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
 .vod-chart-title {
   font-size: 0.7rem;
   font-weight: 600;
@@ -2927,8 +2954,102 @@ body::before {
   color: var(--text3);
   margin-bottom: 12px;
 }
+.vod-delete-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.vod-delete-btn:hover {
+  border-color: var(--accent);
+  background: rgba(255,60,60,0.1);
+  color: var(--accent);
+}
 .vod-history-section { margin-top: 32px; }
-.vod-history-title {
+
+/* VOD Projects */
+.vod-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.vod-project-card {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.vod-project-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(168,85,247,0.15);
+}
+.vod-project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.vod-project-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  flex: 1;
+  padding-right: 12px;
+}
+.vod-project-delete {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+}
+.vod-project-delete:hover {
+  border-color: var(--accent);
+  background: rgba(255,60,60,0.1);
+  color: var(--accent);
+}
+.vod-project-stats {
+  display: flex;
+  gap: 20px;
+}
+.vod-project-stat {
+  font-size: 0.65rem;
+  color: var(--text3);
+}
+.vod-project-stat span {
+  color: var(--purple);
+  font-weight: 600;
+}
+.vod-project-add {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.vod-history-section { margin-top: 32px; }.vod-history-title {
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -6328,27 +6449,148 @@ function renderStatTable() {
 // ═══════════════════════════════════════════════════════════════════════
 // TOOL SECTIONS
 // ═══════════════════════════════════════════════════════════════════════
+let activeVODProject = null;
+
 function buildVodStatsTool() {
   const sec = document.createElement('div');
   sec.className = 'section';
   sec.id = 'sec_tool_vodstats';
-  sec.innerHTML = `
+  
+  // Initialize projects if needed
+  if (!state.vodProjects) state.vodProjects = [];
+  
+  // Show project selector or project view
+  if (!activeVODProject) {
+    sec.innerHTML = buildVODProjectSelector();
+  } else {
+    sec.innerHTML = buildVODProjectView();
+  }
+  
+  return sec;
+}
+
+function buildVODProjectSelector() {
+  const projects = state.vodProjects || [];
+  
+  return `
     <div class="tool-header">
       <div class="tool-icon-big">📊</div>
       <div class="tool-title-block">
-        <h2>VOD Stat Tracking & Performance Charts</h2>
-        <p>Track your improvement over time. Complete VOD quests every 3 days to build your performance history. Data = Growth.</p>
+        <h2>VOD Analysis Projects</h2>
+        <p>Separate your VOD analysis by matchup, character, or focus area. Track specific improvement over time.</p>
       </div>
     </div>
-    <button class="add-form-btn" onclick="openVODStatModal()" style="margin-bottom:24px;width:auto;padding:14px 32px;">
+    
+    <div class="vod-project-add">
+      <h3 style="font-size:0.8rem;margin-bottom:12px;letter-spacing:0.1em;">CREATE NEW PROJECT</h3>
+      <div style="display:flex;gap:12px;margin-bottom:32px;">
+        <input class="add-form-input" id="vodProjectNameInput" placeholder="e.g. vs Zetterburn, Edgeguard Practice, Tournament Sets" style="flex:2;" />
+        <button class="add-form-btn" onclick="createVODProject()">+ CREATE PROJECT</button>
+      </div>
+    </div>
+    
+    ${projects.length === 0 ? `
+      <div style="text-align:center;padding:60px 20px;color:var(--text3);">
+        <div style="font-size:2rem;margin-bottom:12px;">📁</div>
+        <div style="font-size:0.8rem;margin-bottom:8px;">No projects yet</div>
+        <div style="font-size:0.65rem;">Create a project to start tracking VOD stats for specific matchups or focus areas</div>
+      </div>
+    ` : `
+      <div class="vod-projects-grid">
+        ${projects.map((p, i) => `
+          <div class="vod-project-card" onclick="openVODProject(${i})">
+            <div class="vod-project-header">
+              <div class="vod-project-name">${escHtml(p.name)}</div>
+              <button class="vod-project-delete" onclick="event.stopPropagation(); deleteVODProject(${i})" title="Delete project">✕</button>
+            </div>
+            <div class="vod-project-stats">
+              <div class="vod-project-stat"><span>${p.entries?.length || 0}</span> Sessions</div>
+              <div class="vod-project-stat"><span>${p.lastUpdated ? new Date(p.lastUpdated).toLocaleDateString() : 'Never'}</span> Last updated</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `}
+  `;
+}
+
+function buildVODProjectView() {
+  const project = state.vodProjects[activeVODProject];
+  if (!project) {
+    activeVODProject = null;
+    return buildVODProjectSelector();
+  }
+  
+  return `
+    <div class="tool-header" style="position:relative;">
+      <button onclick="closeVODProject()" style="position:absolute;left:0;top:50%;transform:translateY(-50%);background:transparent;border:2px solid var(--border2);color:var(--text2);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.65rem;transition:all 0.2s;">
+        ← BACK TO PROJECTS
+      </button>
+      <div class="tool-icon-big">📊</div>
+      <div class="tool-title-block">
+        <h2>${escHtml(project.name)}</h2>
+        <p>Track your improvement for this specific focus area</p>
+      </div>
+    </div>
+    <button class="add-form-btn" onclick="openVODStatModalForProject()" style="margin-bottom:24px;width:auto;padding:14px 32px;">
       + NEW VOD SESSION
     </button>
     <div id="vodChartsContainer"></div>
   `;
-  const container = sec.querySelector('#vodChartsContainer');
-  container.innerHTML = renderVODCharts();
-  initVODCharts();
-  return sec;
+}
+
+function createVODProject() {
+  const name = document.getElementById('vodProjectNameInput')?.value.trim();
+  if (!name) {
+    alert('Please enter a project name');
+    return;
+  }
+  
+  if (!state.vodProjects) state.vodProjects = [];
+  state.vodProjects.push({
+    name: name,
+    entries: [],
+    createdAt: new Date().toISOString(),
+    lastUpdated: new Date().toISOString()
+  });
+  saveState();
+  showSection('tool_vodstats');
+}
+
+function openVODProject(index) {
+  activeVODProject = index;
+  showSection('tool_vodstats');
+  
+  // Render charts for this project
+  setTimeout(() => {
+    const container = document.getElementById('vodChartsContainer');
+    if (container) {
+      container.innerHTML = renderVODChartsForProject(activeVODProject);
+      initVODChartsForProject(activeVODProject);
+    }
+  }, 100);
+}
+
+function closeVODProject() {
+  activeVODProject = null;
+  showSection('tool_vodstats');
+}
+
+function deleteVODProject(index) {
+  const project = state.vodProjects[index];
+  if (!confirm(`Delete "${project.name}"? This will delete all ${project.entries?.length || 0} VOD sessions in this project. This cannot be undone.`)) return;
+  
+  state.vodProjects.splice(index, 1);
+  saveState();
+  showSection('tool_vodstats');
+}
+
+function openVODStatModalForProject() {
+  if (activeVODProject === null) {
+    alert('No project selected');
+    return;
+  }
+  openVODStatModal();
 }
 
 function buildMatchupsTool() {
@@ -8251,7 +8493,19 @@ function saveVODEntry() {
     notes: document.getElementById('vodNotes').value.trim()
   };
   
-  state.vodEntries.push(entry);
+  // Save to active project instead of global vodEntries
+  if (activeVODProject !== null && state.vodProjects && state.vodProjects[activeVODProject]) {
+    if (!state.vodProjects[activeVODProject].entries) {
+      state.vodProjects[activeVODProject].entries = [];
+    }
+    state.vodProjects[activeVODProject].entries.push(entry);
+    state.vodProjects[activeVODProject].lastUpdated = new Date().toISOString();
+  } else {
+    // Fallback to old system if no project selected
+    if (!state.vodEntries) state.vodEntries = [];
+    state.vodEntries.push(entry);
+  }
+  
   saveState();
   
   const todayQuests = generateTodayQuests(currentDay);
@@ -8262,7 +8516,191 @@ function saveVODEntry() {
   
   closeVODStatModal();
   showToast('📊 VOD stats saved!', 'success');
-  if (activeSection && activeSection.includes('tool')) showSection(activeSection);
+  
+  // Refresh the project view
+  if (activeVODProject !== null) {
+    const container = document.getElementById('vodChartsContainer');
+    if (container) {
+      container.innerHTML = renderVODChartsForProject(activeVODProject);
+      initVODChartsForProject(activeVODProject);
+    }
+  } else if (activeSection && activeSection.includes('tool')) {
+    showSection(activeSection);
+  }
+}
+
+function renderVODChartsForProject(projectIndex) {
+  const project = state.vodProjects[projectIndex];
+  if (!project || !project.entries || project.entries.length === 0) {
+    return `<div style="text-align:center;padding:60px 20px;color:var(--text3);">
+      <div style="font-size:2.5rem;margin-bottom:12px;">📊</div>
+      <div style="font-size:0.8rem;margin-bottom:8px;">No VOD data in this project yet</div>
+      <div style="font-size:0.65rem;">Click "+ NEW VOD SESSION" to start tracking</div>
+    </div>`;
+  }
+  
+  const entries = project.entries;
+  return `
+    <div class="vod-chart-container">
+      <div class="vod-chart-card vod-chart-main">
+        <div class="vod-chart-title">📊 Performance Trends - ${escHtml(project.name)}</div>
+        <div class="vod-chart-subtitle">Track all metrics over time</div>
+        <canvas id="vodChartCombined" style="height:400px;"></canvas>
+        <div class="vod-chart-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#a855f7;"></span>Avg Damage/Opening (%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#3c8dff;"></span>Openings/Stock</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#2dcc70;"></span>Avg Kill %</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#ff3c3c;"></span>Dropped Combo (%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#ff8c00;"></span>Dropped Edgeguard (%)</div>
+        </div>
+      </div>
+    </div>
+    <div class="vod-history-section">
+      <div class="vod-history-title">📋 Session History</div>
+      ${entries.slice().reverse().map((e, reverseIdx) => {
+        const actualIdx = entries.length - 1 - reverseIdx;
+        return `
+        <div class="vod-history-card">
+          <div class="vod-history-header">
+            <div class="vod-history-name">${escHtml(e.sessionName)}</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="vod-history-date">Day ${e.day} • ${new Date(e.date).toLocaleDateString()}</div>
+              <button class="vod-delete-btn" onclick="deleteVODEntryFromProject(${projectIndex}, ${actualIdx})" title="Delete this session">✕</button>
+            </div>
+          </div>
+          <div class="vod-history-stats">
+            <div class="vod-stat-item"><div class="vod-stat-value">${e.avgDamagePerOpening}%</div><div class="vod-stat-label">Dmg/Opening</div></div>
+            <div class="vod-stat-item"><div class="vod-stat-value">${e.openingsPerStock}</div><div class="vod-stat-label">Opens/Stock</div></div>
+            <div class="vod-stat-item"><div class="vod-stat-value">${e.avgKillPercent}%</div><div class="vod-stat-label">Kill %</div></div>
+            <div class="vod-stat-item"><div class="vod-stat-value">${e.droppedComboRate}%</div><div class="vod-stat-label">Drop Combo</div></div>
+            <div class="vod-stat-item"><div class="vod-stat-value">${e.droppedEdgeguardRate}%</div><div class="vod-stat-label">Drop EG</div></div>
+          </div>
+          ${e.notes ? `<div class="vod-history-notes">${escHtml(e.notes)}</div>` : ''}
+        </div>
+      `;}).join('')}
+    </div>
+  `;
+}
+
+function initVODChartsForProject(projectIndex) {
+  const project = state.vodProjects[projectIndex];
+  if (!project || !project.entries || project.entries.length === 0) return;
+  
+  const entries = project.entries;
+  const labels = entries.map((e, i) => `S${i+1}`);
+  
+  setTimeout(() => {
+    const canvas = document.getElementById('vodChartCombined');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (window.vodChartCombinedInstance) window.vodChartCombinedInstance.destroy();
+    
+    window.vodChartCombinedInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Avg Damage/Opening (%)',
+            data: entries.map(e => e.avgDamagePerOpening),
+            borderColor: '#a855f7',
+            backgroundColor: 'rgba(168,85,247,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Openings/Stock',
+            data: entries.map(e => e.openingsPerStock),
+            borderColor: '#3c8dff',
+            backgroundColor: 'rgba(60,141,255,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Avg Kill %',
+            data: entries.map(e => e.avgKillPercent),
+            borderColor: '#2dcc70',
+            backgroundColor: 'rgba(45,204,112,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Dropped Combo (%)',
+            data: entries.map(e => e.droppedComboRate),
+            borderColor: '#ff3c3c',
+            backgroundColor: 'rgba(255,60,60,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Dropped Edgeguard (%)',
+            data: entries.map(e => e.droppedEdgeguardRate),
+            borderColor: '#ff8c00',
+            backgroundColor: 'rgba(255,140,0,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(10,10,16,0.95)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: 'rgba(168,85,247,0.3)',
+            borderWidth: 1,
+            padding: 12,
+            displayColors: true
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: 'rgba(255,255,255,0.5)' }
+          },
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: 'rgba(255,255,255,0.5)' }
+          }
+        }
+      }
+    });
+  }, 100);
+}
+
+function deleteVODEntryFromProject(projectIndex, entryIndex) {
+  if (!confirm('Delete this VOD session? This cannot be undone.')) return;
+  const project = state.vodProjects[projectIndex];
+  project.entries.splice(entryIndex, 1);
+  project.lastUpdated = new Date().toISOString();
+  saveState();
+  
+  // Refresh view
+  const container = document.getElementById('vodChartsContainer');
+  if (container) {
+    container.innerHTML = renderVODChartsForProject(projectIndex);
+    initVODChartsForProject(projectIndex);
+  }
 }
 
 function renderVODCharts() {
@@ -8276,40 +8714,32 @@ function renderVODCharts() {
   
   const entries = state.vodEntries;
   return `
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-bottom:24px;">
-      <div class="vod-chart-card">
-        <div class="vod-chart-title">Avg Damage Per Opening</div>
-        <div class="vod-chart-subtitle">Higher = better punish game</div>
-        <canvas id="vodChartDamage" style="height:200px;"></canvas>
-      </div>
-      <div class="vod-chart-card">
-        <div class="vod-chart-title">Openings Per Stock</div>
-        <div class="vod-chart-subtitle">Lower = more efficient</div>
-        <canvas id="vodChartOpenings" style="height:200px;"></canvas>
-      </div>
-      <div class="vod-chart-card">
-        <div class="vod-chart-title">Average Kill Percent</div>
-        <div class="vod-chart-subtitle">Consistency tracker</div>
-        <canvas id="vodChartKillPercent" style="height:200px;"></canvas>
-      </div>
-      <div class="vod-chart-card">
-        <div class="vod-chart-title">Dropped Combo Rate</div>
-        <div class="vod-chart-subtitle">Lower = better execution</div>
-        <canvas id="vodChartDroppedCombo" style="height:200px;"></canvas>
-      </div>
-      <div class="vod-chart-card">
-        <div class="vod-chart-title">Dropped Edgeguard Rate</div>
-        <div class="vod-chart-subtitle">Lower = better edgeguards</div>
-        <canvas id="vodChartDroppedEdgeguard" style="height:200px;"></canvas>
+    <div class="vod-chart-container">
+      <div class="vod-chart-card vod-chart-main">
+        <div class="vod-chart-title">📊 Performance Trends</div>
+        <div class="vod-chart-subtitle">Track all metrics over time</div>
+        <canvas id="vodChartCombined" style="height:400px;"></canvas>
+        <div class="vod-chart-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#a855f7;"></span>Avg Damage/Opening (%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#3c8dff;"></span>Openings/Stock</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#2dcc70;"></span>Avg Kill %</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#ff3c3c;"></span>Dropped Combo (%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#ff8c00;"></span>Dropped Edgeguard (%)</div>
+        </div>
       </div>
     </div>
     <div class="vod-history-section">
       <div class="vod-history-title">📋 Session History</div>
-      ${entries.slice().reverse().map(e => `
+      ${entries.slice().reverse().map((e, reverseIdx) => {
+        const actualIdx = entries.length - 1 - reverseIdx;
+        return `
         <div class="vod-history-card">
           <div class="vod-history-header">
             <div class="vod-history-name">${escHtml(e.sessionName)}</div>
-            <div class="vod-history-date">Day ${e.day} • ${new Date(e.date).toLocaleDateString()}</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="vod-history-date">Day ${e.day} • ${new Date(e.date).toLocaleDateString()}</div>
+              <button class="vod-delete-btn" onclick="deleteVODEntry(${actualIdx})" title="Delete this session">✕</button>
+            </div>
           </div>
           <div class="vod-history-stats">
             <div class="vod-stat-item"><div class="vod-stat-value">${e.avgDamagePerOpening}%</div><div class="vod-stat-label">Dmg/Opening</div></div>
@@ -8320,7 +8750,7 @@ function renderVODCharts() {
           </div>
           ${e.notes ? `<div class="vod-history-notes">${escHtml(e.notes)}</div>` : ''}
         </div>
-      `).join('')}
+      `;}).join('')}
     </div>
   `;
 }
@@ -8329,13 +8759,111 @@ function initVODCharts() {
   if (!state.vodEntries || state.vodEntries.length === 0) return;
   const entries = state.vodEntries;
   const labels = entries.map((e, i) => `S${i+1}`);
+  
   setTimeout(() => {
-    renderChart('vodChartDamage', labels, entries.map(e => e.avgDamagePerOpening), 'Damage %', 'rgb(168,85,247)');
-    renderChart('vodChartOpenings', labels, entries.map(e => e.openingsPerStock), 'Openings', 'rgb(60,141,255)');
-    renderChart('vodChartKillPercent', labels, entries.map(e => e.avgKillPercent), 'Kill %', 'rgb(45,204,112)');
-    renderChart('vodChartDroppedCombo', labels, entries.map(e => e.droppedComboRate), 'Drop %', 'rgb(255,60,60)');
-    renderChart('vodChartDroppedEdgeguard', labels, entries.map(e => e.droppedEdgeguardRate), 'Drop %', 'rgb(255,140,0)');
+    const canvas = document.getElementById('vodChartCombined');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (window.vodChartCombinedInstance) window.vodChartCombinedInstance.destroy();
+    
+    window.vodChartCombinedInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Avg Damage/Opening (%)',
+            data: entries.map(e => e.avgDamagePerOpening),
+            borderColor: '#a855f7',
+            backgroundColor: 'rgba(168,85,247,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Openings/Stock',
+            data: entries.map(e => e.openingsPerStock),
+            borderColor: '#3c8dff',
+            backgroundColor: 'rgba(60,141,255,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Avg Kill %',
+            data: entries.map(e => e.avgKillPercent),
+            borderColor: '#2dcc70',
+            backgroundColor: 'rgba(45,204,112,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Dropped Combo (%)',
+            data: entries.map(e => e.droppedComboRate),
+            borderColor: '#ff3c3c',
+            backgroundColor: 'rgba(255,60,60,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Dropped Edgeguard (%)',
+            data: entries.map(e => e.droppedEdgeguardRate),
+            borderColor: '#ff8c00',
+            backgroundColor: 'rgba(255,140,0,0.1)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(10,10,16,0.95)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: 'rgba(168,85,247,0.3)',
+            borderWidth: 1,
+            padding: 12,
+            displayColors: true
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: 'rgba(255,255,255,0.5)' }
+          },
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: 'rgba(255,255,255,0.5)' }
+          }
+        }
+      }
+    });
   }, 100);
+}
+
+function deleteVODEntry(index) {
+  if (!confirm('Delete this VOD session? This cannot be undone.')) return;
+  state.vodEntries.splice(index, 1);
+  saveState();
+  showSection('tool_vodstats'); // Refresh the page
 }
 
 function renderChart(canvasId, labels, data, label, color) {
