@@ -2238,6 +2238,26 @@ body::before {
 }
 .pm-time-opt:hover { border-color: var(--blue); color: var(--blue); }
 .pm-time-opt.selected { border-color: var(--blue); background: var(--blue-dim); color: var(--blue); }
+.pm-practice-types {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.pm-practice-type {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.pm-practice-type:hover { border-color: var(--purple); color: var(--purple); }
+.pm-practice-type.selected { border-color: var(--purple); background: var(--purple-dim); color: var(--purple); }
 .pm-start-btn {
   width: 100%; margin-top: 22px;
   background: var(--blue); border: none;
@@ -2438,6 +2458,7 @@ body::before {
 .ps-meta-pill.rating-high { background: rgba(45,204,112,0.1); color: var(--green); border: 1px solid rgba(45,204,112,0.25); }
 .ps-meta-pill.rating-mid { background: rgba(245,200,66,0.1); color: var(--gold); border: 1px solid rgba(245,200,66,0.25); }
 .ps-meta-pill.rating-low { background: rgba(255,60,60,0.1); color: var(--accent); border: 1px solid rgba(255,60,60,0.25); }
+.ps-meta-pill.practice-type { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.25); text-transform: capitalize; }
 .ps-expand-btn { font-size: 0.55rem; color: var(--text2); transition: transform 0.2s; background: none; border: none; cursor: pointer; }
 .ps-card.open .ps-expand-btn { transform: rotate(180deg); }
 .ps-card-body { display: none; padding: 18px; }
@@ -4447,6 +4468,15 @@ body { overscroll-behavior-x: none; }
         <div class="pm-time-opt" onclick="selectMatchTime('1h',this)">1 hour</div>
         <div class="pm-time-opt" onclick="selectMatchTime('2h',this)">2 hours</div>
         <div class="pm-time-opt" onclick="selectMatchTime('3h+',this)">3h+</div>
+      </div>
+    </div>
+    <div class="pm-field">
+      <label class="pm-label">What type of practice?</label>
+      <div class="pm-practice-types" id="pmPracticeTypes">
+        <div class="pm-practice-type" onclick="togglePracticeType('training',this)">Training Room</div>
+        <div class="pm-practice-type" onclick="togglePracticeType('offline',this)">Offline Practice</div>
+        <div class="pm-practice-type" onclick="togglePracticeType('online',this)">Online Practice</div>
+        <div class="pm-practice-type" onclick="togglePracticeType('ranked',this)">Ranked</div>
       </div>
     </div>
     <div class="pm-field">
@@ -7616,21 +7646,39 @@ function openPreMatchModal() {
 
 function closePreMatchModal() {
   document.getElementById('preMatchModal').classList.add('hidden');
+  // Reset selections
+  selectedPracticeTypes = [];
+  document.querySelectorAll('.pm-practice-type').forEach(el => el.classList.remove('selected'));
 }
 
 let selectedMatchTime = null;
+let selectedPracticeTypes = [];
+
 function selectMatchTime(t, el) {
   selectedMatchTime = t;
   document.querySelectorAll('.pm-time-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
 }
 
+function togglePracticeType(type, el) {
+  const idx = selectedPracticeTypes.indexOf(type);
+  if (idx > -1) {
+    selectedPracticeTypes.splice(idx, 1);
+    el.classList.remove('selected');
+  } else {
+    selectedPracticeTypes.push(type);
+    el.classList.add('selected');
+  }
+}
+
 function startMatchSession() {
   const opponent = document.getElementById('pmOpponent').value.trim() || 'Unknown';
   const focus = document.getElementById('pmFocus').value.trim() || 'Open session';
   const time = selectedMatchTime || '1h';
+  const practiceTypes = selectedPracticeTypes.length > 0 ? [...selectedPracticeTypes] : ['practice'];
+  
   activeMatchSession = {
-    opponent, focus, time,
+    opponent, focus, time, practiceTypes,
     startTs: Date.now(),
     notes: {}
   };
@@ -7749,6 +7797,27 @@ function buildPastSessionsTool() {
   const totalSessions = sessions.length;
   const totalMinutes = sessions.reduce((s, r) => s + (r.durationMinutes || 0), 0);
   const avgRating = totalSessions ? (sessions.reduce((s, r) => s + (r.rating || 0), 0) / totalSessions).toFixed(1) : '—';
+  
+  // Calculate this week's minutes (week = Monday to Sunday)
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  const weekStart = new Date(now);
+  // Set to Monday of this week (or today if it's Monday)
+  weekStart.setDate(now.getDate() - ((dayOfWeek === 0 ? 7 : dayOfWeek) - 1));
+  weekStart.setHours(0, 0, 0, 0);
+  
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6); // Sunday
+  weekEnd.setHours(23, 59, 59, 999);
+  
+  const thisWeekSessions = sessions.filter(s => {
+    const sessionDate = new Date(s.timestamp || s.date);
+    return sessionDate >= weekStart && sessionDate <= weekEnd;
+  });
+  
+  const weekMinutes = thisWeekSessions.reduce((s, r) => s + (r.durationMinutes || 0), 0);
+  const weekDisplay = weekMinutes >= 60 ? `${Math.floor(weekMinutes/60)}h ${weekMinutes%60}m` : `${weekMinutes}m`;
+  const totalDisplay = totalMinutes >= 60 ? `${Math.floor(totalMinutes/60)}h ${totalMinutes%60}m` : `${totalMinutes}m`;
 
   const hdrHTML = `
     <div class="tool-header">
@@ -7760,7 +7829,8 @@ function buildPastSessionsTool() {
     </div>
     <div class="ps-stats-bar">
       <div class="ps-stat-chip"><div class="sc-num">${totalSessions}</div><div class="sc-label">Sessions</div></div>
-      <div class="ps-stat-chip"><div class="sc-num">${totalMinutes}</div><div class="sc-label">Total Min</div></div>
+      <div class="ps-stat-chip"><div class="sc-num">${weekDisplay}</div><div class="sc-label">This Week</div></div>
+      <div class="ps-stat-chip"><div class="sc-num">${totalDisplay}</div><div class="sc-label">All Time</div></div>
       <div class="ps-stat-chip"><div class="sc-num">${avgRating}</div><div class="sc-label">Avg Rating</div></div>
     </div>
   `;
@@ -7784,6 +7854,7 @@ function buildPastSessionsTool() {
           <span class="ps-date-tag">Day ${s.day} · ${s.date}</span>
           <div class="ps-vs">vs ${escHtml(s.opponent)}</div>
           <div class="ps-meta-pills">
+            ${s.practiceTypes && s.practiceTypes.length > 0 ? s.practiceTypes.map(pt => `<span class="ps-meta-pill practice-type">${pt}</span>`).join('') : ''}
             <span class="ps-meta-pill duration">⏱ ${dur}</span>
             <span class="ps-meta-pill ${ratingClass}">★ ${s.rating}/10</span>
           </div>
