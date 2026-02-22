@@ -3834,17 +3834,17 @@ body { overscroll-behavior-x: none; }
     <span class="bn-icon">🏠</span>
     <span class="bn-label">Today</span>
   </button>
-  <button class="bn-tab" id="bnQuests" onclick="bottomNavClick('quests')">
+  <button class="bn-tab" id="bnMatchups" onclick="bottomNavClick('matchups')">
     <span class="bn-icon">📋</span>
-    <span class="bn-label">Quests</span>
+    <span class="bn-label">Matchups</span>
   </button>
   <button class="bn-tab" id="bnProgress" onclick="bottomNavClick('progress')">
     <span class="bn-icon">📈</span>
     <span class="bn-label">Progress</span>
   </button>
-  <button class="bn-tab" id="bnStats" onclick="bottomNavClick('stats')">
+  <button class="bn-tab" id="bnSessions" onclick="bottomNavClick('sessions')">
     <span class="bn-icon">🎯</span>
-    <span class="bn-label">Stats</span>
+    <span class="bn-label">Sessions</span>
   </button>
   <button class="bn-tab" id="bnMore" onclick="openDrawer()">
     <span class="bn-icon">☰</span>
@@ -5916,9 +5916,28 @@ function buildRoadmap() {
     const dot = document.createElement('div');
     dot.className = 'roadmap-day-dot';
     dot.title = `Day ${d} — ${getDayDate(d)}`;
-    if (state.dayCompletions[d]) dot.classList.add('completed');
-    else if (d === currentDay) dot.classList.add('current');
-    else if (d > currentDay) dot.classList.add('locked');
+    
+    // Check if this day is completed
+    const isDayComplete = state.dayCompletions[d] === true;
+    
+    if (isDayComplete && d < currentDay) {
+      // Past completed day
+      dot.classList.add('completed');
+    } else if (d === currentDay) {
+      // Current day - check if already completed today
+      if (isDayComplete) {
+        dot.classList.add('completed');
+      } else {
+        dot.classList.add('current');
+      }
+    } else if (d > currentDay) {
+      // Future day
+      dot.classList.add('locked');
+    } else {
+      // Past incomplete day - should still show as incomplete/current
+      dot.classList.add('current');
+    }
+    
     strip.appendChild(dot);
   }
   wrap.appendChild(strip);
@@ -6339,10 +6358,13 @@ function renderMatchupGrid(grid) {
     const card = document.createElement('div');
     card.className = 'matchup-card';
     const fields = [
+      { key: 'preferredRange', label: 'What Range Do I Want to Play At?', ph: 'Close range? Mid range? Long range? Platform camping?' },
       { key: 'myWin', label: 'My Win Condition', ph: 'What needs to be true for you to win?' },
       { key: 'theirWin', label: 'Their Win Condition', ph: 'What does their optimal game plan look like?' },
       { key: 'neutralGoal', label: 'Neutral Goal', ph: 'What are you specifically trying to accomplish in neutral?' },
       { key: 'punishFocus', label: 'Punish Focus', ph: 'What move or position gives your best punish?' },
+      { key: 'cpStages', label: 'My Counterpick Stages', ph: 'e.g. FD, Battlefield, Small Battlefield' },
+      { key: 'banStages', label: 'Ban These Stages', ph: 'e.g. Kalos, Town & City' },
       { key: 'notes', label: 'Post-Match Notes', ph: 'What did you learn the last time you played this matchup?' },
     ];
     card.innerHTML = `
@@ -6366,7 +6388,7 @@ function renderMatchupGrid(grid) {
 function addMatchupCard() {
   const char = document.getElementById('matchupCharIn')?.value.trim(); if (!char) return;
   if (!state.matchupCards) state.matchupCards = [];
-  state.matchupCards.push({ char, myWin:'', theirWin:'', neutralGoal:'', punishFocus:'', notes:'' });
+  state.matchupCards.push({ char, preferredRange:'', myWin:'', theirWin:'', neutralGoal:'', punishFocus:'', cpStages:'', banStages:'', notes:'' });
   saveState();
   document.getElementById('matchupCharIn').value = '';
   renderMatchupGrid(document.getElementById('matchupGrid'));
@@ -8537,14 +8559,12 @@ function bottomNavClick(tab) {
   let sectionId;
   if (tab === 'today') {
     sectionId = 'today';
-  } else if (tab === 'quests') {
-    // Show first available pillar
-    const firstPillar = typeof PILLARS !== 'undefined' && PILLARS[0];
-    sectionId = firstPillar ? firstPillar.id : 'today';
+  } else if (tab === 'matchups') {
+    sectionId = 'tool_matchups';
   } else if (tab === 'progress') {
     sectionId = 'tool_vodstats';
-  } else if (tab === 'stats') {
-    sectionId = 'tool_milestones';
+  } else if (tab === 'sessions') {
+    sectionId = 'tool_pastsessions';
   }
   if (sectionId) showSection(sectionId);
   updateBottomNav(sectionId);
@@ -8554,15 +8574,15 @@ function updateBottomNav(activeId) {
   // Map section IDs to bottom nav tab IDs
   const tabMap = {
     'today': 'bnToday',
+    'tool_matchups': 'bnMatchups',
     'tool_vodstats': 'bnProgress',
-    'tool_milestones': 'bnStats',
+    'tool_pastsessions': 'bnSessions',
   };
-  // Pillars map to quests tab
+  // Pillars and other tools map to more tab
   if (typeof PILLARS !== 'undefined') {
-    PILLARS.forEach(p => { tabMap[p.id] = 'bnQuests'; });
+    PILLARS.forEach(p => { tabMap[p.id] = 'bnMore'; });
   }
-  // Tools map to more tab
-  ['tool_matchups','tool_vod','tool_locals','tool_squad','tool_pastsessions','tool_reset'].forEach(t => {
+  ['tool_vod','tool_locals','tool_squad','tool_reset','tool_milestones'].forEach(t => {
     tabMap[t] = 'bnMore';
   });
 
