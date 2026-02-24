@@ -7006,7 +7006,7 @@ function buildVodStatsTool() {
   if (!state.vodProjects) state.vodProjects = [];
   
   // Show project selector or project view
-  if (!activeVODProject) {
+  if (activeVODProject === null || activeVODProject === undefined) {
     sec.innerHTML = buildVODProjectSelector();
   } else {
     sec.innerHTML = buildVODProjectView();
