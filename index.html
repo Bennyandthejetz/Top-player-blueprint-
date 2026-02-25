@@ -3653,6 +3653,51 @@ body::before {
 
 /* VOD Charts Styling */
 /* VOD Charts - Mobile First */
+.vod-project-header {
+  margin-bottom: 24px;
+}
+.vod-back-btn {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.vod-back-btn:hover {
+  border-color: var(--purple);
+  background: var(--purple-dim);
+  transform: translateX(-4px);
+}
+.vod-project-title-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.vod-project-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+.vod-project-title-block h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.vod-project-title-block p {
+  font-size: 0.75rem;
+  color: var(--text3);
+  margin: 0;
+}
+
 .vod-chart-section {
   background: var(--card);
   border: 1px solid var(--border2);
@@ -6352,21 +6397,50 @@ const QUEST_SCHEDULE = {
 function generateTodayQuests(day) {
   const profile = state.profile || {};
   const timePerDay = profile.timePerDay || '1hr';
-  const isBehind = getMissedDays() > 2;
+  const missedDays = getMissedDays();
 
-  // Get scheduled quests
+  // Get today's scheduled quests
   let quests = (QUEST_SCHEDULE[day] || QUEST_SCHEDULE[Math.min(day, 60)] || []).slice();
-
-  // If behind, only show core quests
-  if (isBehind) {
-    quests = quests.filter(q => q.priority === 'core');
+  
+  // CATCH-UP MODE: Add missed quests from previous incomplete days
+  if (missedDays > 0) {
+    const missedQuests = [];
+    
+    // Look back through missed days
+    for (let d = 1; d < day; d++) {
+      // Check if this day was completed
+      const dayComplete = state.completedDays && state.completedDays.includes(d);
+      
+      if (!dayComplete) {
+        // Get quests from this day
+        const dayQuests = QUEST_SCHEDULE[d] || [];
+        
+        // Find which quests weren't completed
+        dayQuests.forEach(q => {
+          const key = `quest_${d}_${q.id}`;
+          const wasCompleted = state.dayCompletions[key];
+          
+          if (!wasCompleted && q.priority === 'core') {
+            // Add to makeup list with day label
+            missedQuests.push({
+              ...q,
+              originalDay: d,
+              title: `[Day ${d}] ${q.title}`,
+              isMakeup: true
+            });
+          }
+        });
+      }
+    }
+    
+    // Add makeup quests BEFORE today's quests (prioritize catching up)
+    quests = [...missedQuests, ...quests];
   }
 
   // Trim by time available
   const maxQ = timePerDay === '30min' ? 2 : timePerDay === '1hr' ? 3 : timePerDay === '2hr' ? 4 : 5;
   quests = quests.slice(0, maxQ);
 
-  // Every 7 days: Boss Battle is always first (already in schedule)
   return quests;
 }
 
@@ -6817,14 +6891,15 @@ function buildTodaySectionBase() {
   sec.appendChild(pgrid);
 
   // ── CATCH-UP ALERT ───────────────────────────────────────────────────
-  if (missed > 2) {
+  if (missed > 0) {
     const alert = document.createElement('div');
     alert.className = 'catchup-alert';
+    const makeupCount = quests.filter(q => q.isMakeup).length;
     alert.innerHTML = `
-      <div class="ca-icon">⚠️</div>
+      <div class="ca-icon">⚡</div>
       <div class="ca-text">
-        <div class="ca-title">CATCH-UP MODE — ${missed} DAYS BEHIND</div>
-        System adjusted. Only CORE quests showing. No shame — just get one done right now.
+        <div class="ca-title">CATCH-UP MODE — ${missed} DAY${missed > 1 ? 'S' : ''} BEHIND</div>
+        ${makeupCount > 0 ? `${makeupCount} makeup quest${makeupCount > 1 ? 's' : ''} added. Complete these to catch up.` : 'Stay consistent to avoid makeup quests.'}
       </div>
     `;
     sec.appendChild(alert);
@@ -7014,44 +7089,69 @@ function advancePillarAtoms(pillarId, questXp) {
 }
 
 function toggleQuestDone(qid, xp) {
-  const key = `quest_${currentDay}_${qid}`;
+  const todayQuests = generateTodayQuests(currentDay);
+  const quest = todayQuests.find(q => q.id === qid);
+  
+  // Use the original day for makeup quests, current day for regular quests
+  const dayToMark = quest?.originalDay || currentDay;
+  const key = `quest_${dayToMark}_${qid}`;
+  
   const wasDone = !!state.dayCompletions[key];
   state.dayCompletions[key] = !wasDone;
+  
   if (!wasDone) {
     addXp(xp);
-    // Find the quest and directly link to its milestone
-    const todayQuests = generateTodayQuests(currentDay);
-    const quest = todayQuests.find(q => q.id === qid);
+    
     if (quest) {
       completeQuestMilestone(quest);
       const pillar = PILLARS.find(p => p.id === quest.pillar);
       const milestone = getMilestone(quest.pillar, quest.milestone);
       if (pillar && milestone) {
         const pct = getMilestonePct(milestone);
-        showToast(`✅ ${milestone.name} — ${pct}% · +${xp} XP`, 'success');
+        const label = quest.isMakeup ? `[Day ${quest.originalDay}] ${milestone.name}` : milestone.name;
+        showToast(`✅ ${label} — ${pct}% · +${xp} XP`, 'success');
       }
     }
     updateGlobal();
     updateHeader();
     
-    // Check if ALL quests are now done
-    const allDone = todayQuests.every(q => state.dayCompletions[`quest_${currentDay}_${q.id}`]);
+    // Check if ALL of today's quests (including makeups) are now done
+    const allDone = todayQuests.every(q => {
+      const qDay = q.originalDay || currentDay;
+      return state.dayCompletions[`quest_${qDay}_${q.id}`];
+    });
+    
     if (allDone) {
-      // Trigger same completion as session complete
+      // Trigger completion
       playLevelUp();
       speakAnnouncer('PERFECT');
       
-      // Mark day as complete (turn roadmap green)
+      // Mark today (and any completed makeup days) as complete
       if (!state.completedDays) state.completedDays = [];
+      
+      // Mark current day complete
       if (!state.completedDays.includes(currentDay)) {
         state.completedDays.push(currentDay);
       }
+      
+      // Also mark any makeup days that are now fully complete
+      const makeupDays = [...new Set(todayQuests.filter(q => q.isMakeup).map(q => q.originalDay))];
+      makeupDays.forEach(day => {
+        const dayQuests = QUEST_SCHEDULE[day] || [];
+        const allDayQuestsComplete = dayQuests.every(q => 
+          state.dayCompletions[`quest_${day}_${q.id}`]
+        );
+        if (allDayQuestsComplete && !state.completedDays.includes(day)) {
+          state.completedDays.push(day);
+        }
+      });
       
       // Update progress bar
       updateGlobal();
     }
   }
   saveState();
+  
   // Re-render today section
   if (activeSection === 'today') {
     const sec = document.getElementById('sec_today');
@@ -7570,14 +7670,16 @@ function buildVODProjectView() {
   }
   
   return `
-    <div class="tool-header" style="position:relative;">
-      <button onclick="closeVODProject()" style="position:absolute;left:0;top:50%;transform:translateY(-50%);background:transparent;border:2px solid var(--border2);color:var(--text2);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.65rem;transition:all 0.2s;">
-        ← BACK TO PROJECTS
+    <div class="vod-project-header">
+      <button class="vod-back-btn" onclick="closeVODProject()">
+        ← BACK
       </button>
-      <div class="tool-icon-big">📊</div>
-      <div class="tool-title-block">
-        <h2>${escHtml(project.name)}</h2>
-        <p>Track your improvement for this specific focus area</p>
+      <div class="vod-project-title-block">
+        <div class="vod-project-icon">📊</div>
+        <div>
+          <h2>${escHtml(project.name)}</h2>
+          <p>Track your improvement for this specific focus area</p>
+        </div>
       </div>
     </div>
     <button class="add-form-btn" onclick="openVODStatModalForProject()" style="margin-bottom:24px;width:auto;padding:14px 32px;">
@@ -9777,14 +9879,18 @@ function saveVODEntry() {
   
   const entry = {
     id: 'vod_' + Date.now(),
+    timestamp: new Date().toISOString(),
     date: new Date().toISOString(),
     day: currentDay,
     sessionName,
-    avgDamagePerOpening: parseFloat(document.getElementById('vodAvgDamage').value) || 0,
+    // Map to STAT_METRICS keys
+    dmgPerOpening: parseFloat(document.getElementById('vodAvgDamage').value) || 0,
     openingsPerStock: parseFloat(document.getElementById('vodOpeningsPerStock').value) || 0,
-    avgKillPercent: parseFloat(document.getElementById('vodAvgKillPercent').value) || 0,
-    droppedComboRate: parseFloat(document.getElementById('vodDroppedCombo').value) || 0,
-    droppedEdgeguardRate: parseFloat(document.getElementById('vodDroppedEdgeguard').value) || 0,
+    killPct: parseFloat(document.getElementById('vodAvgKillPercent').value) || 0,
+    droppedCombos: parseFloat(document.getElementById('vodDroppedCombo').value) || 0,
+    droppedEdgeguards: parseFloat(document.getElementById('vodDroppedEdgeguard').value) || 0,
+    neutralWinRate: 0, // Not in form yet
+    punishEfficiency: 0, // Not in form yet
     notes: document.getElementById('vodNotes').value.trim()
   };
   
@@ -9885,7 +9991,7 @@ function initVODChartsForProject(projectIndex) {
     if (window.vodMainChartInstance) window.vodMainChartInstance.destroy();
     
     const entries = project.entries;
-    const labels = entries.map((e, i) => `S${i + 1}`);
+    const labels = entries.map((e, i) => e.sessionName || `Session ${i + 1}`);
     
     // Build datasets from STAT_METRICS
     const datasets = STAT_METRICS.map(metric => ({
@@ -11026,8 +11132,12 @@ function getWeeklyVODCount() {
   state.vodProjects.forEach(project => {
     if (project.entries) {
       project.entries.forEach(entry => {
-        const entryDate = new Date(entry.timestamp).getTime();
-        if (entryDate >= oneWeekAgo) count++;
+        // Check both timestamp and date fields (for backwards compatibility)
+        const entryTime = entry.timestamp || entry.date;
+        if (entryTime) {
+          const entryDate = new Date(entryTime).getTime();
+          if (entryDate >= oneWeekAgo) count++;
+        }
       });
     }
   });
