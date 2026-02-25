@@ -6437,9 +6437,12 @@ function generateTodayQuests(day) {
     quests = [...missedQuests, ...quests];
   }
 
-  // Trim by time available
-  const maxQ = timePerDay === '30min' ? 2 : timePerDay === '1hr' ? 3 : timePerDay === '2hr' ? 4 : 5;
-  quests = quests.slice(0, maxQ);
+  // DON'T trim if we have makeup quests - show all of them plus today's
+  // Only trim regular days to time available
+  if (missedDays === 0) {
+    const maxQ = timePerDay === '30min' ? 2 : timePerDay === '1hr' ? 3 : timePerDay === '2hr' ? 4 : 5;
+    quests = quests.slice(0, maxQ);
+  }
 
   return quests;
 }
