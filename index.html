@@ -2806,6 +2806,578 @@ body::before {
 .hbb-focus { color: var(--text2); font-style: italic; font-family: 'Crimson Pro', serif; font-size: 0.8rem; }
 
 /* ── PILLAR GRID ──────────────────────────────────── */
+/* Daily Macros - Beautiful Modern Design */
+.daily-macros-section {
+  margin-bottom: 24px;
+}
+.dm-container {
+  background: linear-gradient(135deg, rgba(168,85,247,0.05) 0%, rgba(60,141,255,0.05) 100%);
+  border: 1px solid rgba(168,85,247,0.2);
+  border-radius: 16px;
+  padding: 20px;
+}
+.dm-main-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.dm-card {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  border-radius: 12px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.dm-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.dm-card:hover::before {
+  opacity: 0.05;
+}
+.dm-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--purple);
+  box-shadow: 0 8px 24px rgba(168,85,247,0.2);
+}
+.dm-card.dm-complete {
+  border-color: var(--green);
+  background: linear-gradient(135deg, rgba(45,204,112,0.05) 0%, rgba(45,204,112,0.02) 100%);
+}
+.dm-card-inner {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 8px;
+}
+.dm-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.dm-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.05);
+  stroke-width: 3;
+}
+.dm-progress {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dm-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.dm-slash {
+  font-size: 1rem;
+  color: var(--text3);
+}
+.dm-unit {
+  font-size: 0.9rem;
+  color: var(--text3);
+  margin-left: 2px;
+}
+.dm-name {
+  font-size: 0.65rem;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.3;
+}
+.dm-goal {
+  color: var(--text3);
+  font-size: 0.6rem;
+}
+.dm-extras {
+  display: flex;
+  gap: 10px;
+}
+.dm-extra {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dm-extra:hover {
+  border-color: var(--purple);
+  background: var(--purple-dim);
+  transform: translateX(4px);
+}
+.dm-extra.dm-extra-done {
+  border-color: rgba(45,204,112,0.3);
+  background: rgba(45,204,112,0.05);
+  cursor: default;
+}
+.dm-extra.dm-extra-done:hover {
+  transform: none;
+}
+.dm-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.2s;
+}
+.dm-dot-filled {
+  background: var(--green);
+  border-color: var(--green);
+}
+.dm-dot-filled::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.7rem;
+}
+.dm-extra-text {
+  flex: 1;
+  font-size: 0.75rem;
+  color: var(--text2);
+}
+.dm-extra-arrow {
+  font-size: 0.9rem;
+  color: var(--text3);
+  transition: transform 0.2s;
+}
+.dm-extra:hover .dm-extra-arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 640px) {
+  .dm-main-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .dm-extras {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .dm-card {
+    padding: 12px 8px;
+  }
+  .dm-card-inner {
+    width: 56px;
+    height: 56px;
+  }
+  .dm-value {
+    font-size: 1.4rem;
+  }
+}
+
+/* Journal Tool - Championship Level */
+.journal-instructions {
+  background: linear-gradient(135deg, rgba(255,60,60,0.1) 0%, rgba(245,200,66,0.1) 100%);
+  border-left: 4px solid #ff3c3c;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+.journal-instructions-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  color: #ff3c3c;
+  margin-bottom: 6px;
+}
+.journal-instructions-text {
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.journal-form-weekly {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+.journal-question-block {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.journal-question-block:last-of-type {
+  border-bottom: none;
+}
+.journal-question-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--purple);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.journal-question-text {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.journal-textarea-small {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--text);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+.journal-textarea-small:focus {
+  outline: none;
+  border-color: var(--purple);
+}
+.journal-submit-btn {
+  width: 100%;
+  background: var(--green);
+  border: none;
+  color: white;
+  padding: 16px;
+  border-radius: 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.journal-submit-btn:hover {
+  background: #3be080;
+  transform: translateY(-2px);
+}
+.journal-history-header {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: var(--text2);
+  margin-bottom: 16px;
+}
+.journal-history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.journal-history-week-card {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.journal-history-week-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(168,85,247,0.2);
+}
+.journal-history-week-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.journal-history-week-pillar {
+  font-size: 0.8rem;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+.journal-history-week-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.journal-history-week-date {
+  font-size: 0.65rem;
+  color: var(--text3);
+}
+.journal-history-week-complete {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--green);
+}
+.journal-history-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text3);
+}
+.journal-history-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+.journal-history-empty-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* Journal View Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+.journal-view-modal {
+  background: linear-gradient(135deg, #1a0a1a 0%, #0f0f20 100%);
+  border: 2px solid var(--purple);
+  border-radius: 16px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.journal-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: #1a0a1a;
+  z-index: 10;
+}
+.journal-view-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  color: var(--purple);
+  margin-bottom: 4px;
+}
+.journal-view-date {
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.modal-close-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+}
+.journal-view-content {
+  padding: 24px;
+}
+.journal-view-qa {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.journal-view-qa:last-child {
+  border-bottom: none;
+}
+.journal-view-question {
+  font-size: 0.85rem;
+  color: var(--text2);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.journal-view-q-num {
+  font-family: 'DM Mono', monospace;
+  color: var(--purple);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+.journal-view-answer {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.7;
+  padding: 16px;
+  background: rgba(168,85,247,0.05);
+  border-left: 3px solid var(--purple);
+  border-radius: 6px;
+}
+
+.journal-form {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.journal-prompt {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: rgba(168,85,247,0.05);
+  border-left: 3px solid var(--purple);
+  border-radius: 8px;
+}
+.journal-prompt-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--purple);
+  margin-bottom: 6px;
+}
+.journal-prompt-text {
+  font-size: 0.85rem;
+  color: var(--text2);
+  font-style: italic;
+  line-height: 1.5;
+}
+.journal-textarea {
+  width: 100%;
+  min-height: 150px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 14px;
+  color: var(--text);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+.journal-history-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.journal-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.journal-history-day {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+.journal-history-date {
+  font-size: 0.65rem;
+  color: var(--text3);
+}
+.journal-history-text {
+  font-size: 0.85rem;
+  color: var(--text2);
+  line-height: 1.6;
+  font-family: 'Crimson Pro', serif;
+}
+
+/* Tournament Tool */
+.tournament-simple {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 24px;
+}
+.tournament-status {
+  margin-bottom: 24px;
+}
+.tournament-complete {
+  text-align: center;
+  padding: 32px 20px;
+  background: linear-gradient(135deg, rgba(245,200,66,0.1) 0%, rgba(245,200,66,0.05) 100%);
+  border: 2px solid #f5c842;
+  border-radius: 12px;
+}
+.tournament-trophy {
+  font-size: 4rem;
+  margin-bottom: 12px;
+}
+.tournament-winner-text {
+  font-size: 0.75rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.tournament-winner-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: #f5c842;
+  letter-spacing: 0.12em;
+}
+.tournament-pending {
+  text-align: center;
+  padding: 32px 20px;
+  border: 2px dashed var(--border2);
+  border-radius: 12px;
+}
+.tournament-pending-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+.tournament-pending-text {
+  font-size: 0.9rem;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.tournament-pending-sub {
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.tournament-record {
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.tournament-record-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+
 .pillar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 8px; margin-bottom: 18px; }
 .pg-item { background: var(--card); border: 1px solid var(--border2); border-radius: 10px; padding: 12px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.15s; position: relative; overflow: hidden; }
 .pg-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--pill-color, var(--accent)); border-radius: 3px 0 0 3px; }
@@ -6731,6 +7303,8 @@ function buildNav() {
     { id: 'tool_vod', icon: '📹', name: 'VOD Review' },
     { id: 'tool_locals', icon: '👥', name: 'Local Scene' },
     { id: 'tool_milestones', icon: '🏅', name: 'Milestones' },
+    { id: 'tool_journal', icon: '📓', name: 'Daily Journal' },
+    { id: 'tool_tournament', icon: '🏆', name: 'Weekly Tournament' },
     { id: 'tool_squad', icon: '🤝', name: 'Squad' },
     { id: 'tool_pastsessions', icon: '📋', name: 'Past Sessions' },
     { id: 'tool_reset', icon: '⚠️', name: 'Reset Data' },
@@ -6790,6 +7364,8 @@ function buildMain() {
   main.appendChild(buildVodTool());
   main.appendChild(buildLocalsTool());
   main.appendChild(buildMilestonesTool());
+  main.appendChild(buildJournalTool());
+  main.appendChild(buildTournamentTool());
   main.appendChild(buildSquadSection());
   main.appendChild(buildPastSessionsTool());
   main.appendChild(buildResetTool());
@@ -6860,38 +7436,97 @@ function buildTodaySectionBase() {
   `;
   sec.appendChild(hero);
 
-  // ── PILLAR OVERVIEW GRID ─────────────────────────────────────────────
-  const pgrid = document.createElement('div');
-  pgrid.className = 'pillar-grid';
-
-  // ROI-ordered pillars (most impactful first)
-  const ROI_ORDER = ['tech', 'neutral', 'mental', 'competitive', 'advantage', 'disadvantage', 'matchups', 'review', 'physical', 'metagame'];
-  const orderedPillars = [...PILLARS].sort((a,b) => {
-    const ai = ROI_ORDER.indexOf(a.id); const bi = ROI_ORDER.indexOf(b.id);
-    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
-  });
-
-  orderedPillars.forEach((p, idx) => {
-    const pct = getPillarPct(p);
-    const roiColors = ['#ff3c3c','#ff3c3c','#f5c842','#2dcc70','#3c8dff','#3c8dff','#a855f7','#ff8c00','#2dcc70','#8888a8'];
-    const color = roiColors[idx] || '#8888a8';
-    const pill = document.createElement('div');
-    pill.className = 'pg-item';
-    pill.style.setProperty('--pill-color', color);
-    pill.onclick = () => showSection(p.id);
-    pill.innerHTML = `
-      <div class="pg-icon">${p.icon}</div>
-      <div class="pg-info">
-        <div class="pg-name">${p.name}</div>
-        <div class="pg-bar-wrap">
-          <div class="pg-bar-fill" style="width:${pct}%;background:${color};"></div>
+  // ── DAILY MACROS (REQUIREMENTS TRACKER) ──────────────────────────────
+  const macrosSection = document.createElement('div');
+  macrosSection.className = 'daily-macros-section';
+  
+  // Calculate what's done today
+  const vodToday = getWeeklyVODCount() > 0;
+  const bpmToday = (state.lastBPMTest && state.lastBPMTest === new Date().toDateString());
+  const tourneyWeek = Math.ceil(currentDay / 7);
+  const tourneyDone = state.weeklyTournaments?.[`week${tourneyWeek}`]?.winner;
+  
+  // Check if journal done (weekly journal for current week)
+  const journalDone = state.weeklyJournals?.some(j => j.week === weekNum);
+  
+  // Get current pillar for journal (based on week/block)
+  const weekNum = Math.ceil(currentDay / 7);
+  const journalPillar = weekNum <= 2 ? 'tech' : weekNum <= 4 ? 'neutral' : weekNum <= 6 ? 'mental' : 'competitive';
+  
+  // Profile time commitment and actual play time today
+  const timePerDay = state.profile?.timePerDay || '1hr';
+  const playGoal = timePerDay === '30min' ? 30 : timePerDay === '1hr' ? 60 : timePerDay === '2hr' ? 120 : 180;
+  const playToday = state.sessionMinutesToday || 0; // Track from session timer
+  const playPct = Math.min(100, (playToday / playGoal) * 100);
+  
+  macrosSection.innerHTML = `
+    <div class="dm-container">
+      <div class="dm-main-grid">
+        <div class="dm-card">
+          <div class="dm-card-inner">
+            <svg viewBox="0 0 36 36" class="dm-svg">
+              <circle cx="18" cy="18" r="16" class="dm-bg"/>
+              <circle cx="18" cy="18" r="16" class="dm-progress" 
+                style="stroke-dasharray: ${100}; stroke-dashoffset: ${100 * (1 - completedCount / quests.length)}; stroke: #a855f7"/>
+            </svg>
+            <div class="dm-value">${completedCount}<span class="dm-slash">/</span>${quests.length}</div>
+          </div>
+          <div class="dm-name">Daily Quests</div>
         </div>
-        <div class="pg-pct" style="color:${color}">${pct}%</div>
+        
+        <div class="dm-card" onclick="openSessionTimer()">
+          <div class="dm-card-inner">
+            <svg viewBox="0 0 36 36" class="dm-svg">
+              <circle cx="18" cy="18" r="16" class="dm-bg"/>
+              <circle cx="18" cy="18" r="16" class="dm-progress" 
+                style="stroke-dasharray: ${100}; stroke-dashoffset: ${100 * (1 - playPct / 100)}; stroke: #3c8dff"/>
+            </svg>
+            <div class="dm-value">${playToday}<span class="dm-unit">m</span></div>
+          </div>
+          <div class="dm-name">Play Time <span class="dm-goal">/ ${playGoal}m</span></div>
+        </div>
+        
+        <div class="dm-card ${vodToday ? 'dm-complete' : ''}" onclick="showSection('tool_vodstats')">
+          <div class="dm-card-inner">
+            <svg viewBox="0 0 36 36" class="dm-svg">
+              <circle cx="18" cy="18" r="16" class="dm-bg"/>
+              <circle cx="18" cy="18" r="16" class="dm-progress" 
+                style="stroke-dasharray: ${100}; stroke-dashoffset: ${vodToday ? 0 : 100}; stroke: #2dcc70"/>
+            </svg>
+            <div class="dm-value">${vodToday ? '1' : '0'}<span class="dm-slash">/</span>1</div>
+          </div>
+          <div class="dm-name">Stat VOD Review</div>
+        </div>
+        
+        <div class="dm-card ${bpmToday ? 'dm-complete' : ''}" onclick="showBPMPopup()">
+          <div class="dm-card-inner">
+            <svg viewBox="0 0 36 36" class="dm-svg">
+              <circle cx="18" cy="18" r="16" class="dm-bg"/>
+              <circle cx="18" cy="18" r="16" class="dm-progress" 
+                style="stroke-dasharray: ${100}; stroke-dashoffset: ${bpmToday ? 0 : 100}; stroke: #ff3c3c"/>
+            </svg>
+            <div class="dm-value">${bpmToday ? '1' : '0'}<span class="dm-slash">/</span>1</div>
+          </div>
+          <div class="dm-name">BPM Speed Test</div>
+        </div>
       </div>
-    `;
-    pgrid.appendChild(pill);
-  });
-  sec.appendChild(pgrid);
+      
+      <div class="dm-extras">
+        <div class="dm-extra ${tourneyDone ? 'dm-extra-done' : ''}" onclick="${tourneyDone ? '' : 'showSection(\'tool_tournament\')'}">
+          <div class="dm-dot ${tourneyDone ? 'dm-dot-filled' : ''}"></div>
+          <div class="dm-extra-text">Weekly Tournament</div>
+          ${tourneyDone ? '' : '<div class="dm-extra-arrow">→</div>'}
+        </div>
+        <div class="dm-extra ${journalDone ? 'dm-extra-done' : ''}" onclick="${journalDone ? '' : 'showSection(\'tool_journal\')'}">
+          <div class="dm-dot ${journalDone ? 'dm-dot-filled' : ''}"></div>
+          <div class="dm-extra-text">Weekly Journal</div>
+          ${journalDone ? '' : '<div class="dm-extra-arrow">→</div>'}
+        </div>
+      </div>
+    </div>
+  `;
+  
+  sec.appendChild(macrosSection);
 
   // ── CATCH-UP ALERT ───────────────────────────────────────────────────
   if (missed > 0) {
@@ -8548,6 +9183,335 @@ function useGeneratedReflection() {
 
 function deleteMilestone(i) { state.milestones.splice(i,1); saveState(); renderMilestoneTimeline(document.getElementById('milestoneTimeline')); }
 
+// ═══════════════════════════════════════════════════════════════════════
+// JOURNAL TOOL
+// ═══════════════════════════════════════════════════════════════════════
+
+const WEEKLY_JOURNAL_PROMPTS = {
+  tech: [
+    "List every tech skill you executed clean this week. For each one, write the success rate (X/Y attempts). Which tech has the worst rate?",
+    "What tech are you avoiding because it's hard? Why are you avoiding it? What's the consequence of continuing to avoid it?",
+    "Compare your tech execution at the START of a session vs 30 minutes in. Does it degrade? If yes, why? Be specific.",
+    "Name 3 situations where you dropped a tech input this week. What was the exact input error each time? Pattern?",
+    "If you could only drill ONE tech for the next 7 days to improve your tournament results, what would it be and why?"
+  ],
+  neutral: [
+    "What's the one neutral habit you repeated this week that got you punished? Count how many times. What triggers this habit?",
+    "When you WIN neutral, what specific setup or spacing did you use? When you LOSE neutral, what did opponent do? Compare.",
+    "At what point in a match do you start autopiloting in neutral? Game 2? After a stock loss? When tilted? Be honest.",
+    "Name your 3 most used neutral options this week. Are they working? What % of the time do they actually succeed?",
+    "Who in your scene has the best neutral in your matchup? What do they do that you don't? List 3 specific differences."
+  ],
+  mental: [
+    "What % of your losses this week were mental vs technical? For each mental loss, what was the exact moment you tilted?",
+    "When you're down 0-2 in a set, does your gameplan change? Should it? What's your actual win rate from 0-2 down?",
+    "List every excuse you made this week for a loss. Now rewrite each one as a fixable problem with a specific solution.",
+    "What opponent behavior tilts you most? Why does it work? What's your counter-strategy when you feel it happening?",
+    "If you recorded your internal dialogue during your worst set this week, what would it say? Now write what a champion's would say instead."
+  ],
+  competitive: [
+    "Review your 3 toughest sets this week. For each: what was the exact turning point? What could you have done differently at that moment?",
+    "What's your win rate vs players ranked above you? Below you? What does this tell you about your current skill ceiling?",
+    "Count your tournament/competitive games this week. How many were autopilot vs deliberate practice? What's the ratio?",
+    "Name the player who consistently beats you. What's their game plan vs you? Can you write it in one sentence? If not, you don't understand it yet.",
+    "What's the specific skill gap between you and the next rank tier? Not \"get better\" — name the exact ability you're missing."
+  ],
+  advantage: [
+    "Calculate your average damage per opening this week. Is it going up? If not, what combos are you still dropping?",
+    "When you WIN neutral but DON'T get a significant punish, what went wrong? List 3 situations and what you should've done.",
+    "What % of your combos this week went to completion vs dropped? For drops: was it execution, DI read, or situation recognition?",
+    "Compare your punish game at 0% vs 80% vs 120%. Where's it weakest? Why? What's the pattern?",
+    "Watch your best punish sequence this week. Now write what the OPTIMAL punish would've been. What damage did you leave on table?"
+  ],
+  disadvantage: [
+    "Count how many times you died in disadvantage this week vs neutral. If disadvantage is higher, your escape game is the problem.",
+    "What option do you ALWAYS pick when landing from disadvantage? Is opponent reading it? How do you know?",
+    "When recovering, what % of attempts made it back vs got edgeguarded? What's your most common edgeguard death setup?",
+    "Name your panic option when pressured. How many times did you use it this week? Did it work? What should you do instead?",
+    "What situation puts you in disadvantage most often? Be specific. What adjustment would prevent you from getting there?"
+  ],
+  matchups: [
+    "For each matchup you played this week: write your game plan in one sentence. If you can't, you don't have one.",
+    "What character gives you the most trouble? List their 3 best tools vs you and your counter to each. Test your counters next week.",
+    "Review your losses: did you lose to the CHARACTER or the PLAYER? How do you know the difference?",
+    "What matchup knowledge did you learn this week? Write it down with enough detail that you could teach it to someone else.",
+    "Pick your worst matchup. Watch a top player VOD in that matchup. What are they doing that you're not? List 5 specific differences."
+  ],
+  physical: [
+    "How many hours did you play this week? How many were quality practice vs mindless grinding? Be honest about the ratio.",
+    "Did you warm up before every session? If not, did your execution suffer early? Prove it with examples.",
+    "Rate your hand/wrist condition this week (1-10). If below 8, what are you doing to maintain it? What should you be doing?",
+    "Track your focus level across a 2-hour session. When does it peak? When does it crash? How can you structure practice around this?",
+    "Are you playing through fatigue? Count how many games you played while tired. What was your win rate in those games vs when fresh?"
+  ]
+};
+
+function buildJournalTool() {
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.id = 'sec_tool_journal';
+  
+  const week = Math.ceil(currentDay / 7);
+  const pillars = ['tech', 'neutral', 'mental', 'competitive', 'advantage', 'disadvantage', 'matchups', 'physical'];
+  const currentPillar = pillars[(week - 1) % pillars.length];
+  const pillarData = PILLARS.find(p => p.id === currentPillar);
+  
+  const weekJournal = state.weeklyJournals?.find(j => j.week === week);
+  
+  sec.innerHTML = `
+    <div class="tool-header">
+      <div class="tool-icon-big">📓</div>
+      <div class="tool-title-block">
+        <h2>Weekly Journaling</h2>
+        <p>Week ${week}: ${pillarData?.name || 'General'} Deep Dive</p>
+      </div>
+    </div>
+    
+    <div class="journal-instructions">
+      <div class="journal-instructions-title">Championship Standard</div>
+      <div class="journal-instructions-text">
+        Answer each question with specifics. Numbers, names, situations, percents. 
+        Vague answers don't build champions. This is where you prove you're paying attention.
+      </div>
+    </div>
+    
+    <div class="journal-form-weekly">
+      ${WEEKLY_JOURNAL_PROMPTS[currentPillar].map((prompt, i) => `
+        <div class="journal-question-block">
+          <div class="journal-question-num">Question ${i + 1} of ${WEEKLY_JOURNAL_PROMPTS[currentPillar].length}</div>
+          <div class="journal-question-text">${prompt}</div>
+          <textarea 
+            class="journal-textarea-small" 
+            id="journalQ${i}" 
+            placeholder="Your answer..."
+            rows="4"
+          >${weekJournal?.answers?.[i] || ''}</textarea>
+        </div>
+      `).join('')}
+      
+      <button class="journal-submit-btn" onclick="saveWeeklyJournal()">
+        ${weekJournal ? '📝 UPDATE WEEKLY JOURNAL' : '💾 SAVE WEEKLY JOURNAL'}
+      </button>
+    </div>
+    
+    <div id="weeklyJournalHistory"></div>
+  `;
+  
+  renderWeeklyJournalHistory(sec.querySelector('#weeklyJournalHistory'));
+  return sec;
+}
+
+function saveWeeklyJournal() {
+  const week = Math.ceil(currentDay / 7);
+  const pillars = ['tech', 'neutral', 'mental', 'competitive', 'advantage', 'disadvantage', 'matchups', 'physical'];
+  const currentPillar = pillars[(week - 1) % pillars.length];
+  
+  const answers = [];
+  const questionCount = WEEKLY_JOURNAL_PROMPTS[currentPillar].length;
+  
+  for (let i = 0; i < questionCount; i++) {
+    const answer = document.getElementById(`journalQ${i}`)?.value.trim() || '';
+    answers.push(answer);
+  }
+  
+  // Check if at least half are answered
+  const answeredCount = answers.filter(a => a.length > 0).length;
+  if (answeredCount < Math.ceil(questionCount / 2)) {
+    showToast(`⚠️ Answer at least ${Math.ceil(questionCount / 2)} questions`, 'warning');
+    return;
+  }
+  
+  if (!state.weeklyJournals) state.weeklyJournals = [];
+  
+  const existing = state.weeklyJournals.findIndex(j => j.week === week);
+  const entry = {
+    week,
+    pillar: currentPillar,
+    answers,
+    timestamp: new Date().toISOString(),
+    completeness: Math.round((answeredCount / questionCount) * 100)
+  };
+  
+  if (existing >= 0) {
+    state.weeklyJournals[existing] = entry;
+  } else {
+    state.weeklyJournals.push(entry);
+  }
+  
+  saveState();
+  showToast(`💪 Week ${week} journal saved! ${entry.completeness}% complete`, 'success');
+  
+  // Refresh view
+  const sec = document.getElementById('sec_tool_journal');
+  if (sec) {
+    const newSec = buildJournalTool();
+    newSec.classList.add('active');
+    sec.replaceWith(newSec);
+  }
+  
+  // Refresh today section to update macro
+  const todaySec = document.getElementById('sec_today');
+  if (todaySec && todaySec.classList.contains('active')) {
+    const newToday = buildTodaySectionEnhanced();
+    newToday.classList.add('active');
+    todaySec.replaceWith(newToday);
+  }
+}
+
+function renderWeeklyJournalHistory(container) {
+  if (!container) return;
+  
+  if (!state.weeklyJournals || state.weeklyJournals.length === 0) {
+    container.innerHTML = `
+      <div class="journal-history-empty">
+        <div class="journal-history-empty-icon">📓</div>
+        <div class="journal-history-empty-text">No past journals yet. Complete this week's to start your record.</div>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = `
+    <div class="journal-history-header">PAST WEEKLY JOURNALS</div>
+    <div class="journal-history-grid">
+      ${state.weeklyJournals.slice().reverse().map(entry => {
+        const pillarData = PILLARS.find(p => p.id === entry.pillar);
+        return `
+          <div class="journal-history-week-card" onclick="viewWeeklyJournal(${entry.week})">
+            <div class="journal-history-week-badge">Week ${entry.week}</div>
+            <div class="journal-history-week-pillar">${pillarData?.icon} ${pillarData?.name}</div>
+            <div class="journal-history-week-meta">
+              <div class="journal-history-week-date">${new Date(entry.timestamp).toLocaleDateString()}</div>
+              <div class="journal-history-week-complete">${entry.completeness}% Complete</div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function viewWeeklyJournal(week) {
+  const entry = state.weeklyJournals?.find(j => j.week === week);
+  if (!entry) return;
+  
+  const pillarData = PILLARS.find(p => p.id === entry.pillar);
+  const prompts = WEEKLY_JOURNAL_PROMPTS[entry.pillar];
+  
+  const modal = document.createElement('div');
+  modal.id = 'viewJournalModal';
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="journal-view-modal">
+      <div class="journal-view-header">
+        <div>
+          <div class="journal-view-title">Week ${week}: ${pillarData?.name} Journal</div>
+          <div class="journal-view-date">${new Date(entry.timestamp).toLocaleDateString()}</div>
+        </div>
+        <button class="modal-close-btn" onclick="closeViewJournal()">✕</button>
+      </div>
+      <div class="journal-view-content">
+        ${prompts.map((prompt, i) => `
+          <div class="journal-view-qa">
+            <div class="journal-view-question">
+              <span class="journal-view-q-num">Q${i + 1}:</span> ${prompt}
+            </div>
+            <div class="journal-view-answer">
+              ${entry.answers[i] || '<span style="color:var(--text3);font-style:italic;">No answer recorded</span>'}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function closeViewJournal() {
+  document.getElementById('viewJournalModal')?.remove();
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// TOURNAMENT TOOL
+// ═══════════════════════════════════════════════════════════════════════
+function buildTournamentTool() {
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.id = 'sec_tool_tournament';
+  
+  const week = Math.ceil(currentDay / 7);
+  const tourneyData = state.weeklyTournaments?.[`week${week}`];
+  
+  sec.innerHTML = `
+    <div class="tool-header">
+      <div class="tool-icon-big">🏆</div>
+      <div class="tool-title-block">
+        <h2>Weekly Tournament</h2>
+        <p>Week ${week} Bracket</p>
+      </div>
+    </div>
+    <div class="tournament-simple">
+      <div class="tournament-status">
+        ${tourneyData?.winner ? `
+          <div class="tournament-complete">
+            <div class="tournament-trophy">🏆</div>
+            <div class="tournament-winner-text">Week ${week} Champion:</div>
+            <div class="tournament-winner-name">${escHtml(tourneyData.winner)}</div>
+          </div>
+        ` : `
+          <div class="tournament-pending">
+            <div class="tournament-pending-icon">⚔️</div>
+            <div class="tournament-pending-text">Tournament not completed yet</div>
+            <div class="tournament-pending-sub">Record your winner below</div>
+          </div>
+        `}
+      </div>
+      
+      <div class="tournament-record">
+        <div class="tournament-record-title">Record Winner:</div>
+        <input type="text" class="add-form-input" id="tourneyWinner" placeholder="Winner name..." value="${tourneyData?.winner || ''}" />
+        <button class="add-form-btn" onclick="saveTournamentWinner()" style="width:auto;padding:14px 32px;">
+          ${tourneyData?.winner ? 'UPDATE WINNER' : 'SAVE WINNER'}
+        </button>
+      </div>
+    </div>
+  `;
+  
+  return sec;
+}
+
+function saveTournamentWinner() {
+  const winner = document.getElementById('tourneyWinner')?.value.trim();
+  if (!winner) return;
+  
+  const week = Math.ceil(currentDay / 7);
+  if (!state.weeklyTournaments) state.weeklyTournaments = {};
+  
+  state.weeklyTournaments[`week${week}`] = {
+    winner,
+    timestamp: new Date().toISOString()
+  };
+  
+  saveState();
+  showToast('🏆 Tournament winner recorded!', 'success');
+  
+  // Refresh view
+  const sec = document.getElementById('sec_tool_tournament');
+  if (sec) {
+    const newSec = buildTournamentTool();
+    newSec.classList.add('active');
+    sec.replaceWith(newSec);
+  }
+  
+  // Refresh today section to update macro
+  const todaySec = document.getElementById('sec_today');
+  if (todaySec && todaySec.classList.contains('active')) {
+    const newToday = buildTodaySectionEnhanced();
+    newToday.classList.add('active');
+    todaySec.replaceWith(newToday);
+  }
+}
+
 function buildSquadSection() {
   const sec = document.createElement('div');
   sec.className = 'section';
@@ -9341,6 +10305,14 @@ function updateSessionTimer() {
   const m = Math.floor(elapsed / 60);
   const s = elapsed % 60;
   sessionDurationMinutes = m;
+  
+  // Track total minutes today for daily macros
+  const today = new Date().toDateString();
+  if (!state.sessionMinutesDate || state.sessionMinutesDate !== today) {
+    state.sessionMinutesDate = today;
+    state.sessionMinutesToday = 0;
+  }
+  
   const el = document.getElementById('aspTimerDisplay');
   if (el) el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
 }
@@ -9359,6 +10331,11 @@ function endMatchSession() {
       adjustments: document.getElementById('aspNoteAdjustments')?.value || '',
     };
     activeMatchSession.durationMinutes = sessionDurationMinutes;
+    
+    // Add minutes to today's total for daily macros
+    if (!state.sessionMinutesToday) state.sessionMinutesToday = 0;
+    state.sessionMinutesToday += sessionDurationMinutes;
+    saveState();
   }
 
   document.getElementById('activeSessionPanel').classList.add('hidden');
