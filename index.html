@@ -3230,7 +3230,7 @@ body::before {
   border: 2px solid var(--purple);
   border-radius: 12px;
   padding: 16px 20px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -3247,6 +3247,132 @@ body::before {
   0%, 100% { border-color: var(--purple); }
   50% { border-color: #b968ff; box-shadow: 0 0 20px rgba(168,85,247,0.3); }
 }
+
+/* VOD Weekly Banner */
+.vod-banner {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.vod-banner.vod-incomplete {
+  background: linear-gradient(135deg, rgba(255,60,60,0.1) 0%, rgba(255,60,60,0.05) 100%);
+  border: 2px solid #ff3c3c;
+}
+.vod-banner.vod-complete {
+  background: linear-gradient(135deg, rgba(45,204,112,0.1) 0%, rgba(45,204,112,0.05) 100%);
+  border: 2px solid var(--green);
+}
+.vod-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.vod-banner-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.vod-banner-text {
+  flex: 1;
+}
+.vod-banner-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 2px;
+}
+.vod-incomplete .vod-banner-title {
+  color: #ff3c3c;
+}
+.vod-complete .vod-banner-title {
+  color: var(--green);
+}
+.vod-banner-subtitle {
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.vod-banner-arrow {
+  font-size: 1.5rem;
+  color: var(--text2);
+  flex-shrink: 0;
+}
+
+/* Check-In Banners */
+.checkin-banner {
+  background: linear-gradient(135deg, rgba(245,200,66,0.1) 0%, rgba(245,200,66,0.05) 100%);
+  border: 2px solid #f5c842;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  animation: checkInPulse 2s infinite;
+}
+@keyframes checkInPulse {
+  0%, 100% { border-color: #f5c842; }
+  50% { border-color: #ffd966; box-shadow: 0 0 20px rgba(245,200,66,0.3); }
+}
+.checkin-banner-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.checkin-banner-text {
+  flex: 1;
+}
+.checkin-banner-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: #f5c842;
+  margin-bottom: 2px;
+}
+.checkin-banner-subtitle {
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.checkin-buttons {
+  display: flex;
+  gap: 8px;
+}
+.checkin-yes, .checkin-no, .checkin-analyze {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+.checkin-yes {
+  background: var(--green);
+  color: white;
+}
+.checkin-yes:hover {
+  background: #3be080;
+  transform: translateY(-1px);
+}
+.checkin-no {
+  background: rgba(255,60,60,0.2);
+  color: #ff3c3c;
+  border: 2px solid #ff3c3c;
+}
+.checkin-no:hover {
+  background: rgba(255,60,60,0.3);
+}
+.checkin-analyze {
+  background: #f5c842;
+  color: #1a1a2e;
+}
+.checkin-analyze:hover {
+  background: #ffd966;
+  transform: translateY(-1px);
+}
+
 .bpm-banner-icon {
   font-size: 2rem;
   flex-shrink: 0;
@@ -3269,6 +3395,204 @@ body::before {
   font-size: 1.5rem;
   color: var(--purple);
   flex-shrink: 0;
+}
+
+/* Coaching Modal */
+#coachingModal {
+  position: fixed;
+  inset: 0;
+  z-index: 9700;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+}
+#coachingModal.hidden { display: none; }
+.coaching-modal-card {
+  background: linear-gradient(135deg, #1a0a1a 0%, #0f0f20 100%);
+  border: 2px solid #ff3c3c;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 40px rgba(255,60,60,0.3);
+}
+.coaching-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.coaching-badge {
+  background: rgba(255,60,60,0.2);
+  border: 1px solid #ff3c3c;
+  color: #ff3c3c;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  font-family: 'DM Mono', monospace;
+}
+.coaching-close {
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.coaching-close:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+}
+.coaching-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.12em;
+  color: #ff3c3c;
+  margin-bottom: 12px;
+}
+.coaching-subtitle {
+  font-size: 0.85rem;
+  color: var(--text2);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.coaching-stat-box {
+  background: rgba(255,60,60,0.1);
+  border: 2px solid #ff3c3c;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.coaching-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.coaching-stat-row:last-child {
+  margin-bottom: 0;
+}
+.coaching-stat-label {
+  font-size: 0.75rem;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+}
+.coaching-stat-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: #ff3c3c;
+}
+.coaching-stat-value.good {
+  color: var(--green);
+}
+.coaching-solutions-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.coaching-solution {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.coaching-solution:hover {
+  border-color: var(--purple);
+  background: var(--purple-dim);
+  transform: translateY(-2px);
+}
+.coaching-solution.selected {
+  border-color: var(--green);
+  background: var(--green-dim);
+}
+.coaching-solution-check {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border2);
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.coaching-solution.selected .coaching-solution-check {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.coaching-solution-text {
+  flex: 1;
+}
+.coaching-solution-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.coaching-solution-desc {
+  font-size: 0.75rem;
+  color: var(--text3);
+  line-height: 1.5;
+}
+.coaching-commit-btn {
+  width: 100%;
+  background: var(--green);
+  border: none;
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 20px;
+}
+.coaching-commit-btn:hover {
+  background: #3be080;
+  transform: translateY(-2px);
+}
+.coaching-commit-btn:disabled {
+  background: var(--border);
+  cursor: not-allowed;
+  transform: none;
+}
+.coaching-no-data {
+  text-align: center;
+  padding: 40px 20px;
+}
+.coaching-no-data-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+.coaching-no-data-text {
+  font-size: 0.85rem;
+  color: var(--text2);
+  line-height: 1.6;
 }
 
 #vodStatModal { position: fixed; inset: 0; z-index: 9500; background: rgba(0,0,0,0.92); display: flex; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(6px); overflow-y: auto; }
@@ -3328,50 +3652,172 @@ body::before {
 .vod-stat-cancel:hover { border-color: var(--text); color: var(--text); }
 
 /* VOD Charts Styling */
-.vod-chart-card {
+/* VOD Charts - Mobile First */
+.vod-chart-section {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.vod-chart-header {
+  margin-bottom: 16px;
+}
+.vod-chart-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.vod-chart-subtitle {
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.vod-chart-wrapper {
+  position: relative;
+  height: 240px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.vod-chart-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.vod-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.vod-legend-item:hover {
+  background: rgba(255,255,255,0.05);
+}
+.vod-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+.vod-legend-label {
+  font-size: 0.65rem;
+  color: var(--text2);
+  line-height: 1.2;
+}
+
+/* Session List */
+.vod-sessions-list {
+  margin-top: 24px;
+}
+.vod-sessions-header {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+.vod-session-card {
   background: var(--card);
   border: 1px solid var(--border2);
   border-radius: 10px;
   padding: 16px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
 }
-.vod-chart-main {
-  padding: 24px;
-  margin-bottom: 24px;
+.vod-session-card:hover {
+  border-color: var(--border);
 }
-.vod-chart-container {
-  margin-bottom: 32px;
-}
-.vod-chart-legend {
+.vod-session-top {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.65rem;
-  color: var(--text2);
-}
-.legend-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-.vod-chart-title {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 4px;
 }
-.vod-chart-subtitle {
-  font-size: 0.55rem;
+.vod-session-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.vod-session-delete {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+}
+.vod-session-delete:hover {
+  border-color: #ff3c3c;
+  background: rgba(255,60,60,0.1);
+  color: #ff3c3c;
+}
+.vod-session-date {
+  font-size: 0.65rem;
   color: var(--text3);
   margin-bottom: 12px;
 }
+.vod-session-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+}
+.vod-session-stat {
+  text-align: center;
+  padding: 8px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+}
+.vod-session-stat-label {
+  font-size: 0.6rem;
+  color: var(--text3);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.vod-session-stat-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: var(--text);
+}
+.vod-session-notes {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text2);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .vod-chart-wrapper {
+    height: 200px;
+  }
+  .vod-session-stats {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+  }
+  .vod-session-stat {
+    padding: 6px;
+  }
+  .vod-chart-legend {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .vod-delete-btn {
   background: transparent;
   border: 1px solid var(--border2);
@@ -6418,6 +6864,60 @@ function buildTodaySectionBase() {
     `;
     sec.appendChild(bpmBanner);
   }
+  
+  // ── WEEKLY VOD MINIMUM BANNER ──────────────────────────────────────
+  const vodCount = getWeeklyVODCount();
+  const vodMinimum = 5;
+  const vodBanner = document.createElement('div');
+  vodBanner.className = vodCount >= vodMinimum ? 'vod-banner vod-complete' : 'vod-banner vod-incomplete';
+  vodBanner.onclick = () => {
+    if (vodCount >= vodMinimum) {
+      openCoachingModal();
+    } else {
+      showSection('tool_vodstats');
+    }
+  };
+  vodBanner.innerHTML = `
+    <div class="vod-banner-icon">${vodCount >= vodMinimum ? '✓' : '📊'}</div>
+    <div class="vod-banner-text">
+      <div class="vod-banner-title">WEEKLY VOD STATS: ${vodCount}/${vodMinimum}</div>
+      <div class="vod-banner-subtitle">${vodCount >= vodMinimum ? 'Tap for coaching analysis' : 'Complete 5 sessions for proper coaching analysis'}</div>
+    </div>
+    <div class="vod-banner-arrow">→</div>
+  `;
+  sec.appendChild(vodBanner);
+  
+  // ── CHECK-IN BANNERS ────────────────────────────────────────────────
+  const pendingCheckIn = checkForPendingCheckIns();
+  if (pendingCheckIn) {
+    const checkInBanner = document.createElement('div');
+    checkInBanner.className = 'checkin-banner';
+    
+    if (pendingCheckIn.type === 'day3') {
+      checkInBanner.innerHTML = `
+        <div class="checkin-banner-icon">⏰</div>
+        <div class="checkin-banner-text">
+          <div class="checkin-banner-title">DAY 3 CHECK-IN</div>
+          <div class="checkin-banner-subtitle">Have you done your committed solutions?</div>
+        </div>
+        <div class="checkin-buttons">
+          <button class="checkin-yes" onclick="completeCheckIn(${state.weeklyCommitments.length - 1}, 'day3', 'yes')">YES</button>
+          <button class="checkin-no" onclick="completeCheckIn(${state.weeklyCommitments.length - 1}, 'day3', 'no')">NO</button>
+        </div>
+      `;
+    } else if (pendingCheckIn.type === 'day7') {
+      checkInBanner.innerHTML = `
+        <div class="checkin-banner-icon">📊</div>
+        <div class="checkin-banner-text">
+          <div class="checkin-banner-title">DAY 7 ANALYSIS</div>
+          <div class="checkin-banner-subtitle">Comparing your progress...</div>
+        </div>
+        <button class="checkin-analyze" onclick="completeCheckIn(${state.weeklyCommitments.length - 1}, 'day7', true)">VIEW RESULTS</button>
+      `;
+    }
+    
+    sec.appendChild(checkInBanner);
+  }
 
   const questList = document.createElement('div');
   questList.className = 'quest-list';
@@ -6906,11 +7406,13 @@ function deleteScenario(i) {
 // STAT TRACKER
 // ═══════════════════════════════════════════════════════════════════════
 const STAT_METRICS = [
-  { key: 'dmgPerOpening',    label: 'Dmg/Opening',       unit: '',  color: '#c97aff', higherBetter: true  },
-  { key: 'openingsPerStock', label: 'Openings/Stock',    unit: '',  color: '#ff3c3c', higherBetter: true  },
-  { key: 'disadvStocks',     label: 'Stocks Lost Disadv',unit: '',  color: '#3c8dff', higherBetter: false },
-  { key: 'edgeguardPct',     label: 'Edgeguard Conv%',   unit: '%', color: '#2dcc70', higherBetter: true  },
-  { key: 'missedConfirms',   label: 'Missed Confirms',   unit: '',  color: '#f5c842', higherBetter: false },
+  { key: 'dmgPerOpening',    label: 'Dmg/Opening',       unit: '',  color: '#c97aff', higherBetter: true,  target: 45  },
+  { key: 'openingsPerStock', label: 'Openings/Stock',    unit: '',  color: '#ff3c3c', higherBetter: true,  target: 3   },
+  { key: 'killPct',          label: 'Kill %',            unit: '%', color: '#2dcc70', higherBetter: false, target: 110 },
+  { key: 'droppedCombos',    label: 'Dropped Combos',    unit: '',  color: '#f54242', higherBetter: false, target: 2   },
+  { key: 'droppedEdgeguards',label: 'Dropped Edgeguards',unit: '',  color: '#ff8c42', higherBetter: false, target: 1   },
+  { key: 'neutralWinRate',   label: 'Neutral Win %',     unit: '%', color: '#4a9eff', higherBetter: true,  target: 55  },
+  { key: 'punishEfficiency', label: 'Punish Damage',     unit: '',  color: '#b968ff', higherBetter: true,  target: 35  },
 ];
 let activeStatMetric = 'dmgPerOpening';
 
@@ -7717,13 +8219,226 @@ function renderMilestoneTimeline(container) {
 }
 
 function addMilestone() {
-  const text = document.getElementById('msText')?.value.trim(); if (!text) return;
+  const text = document.getElementById('msText')?.value.trim();
+  if (!text) return;
+  
+  // Score reflection quality
+  const quality = scoreReflectionQuality(text);
+  
+  if (quality.score < 6) {
+    // Rejected - too vague
+    showReflectionFeedback(quality, text);
+    return;
+  }
+  
   const cat = document.getElementById('msCat')?.value || 'other';
   if (!state.milestones) state.milestones = [];
-  state.milestones.push({ text, cat, day: currentDay }); saveState();
+  state.milestones.push({ text, cat, day: currentDay });
+  saveState();
   document.getElementById('msText').value = '';
   renderMilestoneTimeline(document.getElementById('milestoneTimeline'));
-  addXp(50); showToast('Milestone logged! +50 XP 🏅', 'gold');
+  
+  // Award XP based on quality
+  const xp = quality.score >= 8 ? 75 : 50;
+  addXp(xp);
+  showToast(`Milestone logged! +${xp} XP 🏅`, 'gold');
+}
+
+function scoreReflectionQuality(text) {
+  let score = 0;
+  const feedback = [];
+  
+  // Check for specificity indicators
+  const hasNumbers = /\d+/.test(text);
+  const hasPercent = /%/.test(text);
+  const hasMoveNames = /\b(nair|fair|bair|uair|dair|grab|dash|wavedash|shield|pivot|uptilt|dtilt|ftilt|upsmash|fsmash|dsmash|upair|jab|spot\s*dodge)\b/i.test(text);
+  const hasSituations = /\b(neutral|disadvantage|advantage|edgeguard|recovery|combo|punish|opening|stock|game|set)\b/i.test(text);
+  const hasOutcomes = /\b(won|lost|killed|died|punished|escaped|converted|dropped|missed|hit|whiff)\b/i.test(text);
+  const wordCount = text.split(/\s+/).length;
+  
+  // Scoring
+  if (wordCount >= 20) { score += 2; } else { feedback.push('Add more detail (20+ words)'); }
+  if (hasNumbers || hasPercent) { score += 2; } else { feedback.push('Include numbers or percents'); }
+  if (hasMoveNames) { score += 2; } else { feedback.push('Name specific moves used'); }
+  if (hasSituations) { score += 2; } else { feedback.push('Describe the situation (neutral, edgeguard, etc.)'); }
+  if (hasOutcomes) { score += 2; } else { feedback.push('State what happened (won, lost, converted, etc.)'); }
+  
+  return {
+    score: score,
+    feedback: feedback,
+    hasSpecifics: score >= 6
+  };
+}
+
+function showReflectionFeedback(quality, originalText) {
+  const modal = document.getElementById('reflectionFeedbackModal');
+  if (!modal) {
+    // Create modal if it doesn't exist
+    const div = document.createElement('div');
+    div.id = 'reflectionFeedbackModal';
+    div.className = 'hidden';
+    div.innerHTML = `
+      <div class="coaching-modal-card">
+        <div class="coaching-header">
+          <div class="coaching-badge">❌ TOO VAGUE</div>
+          <button class="coaching-close" onclick="closeReflectionFeedback()">✕</button>
+        </div>
+        <div id="reflectionFeedbackContent"></div>
+      </div>
+    `;
+    document.body.appendChild(div);
+  }
+  
+  const content = document.getElementById('reflectionFeedbackContent');
+  content.innerHTML = `
+    <div class="coaching-title">REFLECTION REJECTED</div>
+    <div class="coaching-subtitle">A real coach wouldn't accept this. Be specific.</div>
+    
+    <div class="coaching-stat-box">
+      <div class="coaching-stat-row">
+        <div class="coaching-stat-label">QUALITY SCORE</div>
+        <div class="coaching-stat-value">${quality.score}/10</div>
+      </div>
+    </div>
+    
+    <div class="coaching-solutions-title">MISSING:</div>
+    ${quality.feedback.map(f => `
+      <div style="background:rgba(255,60,60,0.1);border:1px solid #ff3c3c;padding:12px;border-radius:8px;margin-bottom:8px;font-size:0.8rem;">
+        • ${f}
+      </div>
+    `).join('')}
+    
+    <div class="coaching-solutions-title" style="margin-top:24px;">YOUR ENTRY:</div>
+    <div style="background:var(--card);border:2px solid var(--border2);padding:16px;border-radius:12px;font-size:0.85rem;font-style:italic;color:var(--text3);margin-bottom:20px;">
+      "${originalText}"
+    </div>
+    
+    <button class="coaching-solution" onclick="showTrackingAdvice()" style="margin-bottom:12px;">
+      <div class="coaching-solution-check">?</div>
+      <div class="coaching-solution-text">
+        <div class="coaching-solution-title">I DON'T KNOW HOW TO TRACK THIS</div>
+        <div class="coaching-solution-desc">Get advice on what to look for and how to capture details</div>
+      </div>
+    </button>
+    
+    <button class="coaching-commit-btn" onclick="closeReflectionFeedback()">TRY AGAIN</button>
+  `;
+  
+  document.getElementById('reflectionFeedbackModal').classList.remove('hidden');
+}
+
+function closeReflectionFeedback() {
+  document.getElementById('reflectionFeedbackModal')?.classList.add('hidden');
+}
+
+function showTrackingAdvice() {
+  const content = document.getElementById('reflectionFeedbackContent');
+  content.innerHTML = `
+    <div class="coaching-title">BUILD YOUR REFLECTION</div>
+    <div class="coaching-subtitle">Answer these questions to create a proper reflection</div>
+    
+    <div style="margin-bottom:20px;">
+      <div class="coaching-solutions-title" style="margin-bottom:8px;">1. WHAT SITUATION?</div>
+      <select id="reflectionSituation" class="milestone-form-select" style="width:100%;">
+        <option value="">Select situation...</option>
+        <option value="in neutral">In neutral</option>
+        <option value="in disadvantage">In disadvantage (getting comboed/pressured)</option>
+        <option value="in advantage">In advantage (combo'ing opponent)</option>
+        <option value="edgeguarding">Edgeguarding</option>
+        <option value="recovering">Recovering/getting edgeguarded</option>
+        <option value="at kill percent">At kill percent</option>
+      </select>
+    </div>
+    
+    <div style="margin-bottom:20px;">
+      <div class="coaching-solutions-title" style="margin-bottom:8px;">2. WHAT MOVE/ACTION?</div>
+      <input type="text" id="reflectionMove" class="add-form-input" placeholder="e.g., dash attack, nair, grab, shield drop" style="width:100%;" />
+    </div>
+    
+    <div style="margin-bottom:20px;">
+      <div class="coaching-solutions-title" style="margin-bottom:8px;">3. WHAT HAPPENED?</div>
+      <select id="reflectionOutcome" class="milestone-form-select" style="width:100%;">
+        <option value="">Select outcome...</option>
+        <option value="got hit">Got hit/punished</option>
+        <option value="landed it">Landed it successfully</option>
+        <option value="got blocked">Got blocked/shielded</option>
+        <option value="whiffed">Missed/whiffed</option>
+        <option value="got the kill">Got the kill</option>
+        <option value="dropped the combo">Dropped the combo</option>
+        <option value="converted to combo">Converted to combo</option>
+      </select>
+    </div>
+    
+    <div style="margin-bottom:20px;">
+      <div class="coaching-solutions-title" style="margin-bottom:8px;">4. HOW MANY TIMES?</div>
+      <input type="number" id="reflectionCount" class="add-form-input" placeholder="e.g., 3" style="width:100%;" min="1" />
+    </div>
+    
+    <div style="margin-bottom:20px;">
+      <div class="coaching-solutions-title" style="margin-bottom:8px;">5. WHAT PERCENT? (Optional)</div>
+      <input type="number" id="reflectionPercent" class="add-form-input" placeholder="e.g., 85" style="width:100%;" />
+    </div>
+    
+    <div class="coaching-solutions-title" style="margin-top:24px;margin-bottom:8px;">PREVIEW:</div>
+    <div id="reflectionPreview" style="background:var(--card);border:2px solid var(--border2);padding:16px;border-radius:12px;font-size:0.85rem;font-style:italic;color:var(--text3);margin-bottom:20px;min-height:60px;">
+      <span style="opacity:0.5;">Your reflection will appear here as you fill in the fields...</span>
+    </div>
+    
+    <button class="coaching-commit-btn" onclick="useGeneratedReflection()">USE THIS REFLECTION</button>
+  `;
+  
+  // Add listeners to update preview
+  setTimeout(() => {
+    ['reflectionSituation', 'reflectionMove', 'reflectionOutcome', 'reflectionCount', 'reflectionPercent'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateReflectionPreview);
+    });
+  }, 100);
+}
+
+function updateReflectionPreview() {
+  const situation = document.getElementById('reflectionSituation')?.value || '';
+  const move = document.getElementById('reflectionMove')?.value || '';
+  const outcome = document.getElementById('reflectionOutcome')?.value || '';
+  const count = document.getElementById('reflectionCount')?.value || '';
+  const percent = document.getElementById('reflectionPercent')?.value || '';
+  
+  let preview = '';
+  if (situation && move && outcome && count) {
+    preview = `${situation.charAt(0).toUpperCase() + situation.slice(1)}, I used ${move} and ${outcome}. `;
+    preview += `This happened ${count} time${count > 1 ? 's' : ''}`;
+    if (percent) {
+      preview += ` around ${percent}%`;
+    }
+    preview += '.';
+  }
+  
+  const previewEl = document.getElementById('reflectionPreview');
+  if (previewEl) {
+    if (preview) {
+      previewEl.textContent = preview;
+      previewEl.style.color = 'var(--text)';
+    } else {
+      previewEl.innerHTML = '<span style="opacity:0.5;">Your reflection will appear here as you fill in the fields...</span>';
+    }
+  }
+}
+
+function useGeneratedReflection() {
+  const preview = document.getElementById('reflectionPreview')?.textContent;
+  if (!preview || preview.includes('will appear here')) {
+    showToast('Fill in all required fields first', 'warning');
+    return;
+  }
+  
+  // Insert into milestone textarea
+  const textarea = document.getElementById('msText');
+  if (textarea) {
+    textarea.value = preview;
+  }
+  
+  closeReflectionFeedback();
+  showToast('✓ Reflection generated. You can edit it before submitting.', 'success');
 }
 
 function deleteMilestone(i) { state.milestones.splice(i,1); saveState(); renderMilestoneTimeline(document.getElementById('milestoneTimeline')); }
@@ -8740,7 +9455,13 @@ if (profiles.length === 0 || !activeProfileId) {
   document.getElementById('profileSelectScreen').classList.add('hidden');
   document.getElementById('profileCreateScreen').classList.add('hidden');
   
-  if (state.startDate) {
+  if (state.startDate || state.completedDays || state.xp > 0 || state.milestones) {
+    // User has started - launch app
+    if (!state.startDate) {
+      // Backfill startDate for existing users
+      state.startDate = new Date().toISOString().split('T')[0];
+      saveState();
+    }
     launchAppEnhanced();
   } else {
     updateObDots();
@@ -9113,43 +9834,39 @@ function renderVODChartsForProject(projectIndex) {
     </div>`;
   }
   
-  const entries = project.entries;
   return `
-    <div class="vod-chart-container">
-      <div class="vod-chart-card vod-chart-main">
-        <div class="vod-chart-title">📊 Performance Trends - ${escHtml(project.name)}</div>
-        <div class="vod-chart-subtitle">Track all metrics over time</div>
-        <canvas id="vodChartCombined" style="height:400px;"></canvas>
-        <div class="vod-chart-legend">
-          <div class="legend-item"><span class="legend-dot" style="background:#a855f7;"></span>Avg Damage/Opening (%)</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#3c8dff;"></span>Openings/Stock</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#2dcc70;"></span>Avg Kill %</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#ff3c3c;"></span>Dropped Combo (%)</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#ff8c00;"></span>Dropped Edgeguard (%)</div>
-        </div>
+    <div class="vod-chart-section">
+      <div class="vod-chart-header">
+        <div class="vod-chart-title">📈 ${escHtml(project.name)}</div>
+        <div class="vod-chart-subtitle">${project.entries.length} sessions tracked</div>
       </div>
+      <div class="vod-chart-wrapper">
+        <canvas id="vodMainChart"></canvas>
+      </div>
+      <div class="vod-chart-legend" id="vodChartLegend"></div>
     </div>
-    <div class="vod-history-section">
-      <div class="vod-history-title">📋 Session History</div>
-      ${entries.slice().reverse().map((e, reverseIdx) => {
-        const actualIdx = entries.length - 1 - reverseIdx;
+    
+    <div class="vod-sessions-list">
+      <div class="vod-sessions-header">Session History</div>
+      ${project.entries.slice().reverse().map((e, reverseIdx) => {
+        const actualIdx = project.entries.length - 1 - reverseIdx;
         return `
-        <div class="vod-history-card">
-          <div class="vod-history-header">
-            <div class="vod-history-name">${escHtml(e.sessionName)}</div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div class="vod-history-date">Day ${e.day} • ${new Date(e.date).toLocaleDateString()}</div>
-              <button class="vod-delete-btn" onclick="deleteVODEntryFromProject(${projectIndex}, ${actualIdx})" title="Delete this session">✕</button>
-            </div>
+        <div class="vod-session-card">
+          <div class="vod-session-top">
+            <div class="vod-session-name">${escHtml(e.sessionName || 'Session ' + (actualIdx + 1))}</div>
+            <button class="vod-session-delete" onclick="deleteVODEntryFromProject(${projectIndex}, ${actualIdx})">✕</button>
           </div>
-          <div class="vod-history-stats">
-            <div class="vod-stat-item"><div class="vod-stat-value">${e.avgDamagePerOpening}%</div><div class="vod-stat-label">Dmg/Opening</div></div>
-            <div class="vod-stat-item"><div class="vod-stat-value">${e.openingsPerStock}</div><div class="vod-stat-label">Opens/Stock</div></div>
-            <div class="vod-stat-item"><div class="vod-stat-value">${e.avgKillPercent}%</div><div class="vod-stat-label">Kill %</div></div>
-            <div class="vod-stat-item"><div class="vod-stat-value">${e.droppedComboRate}%</div><div class="vod-stat-label">Drop Combo</div></div>
-            <div class="vod-stat-item"><div class="vod-stat-value">${e.droppedEdgeguardRate}%</div><div class="vod-stat-label">Drop EG</div></div>
+          <div class="vod-session-date">Day ${e.day} • ${new Date(e.timestamp || e.date).toLocaleDateString()}</div>
+          <div class="vod-session-stats">
+            ${STAT_METRICS.map(m => {
+              const val = e[m.key];
+              return val != null ? `<div class="vod-session-stat">
+                <div class="vod-session-stat-label">${m.label}</div>
+                <div class="vod-session-stat-value">${val}${m.unit}</div>
+              </div>` : '';
+            }).join('')}
           </div>
-          ${e.notes ? `<div class="vod-history-notes">${escHtml(e.notes)}</div>` : ''}
+          ${e.notes ? `<div class="vod-session-notes">${escHtml(e.notes)}</div>` : ''}
         </div>
       `;}).join('')}
     </div>
@@ -9160,80 +9877,39 @@ function initVODChartsForProject(projectIndex) {
   const project = state.vodProjects[projectIndex];
   if (!project || !project.entries || project.entries.length === 0) return;
   
-  const entries = project.entries;
-  const labels = entries.map((e, i) => `S${i+1}`);
-  
   setTimeout(() => {
-    const canvas = document.getElementById('vodChartCombined');
+    const canvas = document.getElementById('vodMainChart');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (window.vodChartCombinedInstance) window.vodChartCombinedInstance.destroy();
     
-    window.vodChartCombinedInstance = new Chart(ctx, {
+    const ctx = canvas.getContext('2d');
+    if (window.vodMainChartInstance) window.vodMainChartInstance.destroy();
+    
+    const entries = project.entries;
+    const labels = entries.map((e, i) => `S${i + 1}`);
+    
+    // Build datasets from STAT_METRICS
+    const datasets = STAT_METRICS.map(metric => ({
+      label: metric.label,
+      data: entries.map(e => e[metric.key] || null),
+      borderColor: metric.color,
+      backgroundColor: metric.color + '20',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+      tension: 0.3,
+      fill: false
+    }));
+    
+    window.vodMainChartInstance = new Chart(ctx, {
       type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Avg Damage/Opening (%)',
-            data: entries.map(e => e.avgDamagePerOpening),
-            borderColor: '#a855f7',
-            backgroundColor: 'rgba(168,85,247,0.1)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
-          },
-          {
-            label: 'Openings/Stock',
-            data: entries.map(e => e.openingsPerStock),
-            borderColor: '#3c8dff',
-            backgroundColor: 'rgba(60,141,255,0.1)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
-          },
-          {
-            label: 'Avg Kill %',
-            data: entries.map(e => e.avgKillPercent),
-            borderColor: '#2dcc70',
-            backgroundColor: 'rgba(45,204,112,0.1)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
-          },
-          {
-            label: 'Dropped Combo (%)',
-            data: entries.map(e => e.droppedComboRate),
-            borderColor: '#ff3c3c',
-            backgroundColor: 'rgba(255,60,60,0.1)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
-          },
-          {
-            label: 'Dropped Edgeguard (%)',
-            data: entries.map(e => e.droppedEdgeguardRate),
-            borderColor: '#ff8c00',
-            backgroundColor: 'rgba(255,140,0,0.1)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
-          }
-        ]
-      },
+      data: { labels, datasets },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
         plugins: {
           legend: { display: false },
           tooltip: {
@@ -9242,24 +9918,61 @@ function initVODChartsForProject(projectIndex) {
             bodyColor: '#fff',
             borderColor: 'rgba(168,85,247,0.3)',
             borderWidth: 1,
-            padding: 12,
-            displayColors: true
+            padding: 10,
+            bodySpacing: 6,
+            displayColors: true,
+            callbacks: {
+              label: function(context) {
+                const metric = STAT_METRICS[context.datasetIndex];
+                return ` ${metric.label}: ${context.parsed.y}${metric.unit}`;
+              }
+            }
           }
         },
         scales: {
           y: {
             beginAtZero: true,
             grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: 'rgba(255,255,255,0.5)' }
+            ticks: { 
+              color: 'rgba(255,255,255,0.5)',
+              font: { size: 10 }
+            }
           },
           x: {
             grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: 'rgba(255,255,255,0.5)' }
+            ticks: { 
+              color: 'rgba(255,255,255,0.5)',
+              font: { size: 10 }
+            }
           }
         }
       }
     });
+    
+    // Build custom legend
+    const legendEl = document.getElementById('vodChartLegend');
+    if (legendEl) {
+      legendEl.innerHTML = STAT_METRICS.map((m, i) => `
+        <div class="vod-legend-item" onclick="toggleChartDataset(${i})">
+          <div class="vod-legend-dot" style="background:${m.color};" id="legendDot${i}"></div>
+          <div class="vod-legend-label">${m.label}</div>
+        </div>
+      `).join('');
+    }
   }, 100);
+}
+
+function toggleChartDataset(index) {
+  if (!window.vodMainChartInstance) return;
+  const meta = window.vodMainChartInstance.getDatasetMeta(index);
+  meta.hidden = !meta.hidden;
+  window.vodMainChartInstance.update();
+  
+  // Update legend dot opacity
+  const dot = document.getElementById('legendDot' + index);
+  if (dot) {
+    dot.style.opacity = meta.hidden ? '0.3' : '1';
+  }
 }
 
 function deleteVODEntryFromProject(projectIndex, entryIndex) {
@@ -10304,6 +11017,24 @@ function shouldShowBPMBanner() {
   return true;
 }
 
+function getWeeklyVODCount() {
+  if (!state.vodProjects) return 0;
+  
+  const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+  let count = 0;
+  
+  state.vodProjects.forEach(project => {
+    if (project.entries) {
+      project.entries.forEach(entry => {
+        const entryDate = new Date(entry.timestamp).getTime();
+        if (entryDate >= oneWeekAgo) count++;
+      });
+    }
+  });
+  
+  return count;
+}
+
 function showBPMPopup() {
   document.getElementById('bpmTesterModal').classList.remove('hidden');
   
@@ -10762,11 +11493,531 @@ window.completeSession = function() {
   }
 };
 
+// ═══════════════════════════════════════════════════════════════════════
+// COACHING ANALYSIS ENGINE
+// ═══════════════════════════════════════════════════════════════════════
+
+function analyzeBottlenecks() {
+  if (!state.vodProjects) return null;
+  
+  // Get all entries from last 7 days
+  const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+  const recentEntries = [];
+  
+  state.vodProjects.forEach(project => {
+    if (project.entries) {
+      project.entries.forEach(entry => {
+        const entryDate = new Date(entry.timestamp).getTime();
+        if (entryDate >= oneWeekAgo) recentEntries.push(entry);
+      });
+    }
+  });
+  
+  if (recentEntries.length < 3) return null;
+  
+  // Analyze each metric
+  const bottlenecks = [];
+  
+  STAT_METRICS.forEach(metric => {
+    const values = recentEntries
+      .map(e => e[metric.key])
+      .filter(v => v != null);
+    
+    if (values.length < 3) return;
+    
+    const avg = values.reduce((a,b) => a+b, 0) / values.length;
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+    
+    // Check for issues
+    const belowTarget = metric.higherBetter ? avg < metric.target : avg > metric.target;
+    if (!belowTarget) return;
+    
+    // CONTEXT ANALYSIS
+    const variance = Math.abs(max - min);
+    const relativeVariance = (variance / avg) * 100;
+    
+    // Determine issue type
+    let issueType = 'stagnant'; // Default
+    let context = '';
+    
+    if (relativeVariance > 40) {
+      // High variance = inconsistent
+      issueType = 'inconsistent';
+      context = `You're inconsistent (${Math.round(min)} to ${Math.round(max)}). Sometimes you execute, sometimes you don't. This is a consistency problem, not a knowledge problem.`;
+    } else if (relativeVariance < 15) {
+      // Low variance = stuck/plateau
+      issueType = 'stagnant';
+      context = `You've plateaued around ${Math.round(avg)}. You're not getting worse, but you're not improving either. Time to change your approach.`;
+    } else {
+      // Medium variance = some improvement but not enough
+      const firstHalf = values.slice(0, Math.floor(values.length / 2));
+      const secondHalf = values.slice(Math.floor(values.length / 2));
+      const firstAvg = firstHalf.reduce((a,b) => a+b, 0) / firstHalf.length;
+      const secondAvg = secondHalf.reduce((a,b) => a+b, 0) / secondHalf.length;
+      
+      const improving = metric.higherBetter ? secondAvg > firstAvg : secondAvg < firstAvg;
+      
+      if (improving) {
+        issueType = 'slow';
+        context = `You're improving slowly (${Math.round(firstAvg)} → ${Math.round(secondAvg)}), but not fast enough. You need to accelerate progress.`;
+      } else {
+        issueType = 'regressing';
+        context = `You're actually getting worse (${Math.round(firstAvg)} → ${Math.round(secondAvg)}). Something changed. Find it.`;
+      }
+    }
+    
+    // Cross-metric analysis for specific insights
+    let crossMetricInsight = '';
+    if (metric.key === 'killPct') {
+      const edgeguards = recentEntries.map(e => e.droppedEdgeguards).filter(v => v != null);
+      if (edgeguards.length > 0) {
+        const avgEdgeguards = edgeguards.reduce((a,b) => a+b, 0) / edgeguards.length;
+        if (avgEdgeguards > 2) {
+          crossMetricInsight = ' Your kill % is high BECAUSE you\'re dropping edgeguards. Fix edgeguards first.';
+        }
+      }
+    }
+    
+    if (metric.key === 'droppedCombos') {
+      const punish = recentEntries.map(e => e.punishEfficiency).filter(v => v != null);
+      if (punish.length > 0) {
+        const avgPunish = punish.reduce((a,b) => a+b, 0) / punish.length;
+        if (avgPunish < 30) {
+          crossMetricInsight = ' Even when you don\'t drop combos, your damage is low. This might be a route optimization problem, not just execution.';
+        }
+      }
+    }
+    
+    bottlenecks.push({
+      metric: metric.label,
+      key: metric.key,
+      current: Math.round(avg * 10) / 10,
+      target: metric.target,
+      sessions: values.length,
+      severity: Math.abs(avg - metric.target) / metric.target,
+      issueType: issueType,
+      context: context + crossMetricInsight
+    });
+  });
+  
+  // Sort by severity
+  bottlenecks.sort((a, b) => b.severity - a.severity);
+  
+  return bottlenecks.length > 0 ? bottlenecks[0] : null;
+}
+
+function getWeeklyCoachingReport() {
+  const vodCount = getWeeklyVODCount();
+  const bottleneck = analyzeBottlenecks();
+  
+  return {
+    vodSessionsLogged: vodCount,
+    vodMinimum: 5,
+    meetsMinimum: vodCount >= 5,
+    bottleneck: bottleneck
+  };
+}
+
+let selectedSolutions = [];
+
+function openCoachingModal() {
+  const report = getWeeklyCoachingReport();
+  selectedSolutions = [];
+  
+  const content = document.getElementById('coachingContent');
+  
+  if (!report.meetsMinimum) {
+    content.innerHTML = `
+      <div class="coaching-no-data">
+        <div class="coaching-no-data-icon">📊</div>
+        <div class="coaching-no-data-text">
+          You need ${report.vodMinimum - report.vodSessionsLogged} more VOD sessions this week for proper analysis.<br><br>
+          Log your sessions to get personalized coaching.
+        </div>
+      </div>
+    `;
+  } else if (!report.bottleneck) {
+    content.innerHTML = `
+      <div class="coaching-title">LOOKING STRONG</div>
+      <div class="coaching-subtitle">All metrics are hitting targets. Keep the momentum.</div>
+      <div class="coaching-stat-box">
+        <div class="coaching-stat-row">
+          <div class="coaching-stat-label">VOD SESSIONS THIS WEEK</div>
+          <div class="coaching-stat-value good">${report.vodSessionsLogged}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    const b = report.bottleneck;
+    const solutions = getSolutionsFor(b.key, b.issueType);
+    
+    content.innerHTML = `
+      <div class="coaching-title">BOTTLENECK DETECTED</div>
+      <div class="coaching-subtitle">${b.context}</div>
+      
+      <div class="coaching-stat-box">
+        <div class="coaching-stat-row">
+          <div class="coaching-stat-label">CURRENT AVERAGE</div>
+          <div class="coaching-stat-value">${b.current}</div>
+        </div>
+        <div class="coaching-stat-row">
+          <div class="coaching-stat-label">TARGET</div>
+          <div class="coaching-stat-value good">${b.target}</div>
+        </div>
+        <div class="coaching-stat-row">
+          <div class="coaching-stat-label">SESSIONS ANALYZED</div>
+          <div class="coaching-stat-value">${b.sessions}</div>
+        </div>
+        <div class="coaching-stat-row">
+          <div class="coaching-stat-label">ISSUE TYPE</div>
+          <div class="coaching-stat-value">${b.issueType.toUpperCase()}</div>
+        </div>
+      </div>
+      
+      <div class="coaching-solutions-title">PICK 2 WAYS TO FIX THIS WEEK:</div>
+      ${solutions.map((sol, i) => `
+        <div class="coaching-solution" onclick="toggleSolution(${i})">
+          <div class="coaching-solution-check" id="solCheck${i}"></div>
+          <div class="coaching-solution-text">
+            <div class="coaching-solution-title">${sol.title}</div>
+            <div class="coaching-solution-desc">${sol.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+      
+      <button class="coaching-commit-btn" id="commitBtn" disabled onclick="commitSolutions('${b.key}', '${b.issueType}')">COMMIT TO THESE SOLUTIONS</button>
+    `;
+  }
+  
+  document.getElementById('coachingModal').classList.remove('hidden');
+}
+
+function closeCoachingModal() {
+  document.getElementById('coachingModal').classList.add('hidden');
+}
+
+function toggleSolution(index) {
+  const idx = selectedSolutions.indexOf(index);
+  if (idx > -1) {
+    selectedSolutions.splice(idx, 1);
+  } else {
+    if (selectedSolutions.length < 2) {
+      selectedSolutions.push(index);
+    } else {
+      // Replace oldest selection
+      selectedSolutions.shift();
+      selectedSolutions.push(index);
+    }
+  }
+  
+  // Update UI
+  document.querySelectorAll('.coaching-solution').forEach((el, i) => {
+    if (selectedSolutions.includes(i)) {
+      el.classList.add('selected');
+      document.getElementById('solCheck' + i).textContent = '✓';
+    } else {
+      el.classList.remove('selected');
+      document.getElementById('solCheck' + i).textContent = '';
+    }
+  });
+  
+  // Enable commit button if 2 selected
+  const btn = document.getElementById('commitBtn');
+  if (btn) {
+    btn.disabled = selectedSolutions.length !== 2;
+  }
+}
+
+function commitSolutions(metricKey, issueType) {
+  const week = getWeekNumber();
+  const solutionTitles = selectedSolutions.map(i => {
+    const solutions = getSolutionsFor(metricKey, issueType);
+    return solutions[i]?.title || '';
+  });
+  
+  // Save commitment to state
+  if (!state.weeklyCommitments) state.weeklyCommitments = [];
+  
+  // Get baseline data for comparison
+  const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+  const baselineEntries = [];
+  state.vodProjects?.forEach(project => {
+    project.entries?.forEach(entry => {
+      const entryDate = new Date(entry.timestamp).getTime();
+      if (entryDate >= oneWeekAgo) baselineEntries.push(entry);
+    });
+  });
+  
+  const baselineValues = baselineEntries
+    .map(e => e[metricKey])
+    .filter(v => v != null);
+  const baselineAvg = baselineValues.length > 0 
+    ? baselineValues.reduce((a,b) => a+b, 0) / baselineValues.length 
+    : null;
+  
+  state.weeklyCommitments.push({
+    week: week,
+    metric: metricKey,
+    issueType: issueType,
+    solutions: selectedSolutions,
+    solutionTitles: solutionTitles,
+    timestamp: new Date().toISOString(),
+    baselineAvg: baselineAvg,
+    checkIns: {
+      day3: { completed: false, timestamp: null },
+      day7: { completed: false, timestamp: null, improved: null }
+    }
+  });
+  saveState();
+  
+  showToast('💪 Solutions committed. Check-ins at Day 3 and Day 7.', 'success');
+  closeCoachingModal();
+  
+  // Schedule check-in reminders
+  scheduleCheckIns(week);
+}
+
+function scheduleCheckIns(commitmentWeek) {
+  // This will show banners on Day 3 and Day 7 after commitment
+  // Implementation in buildTodaySectionEnhanced will check for pending check-ins
+}
+
+function checkForPendingCheckIns() {
+  if (!state.weeklyCommitments) return null;
+  
+  const currentWeek = getWeekNumber();
+  const recentCommitment = state.weeklyCommitments
+    .filter(c => c.week === currentWeek)
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+  
+  if (!recentCommitment) return null;
+  
+  const commitDate = new Date(recentCommitment.timestamp);
+  const daysSinceCommit = Math.floor((Date.now() - commitDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Day 3 check-in
+  if (daysSinceCommit >= 3 && daysSinceCommit < 4 && !recentCommitment.checkIns.day3.completed) {
+    return {
+      type: 'day3',
+      commitment: recentCommitment,
+      daysSince: daysSinceCommit
+    };
+  }
+  
+  // Day 7 check-in
+  if (daysSinceCommit >= 7 && !recentCommitment.checkIns.day7.completed) {
+    return {
+      type: 'day7',
+      commitment: recentCommitment,
+      daysSince: daysSinceCommit
+    };
+  }
+  
+  return null;
+}
+
+function completeCheckIn(commitmentIndex, checkInType, response) {
+  const commitment = state.weeklyCommitments[commitmentIndex];
+  if (!commitment) return;
+  
+  if (checkInType === 'day3') {
+    commitment.checkIns.day3.completed = true;
+    commitment.checkIns.day3.timestamp = new Date().toISOString();
+    commitment.checkIns.day3.response = response;
+    
+    if (response === 'no') {
+      showToast('⚠️ Get back on track. Your solutions only work if you do them.', 'warning');
+    } else {
+      showToast('✓ Keep going. Day 7 check-in coming soon.', 'success');
+    }
+  } else if (checkInType === 'day7') {
+    // Compare data
+    const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    const newEntries = [];
+    state.vodProjects?.forEach(project => {
+      project.entries?.forEach(entry => {
+        const entryDate = new Date(entry.timestamp).getTime();
+        const commitDate = new Date(commitment.timestamp).getTime();
+        if (entryDate >= commitDate) newEntries.push(entry);
+      });
+    });
+    
+    const newValues = newEntries
+      .map(e => e[commitment.metric])
+      .filter(v => v != null);
+    const newAvg = newValues.length > 0 
+      ? newValues.reduce((a,b) => a+b, 0) / newValues.length 
+      : null;
+    
+    const target = STAT_METRICS.find(m => m.key === commitment.metric)?.target;
+    const higherBetter = STAT_METRICS.find(m => m.key === commitment.metric)?.higherBetter;
+    
+    let improved = false;
+    if (newAvg !== null && commitment.baselineAvg !== null) {
+      improved = higherBetter 
+        ? newAvg > commitment.baselineAvg 
+        : newAvg < commitment.baselineAvg;
+    }
+    
+    commitment.checkIns.day7.completed = true;
+    commitment.checkIns.day7.timestamp = new Date().toISOString();
+    commitment.checkIns.day7.improved = improved;
+    commitment.checkIns.day7.newAvg = newAvg;
+    
+    if (improved) {
+      showToast(`✅ Progress detected! ${commitment.baselineAvg} → ${newAvg}. Keep going.`, 'success');
+    } else {
+      showToast(`⚠️ No improvement yet. ${commitment.baselineAvg} → ${newAvg}. Solutions need adjustment.`, 'warning');
+    }
+  }
+  
+  saveState();
+  
+  // Rebuild today section to hide banner
+  if (activeSection === 'today') {
+    const sec = document.getElementById('sec_today');
+    if (sec) {
+      const newSec = buildTodaySectionEnhanced();
+      newSec.classList.add('active');
+      sec.replaceWith(newSec);
+    }
+  }
+}
+
+function getWeekNumber() {
+  const startDate = new Date(state.startDate);
+  const now = new Date();
+  const diff = now.getTime() - startDate.getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  return Math.floor(days / 7) + 1;
+}
+
+function getSolutionsFor(metricKey, issueType = 'stagnant') {
+  const baseSolutions = {
+    droppedCombos: {
+      stagnant: [
+        { title: 'Lab Different Routes', desc: 'Your current practice isn\'t working. Learn 2 new combo routes and drill them 40 reps each.' },
+        { title: 'Video Your Practice', desc: 'Record yourself doing combos in training mode. Watch it back. Find the exact input that drops.' },
+        { title: 'Slow-Mo Practice', desc: 'Do your combos at 0.5x speed for 10 minutes. Focus on muscle memory, not speed.' },
+        { title: 'One Combo Only', desc: 'Pick your EASIEST combo. Only use that for one week. Build consistency before complexity.' }
+      ],
+      inconsistent: [
+        { title: 'Pre-Session Warmup', desc: 'Your execution varies because you don\'t warm up. 5 minutes of combo drills BEFORE every session.' },
+        { title: 'Mental Reset Drill', desc: 'When you drop a combo, pause. Take 3 deep breaths. Then retry. You\'re tilting mid-combo.' },
+        { title: 'Consistent Controller Grip', desc: 'Film your hands during combos. Your grip might be changing. Lock in ONE hand position.' },
+        { title: 'Sleep & Hydration Check', desc: 'Inconsistency might not be skill — it might be fatigue. Are you sleeping 7+ hours? Drinking water?' }
+      ],
+      regressing: [
+        { title: 'Return to Basics', desc: 'Something broke in your fundamentals. Go back to Day 1 combos. Rebuild from ground up.' },
+        { title: 'Controller Check', desc: 'Are your inputs registering correctly? Test your controller. Regression can be hardware.' },
+        { title: 'Identify What Changed', desc: 'You were better before. What did you change? Grip? Setup? Character? Undo it.' },
+        { title: 'Take 2 Days Off', desc: 'Sometimes regression is burnout. Rest completely for 48 hours. Come back fresh.' }
+      ],
+      slow: [
+        { title: 'Double Practice Volume', desc: 'You\'re improving too slowly. Go from 20 reps to 40 reps daily.' },
+        { title: 'Study Frame Data', desc: 'Slow improvement means you don\'t understand WHY combos work. Learn the frame windows.' },
+        { title: 'Copy a Pro', desc: 'Find a top player VOD. Copy their punish game exactly. Don\'t innovate — imitate.' },
+        { title: 'Add Pressure', desc: 'Practice combos vs a moving CPU. You\'re too comfortable in training mode.' }
+      ]
+    },
+    killPct: {
+      stagnant: [
+        { title: 'Kill Confirm Flowchart', desc: 'Write down every situation that should lead to a kill. Drill each one 20 times.' },
+        { title: 'Edgeguard First', desc: 'Stop trying to kill on stage at 120%. Force them offstage at 80%. Edgeguards ARE kills.' },
+        { title: 'Study Kill Windows', desc: 'VOD review 5 of your games. At what % did you actually get kills? That\'s your real window.' },
+        { title: 'Patience Drill', desc: 'Play 5 games where you REFUSE to go for kill until 100%+. Stop forcing it early.' }
+      ],
+      inconsistent: [
+        { title: 'Flowchart Your Confirms', desc: 'You don\'t have consistent setups. Write: "At X%, I confirm with Y move." Memorize it.' },
+        { title: 'DI Mixup Practice', desc: 'Inconsistency = they\'re mixing DI. Lab both DI options for your kill confirms.' },
+        { title: 'Reduce Rage Variance', desc: 'You kill fast when tilted, slow when patient. Pick ONE approach. Be consistent.' },
+        { title: 'Stage Choice Matters', desc: 'Your kill % might vary by stage. Track it. Ban stages where you kill late.' }
+      ],
+      regressing: [
+        { title: 'Fear Check', desc: 'Are you AFRAID to go offstage now? Something made you hesitate. Identify the match that broke your confidence.' },
+        { title: 'Review Your Losses', desc: 'You\'re getting worse at killing. Watch your recent losses. What punished your kill attempts?' },
+        { title: 'Simplify Kill Options', desc: 'You added too many options and now you\'re indecisive. Go back to 2 kill confirms max.' },
+        { title: 'Aggression Reset', desc: 'You\'ve become too passive. Force edgeguards even if risky. Rebuild killer instinct.' }
+      ],
+      slow: [
+        { title: 'Edgeguard Volume Up', desc: 'More edgeguard attempts = lower kill %. Go offstage 2x more often this week.' },
+        { title: 'Lab Guaranteed Setups', desc: 'Slow improvement = you\'re still guessing. Find setups with frame advantage. Guarantee kills.' },
+        { title: 'Copy Top Edgeguards', desc: 'Watch 10 top player edgeguards in your matchup. Copy their exact positioning and timing.' },
+        { title: 'Accept Earlier Kills', desc: 'Stop waiting for perfect confirms. If you can kill at 90%, do it. Lower your standards.' }
+      ]
+    },
+    neutralWinRate: {
+      stagnant: [
+        { title: 'Reduce Approach Frequency', desc: 'You\'re approaching too much. Cut your approaches in half. Let them come to you.' },
+        { title: 'Study Opponent Patterns', desc: 'VOD review: what move beats you most? Stop walking into it.' },
+        { title: 'Master One Bait', desc: 'Learn ONE whiff punish setup. Dashdance, empty hop, whatever. Use it 30 times this week.' },
+        { title: 'Change Your Spacing', desc: 'Your spacing is predictable. Stand 1 character-width closer or farther. Change the game.' }
+      ],
+      inconsistent: [
+        { title: 'Warm Up Neutral First', desc: 'Start every session with 5 min of neutral-only practice. Your variance is from cold starts.' },
+        { title: 'Opponent Adaptation Check', desc: 'You win neutral early, then they adapt. VOD review: what changes mid-set?' },
+        { title: 'Mental State Awareness', desc: 'Do you win neutral when confident, lose when scared? This is a mental consistency issue.' },
+        { title: 'Simplify Neutral Gameplan', desc: 'Too many options = inconsistency. Pick 3 neutral tools max. Master them.' }
+      ],
+      regressing: [
+        { title: 'Autopilot Audit', desc: 'Regression = you stopped thinking. Every neutral interaction: ask "what do they expect?" THEN act.' },
+        { title: 'Find Your New Habit', desc: 'You developed a bad habit recently. Watch your last 3 VODs. Find the new pattern you\'re stuck in.' },
+        { title: 'Play Slower Players', desc: 'You\'re getting rushed. Play vs slower characters/players. Rebuild your pace.' },
+        { title: 'Movement Drills', desc: 'Your movement degraded. 15 min daily: just dashdance, waveland, no attacks. Rebuild control.' }
+      ],
+      slow: [
+        { title: 'Neutral-Only Sessions', desc: 'Play 10 games where you ONLY practice neutral. Ignore punish, just win the hit.' },
+        { title: 'Frame Trap Practice', desc: 'Learn 2 frame traps. Drill them 30 times. Slow improvement = need more setups.' },
+        { title: 'Watch Top Neutral', desc: 'Study 5 sets of top neutral players. Note every time they win an interaction. Copy it.' },
+        { title: 'Add 1 New Option Weekly', desc: 'Each week, add ONE new neutral option to your arsenal. Slow growth compounds.' }
+      ]
+    },
+    // Add more metrics as needed, or use fallback
+  };
+  
+  const solutions = baseSolutions[metricKey]?.[issueType] || baseSolutions[metricKey]?.['stagnant'] || [
+    { title: 'Focused VOD Review', desc: 'Analyze this metric specifically in your replays for 30 minutes.' },
+    { title: 'Deliberate Practice', desc: 'Isolate this skill and practice it for 20 minutes daily.' },
+    { title: 'Get Feedback', desc: 'Ask a better player to review this specific weakness.' },
+    { title: 'Study Top Players', desc: 'Watch how elite players handle this aspect of the game.' }
+  ];
+  
+  // Check if these solutions were already tried and failed
+  const previousCommitments = state.weeklyCommitments || [];
+  const recentFailures = previousCommitments.filter(c => 
+    c.metric === metricKey && 
+    c.week >= getWeekNumber() - 2 // Last 2 weeks
+  );
+  
+  // If solutions were tried before and didn't work, escalate
+  if (recentFailures.length > 0 && issueType === 'stagnant') {
+    solutions.unshift({
+      title: '⚠️ ESCALATION NEEDED',
+      desc: 'You\'ve tried solutions for this before and it didn\'t work. Time to get external help: coach review, training partner feedback, or VOD analysis from a better player.'
+    });
+  }
+  
+  return solutions;
+}
+
 // Initialize on boot
 if (state.startDate) {
   setTimeout(() => initBPMSystem(), 3000);
 }
 
 </script>
+<!-- COACHING ANALYSIS MODAL -->
+<div id="coachingModal" class="hidden">
+  <div class="coaching-modal-card">
+    <div class="coaching-header">
+      <div class="coaching-badge">🎯 WEEKLY ANALYSIS</div>
+      <button class="coaching-close" onclick="closeCoachingModal()">✕</button>
+    </div>
+    
+    <div id="coachingContent"></div>
+  </div>
+</div>
+
 </body>
 </html>
