@@ -2515,6 +2515,105 @@ body::before {
   font-family: 'Crimson Pro', serif; font-style: italic;
   color: var(--text3); font-size: 0.95rem;
 }
+/* Session Pattern Detection */
+.session-patterns-section {
+  background: linear-gradient(135deg, rgba(255,60,60,0.05) 0%, rgba(168,85,247,0.05) 100%);
+  border: 1px solid rgba(255,60,60,0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.pattern-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.pattern-icon {
+  font-size: 1.5rem;
+}
+.pattern-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: #ff3c3c;
+}
+.pattern-category {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.pattern-category:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.pattern-category-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+.pattern-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pattern-chip {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pattern-chip-warning {
+  border-color: rgba(255,60,60,0.5);
+  background: rgba(255,60,60,0.1);
+}
+.pattern-chip-text {
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 500;
+}
+.pattern-chip-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text3);
+}
+.pattern-note {
+  font-size: 0.7rem;
+  color: var(--text3);
+  font-style: italic;
+}
+.pattern-insight {
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+.pattern-insight:last-child {
+  margin-bottom: 0;
+}
+.pattern-warning {
+  background: rgba(245,200,66,0.1);
+  border-left: 3px solid #f5c842;
+  color: var(--text2);
+}
+.pattern-critical {
+  background: rgba(255,60,60,0.1);
+  border-left: 3px solid #ff3c3c;
+  color: var(--text2);
+}
+.pattern-positive {
+  background: rgba(45,204,112,0.1);
+  border-left: 3px solid var(--green);
+  color: var(--text2);
+}
+
 .ps-stats-bar {
   display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
 }
@@ -3970,6 +4069,139 @@ body::before {
 }
 
 /* Coaching Modal */
+.coaching-tone-prefix,
+.coaching-tone-suffix {
+  font-size: 0.85rem;
+  color: var(--text2);
+  padding: 12px 16px;
+  background: rgba(168,85,247,0.05);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.coaching-synthesis-section {
+  background: linear-gradient(135deg, rgba(255,60,60,0.08) 0%, rgba(245,200,66,0.08) 100%);
+  border: 2px solid rgba(255,60,60,0.4);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.coaching-synthesis-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  color: #ff3c3c;
+  margin-bottom: 8px;
+}
+.coaching-synthesis-confidence {
+  font-size: 0.7rem;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+.coaching-evidence-title {
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.coaching-evidence-item {
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+.coaching-synthesis-impact {
+  font-size: 0.85rem;
+  color: var(--text);
+  padding: 12px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 6px;
+  margin: 12px 0;
+  line-height: 1.6;
+}
+.coaching-synthesis-solution {
+  padding: 12px;
+  background: rgba(45,204,112,0.1);
+  border-left: 3px solid var(--green);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+.coaching-solution-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--green);
+  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+}
+.coaching-insights-section,
+.coaching-predictions-section {
+  margin-bottom: 24px;
+}
+.coaching-insights-title,
+.coaching-predictions-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+.coaching-insight-card {
+  background: rgba(60,141,255,0.1);
+  border-left: 3px solid var(--blue);
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text2);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.coaching-prediction-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.pred-warning {
+  border-color: rgba(245,200,66,0.5);
+  background: rgba(245,200,66,0.05);
+}
+.pred-critical {
+  border-color: rgba(255,60,60,0.5);
+  background: rgba(255,60,60,0.05);
+}
+.pred-info {
+  border-color: rgba(60,141,255,0.5);
+  background: rgba(60,141,255,0.05);
+}
+.coaching-pred-metric {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--purple);
+  margin-bottom: 6px;
+}
+.coaching-pred-message {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.coaching-pred-rec {
+  font-size: 0.8rem;
+  color: var(--text2);
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.coaching-pred-meta {
+  font-size: 0.65rem;
+  color: var(--text3);
+}
+
+/* Original Coaching Modal */
 #coachingModal {
   position: fixed;
   inset: 0;
@@ -4224,6 +4456,81 @@ body::before {
 .vod-stat-cancel:hover { border-color: var(--text); color: var(--text); }
 
 /* VOD Charts Styling */
+/* VOD Correlation Analysis */
+.vod-correlations-section {
+  background: linear-gradient(135deg, rgba(60,141,255,0.05) 0%, rgba(168,85,247,0.05) 100%);
+  border: 1px solid rgba(60,141,255,0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.vod-corr-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.vod-corr-icon {
+  font-size: 1.5rem;
+}
+.vod-corr-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: var(--blue);
+  flex: 1;
+}
+.vod-corr-subtitle {
+  font-size: 0.7rem;
+  color: var(--text3);
+  width: 100%;
+  margin-top: -8px;
+}
+.vod-corr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.vod-corr-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px;
+}
+.vod-corr-actionable {
+  border-color: rgba(245,200,66,0.5);
+  background: rgba(245,200,66,0.05);
+}
+.vod-corr-metrics {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.vod-corr-metric {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.vod-corr-arrow {
+  font-size: 1.2rem;
+  color: var(--blue);
+}
+.vod-corr-strength {
+  font-size: 0.7rem;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+.vod-corr-interpretation {
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
 /* VOD Charts - Mobile First */
 .vod-project-header {
   margin-bottom: 24px;
@@ -9246,6 +9553,170 @@ const WEEKLY_JOURNAL_PROMPTS = {
   ]
 };
 
+// ═══════════════════════════════════════════════════════════════════════
+// SESSION NOTE QUALITY SCORING
+// ═══════════════════════════════════════════════════════════════════════
+function scoreSessionNotes(notes, takeaway, workOn) {
+  let score = 0;
+  const feedback = [];
+  
+  const allNotes = [notes.vulnerabilities, notes.neutral, notes.tech, notes.mental, notes.matchup, notes.adjustments, takeaway, workOn].join(' ');
+  const wordCount = allNotes.split(/\s+/).filter(w => w.length > 0).length;
+  
+  if (wordCount < 20) {
+    feedback.push("❌ Too short - need at least 20 words total");
+  } else if (wordCount < 50) {
+    score += 1;
+    feedback.push("⚠️ Brief - aim for 50+ words");
+  } else {
+    score += 2;
+    feedback.push("✅ Good length");
+  }
+  
+  const hasNumbers = /\d+/.test(allNotes);
+  const hasPercent = /\d+%|\d+ percent/i.test(allNotes);
+  const hasCount = /\d+ times|\d+x|x\d+/i.test(allNotes);
+  
+  if (hasNumbers && (hasPercent || hasCount)) {
+    score += 2;
+    feedback.push("✅ Contains specific numbers/counts");
+  } else if (hasNumbers) {
+    score += 1;
+    feedback.push("⚠️ Add percents or counts");
+  } else {
+    feedback.push("❌ No numbers - track HOW MANY");
+  }
+  
+  const movePattern = /(nair|fair|bair|uair|dair|grab|dash attack|ftilt|dtilt|utilt|fsmash|dsmash|usmash|jab|up-?b|side-?b|down-?b|neutral-?b|wavedash|l-?cancel|di|sdi|tech|wave ?land)/i;
+  const moveMatches = allNotes.match(new RegExp(movePattern, 'gi'));
+  
+  if (moveMatches && moveMatches.length >= 3) {
+    score += 2;
+    feedback.push("✅ Names specific moves/tech");
+  } else if (moveMatches && moveMatches.length >= 1) {
+    score += 1;
+    feedback.push("⚠️ Be more specific about moves");
+  } else {
+    feedback.push("❌ No move names");
+  }
+  
+  const situationPattern = /(when|after|during|at \d+%|while|if|because|landing|recovering|edgeguarding|in neutral|in disadvantage|in advantage)/i;
+  const situationMatches = allNotes.match(new RegExp(situationPattern, 'gi'));
+  
+  if (situationMatches && situationMatches.length >= 2) {
+    score += 2;
+    feedback.push("✅ Describes situations");
+  } else if (situationMatches) {
+    score += 1;
+    feedback.push("⚠️ Add more context");
+  } else {
+    feedback.push("❌ No context - WHEN?");
+  }
+  
+  const outcomePattern = /(got punished|got hit|whiff|miss|dropped|won|lost|died|killed|escaped|edgeguarded|combo|string|stock|game)/i;
+  const outcomeMatches = allNotes.match(new RegExp(outcomePattern, 'gi'));
+  
+  if (outcomeMatches && outcomeMatches.length >= 2) {
+    score += 2;
+    feedback.push("✅ Notes outcomes");
+  } else if (outcomeMatches) {
+    score += 1;
+    feedback.push("⚠️ Add results");
+  } else {
+    feedback.push("❌ No outcomes");
+  }
+  
+  return { score, feedback, wordCount };
+}
+
+function showSessionNoteFeedback(quality) {
+  const modal = document.createElement('div');
+  modal.id = 'sessionNoteFeedbackModal';
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="coaching-modal" style="max-width:600px;">
+      <div class="coaching-header">
+        <div class="coaching-title">SESSION NOTES REJECTED</div>
+        <div class="coaching-subtitle">Score: ${quality.score}/10 (Need 6+)</div>
+      </div>
+      <div class="coaching-content">
+        <div class="coaching-issue">
+          ${quality.feedback.map(f => `<div style="margin-bottom:8px;">${f}</div>`).join('')}
+        </div>
+        <div class="coaching-solutions-title" style="margin:20px 0 12px;">EXAMPLE:</div>
+        <div class="coaching-example" style="background:rgba(45,204,112,0.1);border-left:3px solid var(--green);padding:12px;border-radius:6px;">
+          "Got hit by dash attack 4 times landing from platform. Used nair but spaced wrong. 
+          At 80%, edgeguarded after up-b — same angle 3 times. Tilted after game 2, forced approaches."
+        </div>
+        <button class="coaching-btn coaching-btn-secondary" onclick="closeSessionNoteFeedback()" style="width:200px;margin-top:16px;">
+          GO BACK & IMPROVE
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function closeSessionNoteFeedback() {
+  document.getElementById('sessionNoteFeedbackModal')?.remove();
+}
+
+function detectSessionPatterns() {
+  if (!state.matchSessions || state.matchSessions.length < 3) return null;
+  
+  const recent = state.matchSessions.slice(-10);
+  const patterns = {
+    recurring: [],
+    mental: [],
+    opponents: [],
+    tech: []
+  };
+  
+  const allNotes = recent.map(s => [s.notes.vulnerabilities, s.notes.neutral, s.notes.tech, s.notes.mental].join(' '));
+  const wordFreq = {};
+  
+  allNotes.forEach(notes => {
+    const words = notes.toLowerCase().match(/\b\w{4,}\b/g) || [];
+    words.forEach(word => {
+      if (!['this', 'that', 'with', 'from', 'when', 'what', 'about'].includes(word)) {
+        wordFreq[word] = (wordFreq[word] || 0) + 1;
+      }
+    });
+  });
+  
+  Object.entries(wordFreq)
+    .filter(([word, count]) => count >= 3)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .forEach(([word, count]) => {
+      patterns.recurring.push({ issue: word, count, pct: Math.round((count / recent.length) * 100) });
+    });
+  
+  const ratings = recent.map(s => s.rating || 3);
+  const avgRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+  const recentAvg = ratings.slice(-3).reduce((a, b) => a + b, 0) / 3;
+  
+  if (recentAvg < avgRating - 0.5) {
+    patterns.mental.push({ trend: 'declining', msg: `Recent ${recentAvg.toFixed(1)}/5 vs avg ${avgRating.toFixed(1)}/5` });
+  }
+  
+  const tiltCount = recent.filter(s => (s.notes.mental || '').toLowerCase().includes('tilt')).length;
+  if (tiltCount >= 3) {
+    patterns.mental.push({ trend: 'tilt', msg: `Tilt mentioned in ${tiltCount}/${recent.length} sessions` });
+  }
+  
+  const oppFreq = {};
+  recent.forEach(s => {
+    if (s.opponent && s.opponent !== 'CPU') oppFreq[s.opponent] = (oppFreq[s.opponent] || 0) + 1;
+  });
+  
+  Object.entries(oppFreq).filter(([o, c]) => c >= 2).forEach(([opp, count]) => {
+    patterns.opponents.push({ name: opp, count, pct: Math.round((count / recent.length) * 100) });
+  });
+  
+  return patterns;
+}
+
 function buildJournalTool() {
   const sec = document.createElement('div');
   sec.className = 'section';
@@ -10364,10 +10835,20 @@ function saveMatchSession() {
   const workOn = document.getElementById('pstWorkOn').value.trim();
   const rating = sessionRating || 5;
 
+  // SCORE NOTE QUALITY
+  const noteQuality = scoreSessionNotes(activeMatchSession.notes, takeaway, workOn);
+  
+  if (noteQuality.score < 6) {
+    // REJECT - Show quality feedback
+    showSessionNoteFeedback(noteQuality);
+    return;
+  }
+
   const session = {
     id: Date.now(),
     day: currentDay,
     date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    timestamp: new Date().toISOString(),
     opponent: activeMatchSession.opponent,
     focus: activeMatchSession.focus,
     time: activeMatchSession.time,
@@ -10376,6 +10857,7 @@ function saveMatchSession() {
     takeaway,
     workOn,
     rating,
+    noteQuality: noteQuality.score,
   };
 
   if (!state.matchSessions) state.matchSessions = [];
@@ -10448,6 +10930,60 @@ function buildPastSessionsTool() {
     </div>
   `;
   sec.innerHTML = hdrHTML;
+
+  // PATTERN DETECTION
+  const patterns = detectSessionPatterns();
+  if (patterns && (patterns.recurring.length > 0 || patterns.mental.length > 0)) {
+    const patternSection = document.createElement('div');
+    patternSection.className = 'session-patterns-section';
+    patternSection.innerHTML = `
+      <div class="pattern-header">
+        <div class="pattern-icon">🔍</div>
+        <div class="pattern-title">DETECTED PATTERNS (Last 10 Sessions)</div>
+      </div>
+      
+      ${patterns.recurring.length > 0 ? `
+        <div class="pattern-category">
+          <div class="pattern-category-title">⚠️ Recurring Issues</div>
+          <div class="pattern-chips">
+            ${patterns.recurring.map(p => `
+              <div class="pattern-chip pattern-warning">
+                <div class="pattern-chip-text">${p.issue}</div>
+                <div class="pattern-chip-count">${p.count}x (${p.pct}%)</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="pattern-note">These words appear repeatedly in your notes — potential chronic issue</div>
+        </div>
+      ` : ''}
+      
+      ${patterns.mental.length > 0 ? `
+        <div class="pattern-category">
+          <div class="pattern-category-title">🧠 Mental Trends</div>
+          ${patterns.mental.map(m => `
+            <div class="pattern-insight ${m.trend === 'declining' ? 'pattern-warning' : m.trend === 'tilt' ? 'pattern-critical' : 'pattern-positive'}">
+              ${m.msg}
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      
+      ${patterns.opponents.length > 0 ? `
+        <div class="pattern-category">
+          <div class="pattern-category-title">🎯 Frequent Opponents</div>
+          <div class="pattern-chips">
+            ${patterns.opponents.map(o => `
+              <div class="pattern-chip">
+                <div class="pattern-chip-text">${escHtml(o.name)}</div>
+                <div class="pattern-chip-count">${o.count} sessions (${o.pct}%)</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+    `;
+    sec.appendChild(patternSection);
+  }
 
   const list = document.createElement('div');
   list.className = 'past-sessions-list';
@@ -10920,7 +11456,34 @@ function renderVODChartsForProject(projectIndex) {
     </div>`;
   }
   
+  // CORRELATION ANALYSIS
+  const correlations = analyzeVODCorrelations(project.entries);
+  const correlationHTML = correlations.length > 0 ? `
+    <div class="vod-correlations-section">
+      <div class="vod-corr-header">
+        <div class="vod-corr-icon">🔗</div>
+        <div class="vod-corr-title">METRIC CORRELATIONS</div>
+        <div class="vod-corr-subtitle">These metrics are linked — fixing one may fix both</div>
+      </div>
+      <div class="vod-corr-list">
+        ${correlations.slice(0, 3).map(c => `
+          <div class="vod-corr-card ${c.actionable ? 'vod-corr-actionable' : ''}">
+            <div class="vod-corr-metrics">
+              <span class="vod-corr-metric">${c.metric1}</span>
+              <span class="vod-corr-arrow">${c.direction === 'positive' ? '↔' : '⇄'}</span>
+              <span class="vod-corr-metric">${c.metric2}</span>
+            </div>
+            <div class="vod-corr-strength">${c.strength} ${c.direction} correlation (${(c.correlation * 100).toFixed(0)}%)</div>
+            <div class="vod-corr-interpretation">${c.interpretation}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+  
   return `
+    ${correlationHTML}
+    
     <div class="vod-chart-section">
       <div class="vod-chart-header">
         <div class="vod-chart-title">📈 ${escHtml(project.name)}</div>
@@ -12587,6 +13150,385 @@ window.completeSession = function() {
 // COACHING ANALYSIS ENGINE
 // ═══════════════════════════════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════════════════════════════
+// VOD CORRELATION ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════
+function analyzeVODCorrelations(entries) {
+  if (entries.length < 5) return [];
+  
+  const correlations = [];
+  
+  // Calculate correlation coefficient between two metrics
+  function pearsonCorrelation(x, y) {
+    const n = x.length;
+    const sumX = x.reduce((a,b) => a+b, 0);
+    const sumY = y.reduce((a,b) => a+b, 0);
+    const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+    const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+    const sumY2 = y.reduce((sum, yi) => sum + yi * yi, 0);
+    
+    const numerator = n * sumXY - sumX * sumY;
+    const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+    
+    return denominator === 0 ? 0 : numerator / denominator;
+  }
+  
+  // Check all pairs of metrics
+  for (let i = 0; i < STAT_METRICS.length; i++) {
+    for (let j = i + 1; j < STAT_METRICS.length; j++) {
+      const metric1 = STAT_METRICS[i];
+      const metric2 = STAT_METRICS[j];
+      
+      const values1 = entries.map(e => e[metric1.key]).filter(v => v != null);
+      const values2 = entries.map(e => e[metric2.key]).filter(v => v != null);
+      
+      if (values1.length < 5 || values2.length < 5) continue;
+      
+      // Make sure arrays are same length
+      const minLen = Math.min(values1.length, values2.length);
+      const v1 = values1.slice(0, minLen);
+      const v2 = values2.slice(0, minLen);
+      
+      const corr = pearsonCorrelation(v1, v2);
+      
+      // Strong correlation if > 0.6 or < -0.6
+      if (Math.abs(corr) > 0.6) {
+        let interpretation = '';
+        
+        // Interpret the relationship
+        if (corr > 0) {
+          // Positive correlation
+          if (metric1.key === 'killPct' && metric2.key === 'droppedEdgeguards') {
+            interpretation = `When you drop edgeguards, your kill percent goes UP (compensating by forcing kills in neutral)`;
+          } else if (metric1.key === 'openingsPerStock' && metric2.key === 'neutralWinRate') {
+            interpretation = `More openings needed = losing neutral more (they're connected)`;
+          } else if (metric1.key === 'dmgPerOpening' && metric2.key === 'droppedCombos') {
+            interpretation = `When you drop combos, damage per opening tanks (obviously linked)`;
+          } else {
+            interpretation = `${metric1.label} and ${metric2.label} move together (${corr > 0 ? 'both up or both down' : 'opposite directions'})`;
+          }
+        } else {
+          // Negative correlation
+          if (metric1.key === 'neutralWinRate' && metric2.key === 'openingsPerStock') {
+            interpretation = `Better neutral = fewer openings needed per stock (efficiency)`;
+          } else if (metric1.key === 'punishEfficiency' && metric2.key === 'droppedCombos') {
+            interpretation = `More dropped combos = worse punish efficiency (fix combos first)`;
+          } else {
+            interpretation = `When ${metric1.label} goes up, ${metric2.label} goes down (inverse relationship)`;
+          }
+        }
+        
+        correlations.push({
+          metric1: metric1.label,
+          metric2: metric2.label,
+          correlation: corr,
+          strength: Math.abs(corr) > 0.8 ? 'very strong' : 'strong',
+          direction: corr > 0 ? 'positive' : 'negative',
+          interpretation,
+          actionable: interpretation.includes('fix') || interpretation.includes('compensating')
+        });
+      }
+    }
+  }
+  
+  // Sort by strength
+  return correlations.sort((a, b) => Math.abs(b.correlation) - Math.abs(a.correlation));
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// ELITE COACHING ENGINE
+// User Profiling + Data Synthesis + Predictive Guidance + Psychological Modeling
+// ═══════════════════════════════════════════════════════════════════════
+
+function buildUserProfile() {
+  if (!state.userProfile) {
+    state.userProfile = {
+      learningVelocity: {},
+      tiltTriggers: [],
+      successfulSolutions: [],
+      mentalState: 'neutral',
+      improvementTrajectories: {},
+      lastUpdated: new Date().toISOString()
+    };
+  }
+  
+  const profile = state.userProfile;
+  
+  // LEARNING VELOCITY - How fast does user improve in each area?
+  if (state.vodProjects && state.vodProjects.length > 0) {
+    STAT_METRICS.forEach(metric => {
+      const allEntries = [];
+      state.vodProjects.forEach(proj => {
+        if (proj.entries) allEntries.push(...proj.entries);
+      });
+      
+      allEntries.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+      
+      if (allEntries.length >= 5) {
+        const values = allEntries.map(e => e[metric.key]).filter(v => v != null);
+        if (values.length >= 5) {
+          const firstThird = values.slice(0, Math.floor(values.length / 3));
+          const lastThird = values.slice(-Math.floor(values.length / 3));
+          
+          const firstAvg = firstThird.reduce((a,b) => a+b, 0) / firstThird.length;
+          const lastAvg = lastThird.reduce((a,b) => a+b, 0) / lastThird.length;
+          
+          const improvement = metric.higherBetter ? lastAvg - firstAvg : firstAvg - lastAvg;
+          const improvementPct = (improvement / firstAvg) * 100;
+          
+          let velocity = 'slow';
+          if (improvementPct > 20) velocity = 'fast';
+          else if (improvementPct > 10) velocity = 'medium';
+          
+          profile.learningVelocity[metric.key] = {
+            velocity,
+            improvementPct: Math.round(improvementPct),
+            sessionsAnalyzed: values.length
+          };
+        }
+      }
+    });
+  }
+  
+  // TILT TRIGGERS - Extract from session notes
+  if (state.matchSessions && state.matchSessions.length > 0) {
+    const tiltKeywords = ['tilt', 'frustrat', 'anger', 'mad', 'annoyed'];
+    const triggers = [];
+    
+    state.matchSessions.forEach(s => {
+      const mentalNotes = (s.notes?.mental || '').toLowerCase();
+      if (tiltKeywords.some(kw => mentalNotes.includes(kw))) {
+        // Extract what caused it
+        const sentences = mentalNotes.split(/[.!?]+/);
+        sentences.forEach(sent => {
+          if (tiltKeywords.some(kw => sent.includes(kw))) {
+            triggers.push(sent.trim());
+          }
+        });
+      }
+    });
+    
+    // Deduplicate and take most common
+    const triggerCounts = {};
+    triggers.forEach(t => {
+      const words = t.split(/\s+/).filter(w => w.length > 4);
+      words.forEach(w => {
+        triggerCounts[w] = (triggerCounts[w] || 0) + 1;
+      });
+    });
+    
+    profile.tiltTriggers = Object.entries(triggerCounts)
+      .filter(([word, count]) => count >= 2)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([word]) => word);
+  }
+  
+  // MENTAL STATE - Based on recent session ratings
+  if (state.matchSessions && state.matchSessions.length >= 3) {
+    const recent = state.matchSessions.slice(-5);
+    const ratings = recent.map(s => s.rating || 3);
+    const avgRating = ratings.reduce((a,b) => a+b, 0) / ratings.length;
+    const variance = Math.max(...ratings) - Math.min(...ratings);
+    
+    if (avgRating >= 7 && variance <= 2) {
+      profile.mentalState = 'confident';
+    } else if (avgRating <= 4) {
+      profile.mentalState = 'struggling';
+    } else if (variance >= 4) {
+      profile.mentalState = 'unstable';
+    } else if (recent.filter(s => (s.notes?.mental || '').toLowerCase().includes('tilt')).length >= 2) {
+      profile.mentalState = 'tilting';
+    } else {
+      profile.mentalState = 'neutral';
+    }
+  }
+  
+  state.userProfile = profile;
+  saveState();
+  return profile;
+}
+
+function synthesizeData() {
+  // Build user profile first
+  const profile = buildUserProfile();
+  
+  const synthesis = {
+    corePatterns: [],
+    crossMetricInsights: [],
+    behavioralTrends: [],
+    recommendations: []
+  };
+  
+  // PATTERN 1: Cross-reference journal + VOD + sessions
+  if (state.weeklyJournals && state.vodProjects && state.matchSessions) {
+    // Example: Journal mentions "impatient" + VOD shows high kill% + Sessions mention "forcing"
+    const recentJournals = (state.weeklyJournals || []).slice(-2);
+    const journalText = recentJournals.map(j => j.answers.join(' ')).join(' ').toLowerCase();
+    
+    // Check for impatience pattern
+    if (journalText.includes('impatien') || journalText.includes('forcing') || journalText.includes('rush')) {
+      const vodData = [];
+      (state.vodProjects || []).forEach(p => {
+        if (p.entries) vodData.push(...p.entries);
+      });
+      
+      const recentVOD = vodData.slice(-5);
+      if (recentVOD.length > 0) {
+        const avgKillPct = recentVOD.reduce((sum, e) => sum + (e.killPct || 0), 0) / recentVOD.length;
+        
+        if (avgKillPct < 100) { // Killing early = forcing
+          const sessionNotes = (state.matchSessions || []).slice(-5).map(s => 
+            [s.notes.vulnerabilities, s.notes.neutral, s.notes.mental].join(' ')
+          ).join(' ').toLowerCase();
+          
+          if (sessionNotes.includes('force') || sessionNotes.includes('approach')) {
+            synthesis.corePatterns.push({
+              pattern: 'impatience',
+              confidence: 'high',
+              evidence: [
+                `Mentioned impatience/forcing in recent journals`,
+                `Kill % averaging ${avgKillPct.toFixed(0)}% (forcing early kills)`,
+                `Session notes mention forcing approaches`
+              ],
+              impact: 'This impatience is creating multiple issues: taking risks for early kills, forcing neutral approaches, mental tilt when it doesn\'t work',
+              solution: 'Focus on PATIENCE for 1 week. Count how many times you force vs wait. Target: 70% waiting.'
+            });
+          }
+        }
+      }
+    }
+  }
+  
+  // PATTERN 2: VOD correlations that match session patterns
+  const sessionPatterns = detectSessionPatterns();
+  if (sessionPatterns && state.vodProjects) {
+    const allVOD = [];
+    state.vodProjects.forEach(p => {
+      if (p.entries) allVOD.push(...p.entries);
+    });
+    
+    const correlations = analyzeVODCorrelations(allVOD);
+    
+    correlations.forEach(corr => {
+      if (corr.actionable) {
+        // Check if session notes mention either metric
+        const m1Lower = corr.metric1.toLowerCase();
+        const m2Lower = corr.metric2.toLowerCase();
+        
+        const sessionMentions = (sessionPatterns.recurring || []).filter(r => 
+          r.issue.includes(m1Lower.split(' ')[0]) || r.issue.includes(m2Lower.split(' ')[0])
+        );
+        
+        if (sessionMentions.length > 0) {
+          synthesis.crossMetricInsights.push({
+            correlation: corr,
+            sessionPattern: sessionMentions[0],
+            synthesis: `You're noting "${sessionMentions[0].issue}" in ${sessionMentions[0].pct}% of sessions, AND your VOD shows ${corr.interpretation}. These are connected.`
+          });
+        }
+      }
+    });
+  }
+  
+  return synthesis;
+}
+
+function generatePredictiveGuidance() {
+  const profile = state.userProfile || buildUserProfile();
+  const predictions = [];
+  
+  // PREDICTION 1: Plateau detection
+  Object.entries(profile.learningVelocity || {}).forEach(([metricKey, data]) => {
+    if (data.velocity === 'slow' && data.improvementPct < 5 && data.sessionsAnalyzed >= 8) {
+      const metric = STAT_METRICS.find(m => m.key === metricKey);
+      predictions.push({
+        type: 'plateau',
+        metric: metric?.label || metricKey,
+        message: `Your ${metric?.label || metricKey} has plateaued (only ${data.improvementPct}% improvement over ${data.sessionsAnalyzed} sessions). You're approaching your limit with current training methods.`,
+        recommendation: 'Change your approach: try a different practice type, focus on a related skill, or get external coaching.',
+        timeframe: '2-3 weeks',
+        confidence: 'high'
+      });
+    }
+  });
+  
+  // PREDICTION 2: Trajectory projection
+  Object.entries(profile.learningVelocity || {}).forEach(([metricKey, data]) => {
+    if (data.velocity === 'fast' && data.improvementPct > 20) {
+      const metric = STAT_METRICS.find(m => m.key === metricKey);
+      const weeksToTarget = Math.ceil((metric.target - data.improvementPct) / (data.improvementPct / data.sessionsAnalyzed));
+      
+      if (weeksToTarget > 0 && weeksToTarget < 8) {
+        predictions.push({
+          type: 'trajectory',
+          metric: metric?.label || metricKey,
+          message: `At your current pace (${data.improvementPct}% improvement), you'll hit ${metric?.label} target in ~${weeksToTarget} weeks`,
+          recommendation: 'Keep current training approach - it\'s working',
+          timeframe: `${weeksToTarget} weeks`,
+          confidence: 'medium'
+        });
+      }
+    }
+  });
+  
+  // PREDICTION 3: Mental state progression
+  if (profile.mentalState === 'unstable' || profile.mentalState === 'tilting') {
+    predictions.push({
+      type: 'mental_warning',
+      metric: 'Mental Game',
+      message: `Your mental state is ${profile.mentalState}. Session ratings are volatile. This will impact technical execution within 1-2 weeks if not addressed.`,
+      recommendation: 'Take 2 days off competitive play. Focus on drilling only. Write about tilt triggers in journal.',
+      timeframe: '1-2 weeks until performance impact',
+      confidence: 'high'
+    });
+  }
+  
+  return predictions;
+}
+
+function getCoachingTone() {
+  const profile = state.userProfile || buildUserProfile();
+  
+  switch(profile.mentalState) {
+    case 'confident':
+      return {
+        style: 'challenging',
+        prefix: 'You\'re executing well.',
+        suffix: 'Ready for the next challenge?',
+        encouragement: 'Push yourself'
+      };
+    case 'struggling':
+      return {
+        style: 'supportive',
+        prefix: 'You\'re working through a tough spot.',
+        suffix: 'Let\'s focus on one thing.',
+        encouragement: 'Small wins add up'
+      };
+    case 'unstable':
+      return {
+        style: 'stabilizing',
+        prefix: 'Your performance is inconsistent.',
+        suffix: 'Consistency comes first.',
+        encouragement: 'One step at a time'
+      };
+    case 'tilting':
+      return {
+        style: 'calming',
+        prefix: 'Mental game is affecting your play.',
+        suffix: 'Reset before continuing.',
+        encouragement: 'Clarity over speed'
+      };
+    default:
+      return {
+        style: 'neutral',
+        prefix: '',
+        suffix: '',
+        encouragement: 'Keep grinding'
+      };
+  }
+}
+
 function analyzeBottlenecks() {
   if (!state.vodProjects) return null;
   
@@ -12715,6 +13657,11 @@ function openCoachingModal() {
   const report = getWeeklyCoachingReport();
   selectedSolutions = [];
   
+  // BUILD ELITE COACHING DATA
+  const synthesis = synthesizeData();
+  const predictions = generatePredictiveGuidance();
+  const tone = getCoachingTone();
+  
   const content = document.getElementById('coachingContent');
   
   if (!report.meetsMinimum) {
@@ -12727,10 +13674,10 @@ function openCoachingModal() {
         </div>
       </div>
     `;
-  } else if (!report.bottleneck) {
+  } else if (!report.bottleneck && synthesis.corePatterns.length === 0 && predictions.length === 0) {
     content.innerHTML = `
       <div class="coaching-title">LOOKING STRONG</div>
-      <div class="coaching-subtitle">All metrics are hitting targets. Keep the momentum.</div>
+      <div class="coaching-subtitle">All metrics hitting targets. ${tone.encouragement}.</div>
       <div class="coaching-stat-box">
         <div class="coaching-stat-row">
           <div class="coaching-stat-label">VOD SESSIONS THIS WEEK</div>
@@ -12739,45 +13686,109 @@ function openCoachingModal() {
       </div>
     `;
   } else {
-    const b = report.bottleneck;
-    const solutions = getSolutionsFor(b.key, b.issueType);
+    let html = '';
     
-    content.innerHTML = `
-      <div class="coaching-title">BOTTLENECK DETECTED</div>
-      <div class="coaching-subtitle">${b.context}</div>
+    // ADAPTIVE TONE PREFIX
+    if (tone.prefix) {
+      html += `<div class="coaching-tone-prefix">${tone.prefix}</div>`;
+    }
+    
+    // CORE PATTERNS FROM SYNTHESIS
+    if (synthesis.corePatterns.length > 0) {
+      synthesis.corePatterns.forEach(pattern => {
+        html += `
+          <div class="coaching-synthesis-section">
+            <div class="coaching-synthesis-title">🎯 CORE PATTERN DETECTED: ${pattern.pattern.toUpperCase()}</div>
+            <div class="coaching-synthesis-confidence">Confidence: ${pattern.confidence}</div>
+            <div class="coaching-synthesis-evidence">
+              <div class="coaching-evidence-title">Evidence across all data:</div>
+              ${pattern.evidence.map(e => `<div class="coaching-evidence-item">• ${e}</div>`).join('')}
+            </div>
+            <div class="coaching-synthesis-impact">${pattern.impact}</div>
+            <div class="coaching-synthesis-solution">
+              <div class="coaching-solution-label">SOLUTION:</div>
+              ${pattern.solution}
+            </div>
+          </div>
+        `;
+      });
+    }
+    
+    // CROSS-METRIC INSIGHTS
+    if (synthesis.crossMetricInsights.length > 0) {
+      html += `<div class="coaching-insights-section">
+        <div class="coaching-insights-title">🔗 CONNECTED ISSUES</div>
+      `;
+      synthesis.crossMetricInsights.forEach(insight => {
+        html += `<div class="coaching-insight-card">${insight.synthesis}</div>`;
+      });
+      html += `</div>`;
+    }
+    
+    // PREDICTIVE GUIDANCE
+    if (predictions.length > 0) {
+      html += `<div class="coaching-predictions-section">
+        <div class="coaching-predictions-title">📈 TRAJECTORY ANALYSIS</div>
+      `;
+      predictions.forEach(pred => {
+        const typeClass = pred.type === 'plateau' ? 'pred-warning' : pred.type === 'mental_warning' ? 'pred-critical' : 'pred-info';
+        html += `
+          <div class="coaching-prediction-card ${typeClass}">
+            <div class="coaching-pred-metric">${pred.metric}</div>
+            <div class="coaching-pred-message">${pred.message}</div>
+            <div class="coaching-pred-rec">→ ${pred.recommendation}</div>
+            <div class="coaching-pred-meta">${pred.timeframe} | ${pred.confidence} confidence</div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    }
+    
+    // STANDARD BOTTLENECK ANALYSIS
+    if (report.bottleneck) {
+      const b = report.bottleneck;
+      const solutions = getSolutionsFor(b.key, b.issueType);
       
-      <div class="coaching-stat-box">
-        <div class="coaching-stat-row">
-          <div class="coaching-stat-label">CURRENT AVERAGE</div>
-          <div class="coaching-stat-value">${b.current}</div>
-        </div>
-        <div class="coaching-stat-row">
-          <div class="coaching-stat-label">TARGET</div>
-          <div class="coaching-stat-value good">${b.target}</div>
-        </div>
-        <div class="coaching-stat-row">
-          <div class="coaching-stat-label">SESSIONS ANALYZED</div>
-          <div class="coaching-stat-value">${b.sessions}</div>
-        </div>
-        <div class="coaching-stat-row">
-          <div class="coaching-stat-label">ISSUE TYPE</div>
-          <div class="coaching-stat-value">${b.issueType.toUpperCase()}</div>
-        </div>
-      </div>
-      
-      <div class="coaching-solutions-title">PICK 2 WAYS TO FIX THIS WEEK:</div>
-      ${solutions.map((sol, i) => `
-        <div class="coaching-solution" onclick="toggleSolution(${i})">
-          <div class="coaching-solution-check" id="solCheck${i}"></div>
-          <div class="coaching-solution-text">
-            <div class="coaching-solution-title">${sol.title}</div>
-            <div class="coaching-solution-desc">${sol.desc}</div>
+      html += `
+        <div class="coaching-title">BOTTLENECK: ${b.label.toUpperCase()}</div>
+        <div class="coaching-subtitle">${b.context}</div>
+        
+        <div class="coaching-stat-box">
+          <div class="coaching-stat-row">
+            <div class="coaching-stat-label">CURRENT</div>
+            <div class="coaching-stat-value">${b.current}</div>
+          </div>
+          <div class="coaching-stat-row">
+            <div class="coaching-stat-label">TARGET</div>
+            <div class="coaching-stat-value good">${b.target}</div>
+          </div>
+          <div class="coaching-stat-row">
+            <div class="coaching-stat-label">ISSUE TYPE</div>
+            <div class="coaching-stat-value">${b.issueType.toUpperCase()}</div>
           </div>
         </div>
-      `).join('')}
-      
-      <button class="coaching-commit-btn" id="commitBtn" disabled onclick="commitSolutions('${b.key}', '${b.issueType}')">COMMIT TO THESE SOLUTIONS</button>
-    `;
+        
+        <div class="coaching-solutions-title">PICK 2 SOLUTIONS:</div>
+        ${solutions.map((sol, i) => `
+          <div class="coaching-solution" onclick="toggleSolution(${i})">
+            <div class="coaching-solution-check" id="solCheck${i}"></div>
+            <div class="coaching-solution-text">
+              <div class="coaching-solution-title">${sol.title}</div>
+              <div class="coaching-solution-desc">${sol.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+        
+        <button class="coaching-commit-btn" id="commitBtn" disabled onclick="commitSolutions('${b.key}', '${b.issueType}')">COMMIT</button>
+      `;
+    }
+    
+    // ADAPTIVE TONE SUFFIX
+    if (tone.suffix) {
+      html += `<div class="coaching-tone-suffix">${tone.suffix}</div>`;
+    }
+    
+    content.innerHTML = html;
   }
   
   document.getElementById('coachingModal').classList.remove('hidden');
