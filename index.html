@@ -9665,41 +9665,159 @@ function detectSessionPatterns() {
   if (!state.matchSessions || state.matchSessions.length < 3) return null;
   
   const recent = state.matchSessions.slice(-10);
+  const last7Days = state.matchSessions.filter(s => {
+    const sessionDate = new Date(s.timestamp || s.date);
+    const daysDiff = (Date.now() - sessionDate.getTime()) / (1000 * 60 * 60 * 24);
+    return daysDiff <= 7;
+  });
+  
   const patterns = {
     recurring: [],
     mental: [],
     opponents: [],
-    tech: []
+    alerts: [] // ACTIVE ALERTS
   };
   
+  // PATTERN INTELLIGENCE - Extract meaningful weaknesses
   const allNotes = recent.map(s => [s.notes.vulnerabilities, s.notes.neutral, s.notes.tech, s.notes.mental].join(' '));
-  const wordFreq = {};
   
-  allNotes.forEach(notes => {
-    const words = notes.toLowerCase().match(/\b\w{4,}\b/g) || [];
-    words.forEach(word => {
-      if (!['this', 'that', 'with', 'from', 'when', 'what', 'about'].includes(word)) {
-        wordFreq[word] = (wordFreq[word] || 0) + 1;
+  // Define weakness patterns to track
+  const weaknessPatterns = [
+    { keywords: ['grab', 'grabbed', 'throw'], name: 'Grab Vulnerability', context: 'getting grabbed' },
+    { keywords: ['edgeguard', 'recovery', 'offstage'], name: 'Edgeguard Weakness', context: 'recovering/getting edgeguarded' },
+    { keywords: ['combo', 'drop', 'missed'], name: 'Combo Drops', context: 'dropping combos' },
+    { keywords: ['approach', 'neutral', 'spacing'], name: 'Neutral Game', context: 'neutral interactions' },
+    { keywords: ['shield', 'pressure', 'oos'], name: 'Shield Pressure', context: 'dealing with pressure' },
+    { keywords: ['tech', 'l-cancel', 'input'], name: 'Tech Execution', context: 'tech skill execution' },
+    { keywords: ['landing', 'platform', 'aerial'], name: 'Landing Options', context: 'landing from aerials/platforms' },
+    { keywords: ['tilt', 'frustrat', 'mental'], name: 'Mental Game', context: 'mental state' }
+  ];
+  
+  weaknessPatterns.forEach(pattern => {
+    let count = 0;
+    let last7DaysCount = 0;
+    const evidence = [];
+    
+    recent.forEach(s => {
+      const sessionText = [s.notes.vulnerabilities, s.notes.neutral, s.notes.tech, s.notes.mental].join(' ').toLowerCase();
+      const matches = pattern.keywords.filter(kw => sessionText.includes(kw));
+      
+      if (matches.length > 0) {
+        count++;
+        evidence.push(`Day ${s.day}: "${matches[0]}" mentioned`);
       }
     });
+    
+    // Count in last 7 days specifically
+    last7Days.forEach(s => {
+      const sessionText = [s.notes.vulnerabilities, s.notes.neutral, s.notes.tech, s.notes.mental].join(' ').toLowerCase();
+      if (pattern.keywords.some(kw => sessionText.includes(kw))) {
+        last7DaysCount++;
+      }
+    });
+    
+    if (count >= 3) {
+      const pct = Math.round((count / recent.length) * 100);
+      patterns.recurring.push({ 
+        issue: pattern.name,
+        context: pattern.context,
+        count, 
+        pct,
+        evidence: evidence.slice(0, 3),
+        last7DaysCount
+      });
+      
+      // TRIGGER ALERT if 3+ in last 7 days
+      if (last7DaysCount >= 3) {
+        patterns.alerts.push({
+          type: 'chronic_weakness',
+          weakness: pattern.name,
+          context: pattern.context,
+          frequency: last7DaysCount,
+          severity: last7DaysCount >= 5 ? 'critical' : 'high',
+          message: `${pattern.name} detected in ${last7DaysCount} of your last ${last7Days.length} sessions. This is no longer situational.`,
+          evidence: evidence.slice(0, 3)
+        });
+      }
+    }
   });
   
-  Object.entries(wordFreq)
-    .filter(([word, count]) => count >= 3)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .forEach(([word, count]) => {
-      patterns.recurring.push({ issue: word, count, pct: Math.round((count / recent.length) * 100) });
-    });
-  
+  // EMOTIONAL TRENDS - Rating correlation with weaknesses
   const ratings = recent.map(s => s.rating || 3);
   const avgRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
   const recentAvg = ratings.slice(-3).reduce((a, b) => a + b, 0) / 3;
   
   if (recentAvg < avgRating - 0.5) {
-    patterns.mental.push({ trend: 'declining', msg: `Recent ${recentAvg.toFixed(1)}/5 vs avg ${avgRating.toFixed(1)}/5` });
+    patterns.mental.push({ 
+      trend: 'declining', 
+      msg: `Performance declining: Recent ${recentAvg.toFixed(1)}/5 vs avg ${avgRating.toFixed(1)}/5`
+    });
+    
+    // Check if decline correlates with specific weakness
+    patterns.recurring.forEach(weakness => {
+      const sessionsWithWeakness = recent.filter(s => {
+        const text = [s.notes.vulnerabilities, s.notes.neutral, s.notes.tech].join(' ').toLowerCase();
+        return weakness.issue.toLowerCase().split(' ').some(word => text.includes(word));
+      });
+      
+      const weaknessRatings = sessionsWithWeakness.map(s => s.rating || 3);
+      const weaknessAvg = weaknessRatings.length > 0 
+        ? weaknessRatings.reduce((a,b) => a+b, 0) / weaknessRatings.length 
+        : avgRating;
+      
+      if (weaknessAvg < avgRating - 1) {
+        patterns.alerts.push({
+          type: 'emotional_correlation',
+          weakness: weakness.issue,
+          severity: 'high',
+          message: `Your rating drops ${(avgRating - weaknessAvg).toFixed(1)} points in sessions where you struggle with ${weakness.issue}. This weakness is affecting your mental game.`,
+          impact: 'mental_performance_link'
+        });
+      }
+    });
   }
   
+  // ENERGY CONSISTENCY - Session duration trends
+  if (recent.length >= 5) {
+    const durations = recent.map(s => s.durationMinutes || 0).filter(d => d > 0);
+    if (durations.length >= 5) {
+      const firstHalf = durations.slice(0, Math.floor(durations.length / 2));
+      const secondHalf = durations.slice(Math.floor(durations.length / 2));
+      const firstAvg = firstHalf.reduce((a,b) => a+b, 0) / firstHalf.length;
+      const secondAvg = secondHalf.reduce((a,b) => a+b, 0) / secondHalf.length;
+      
+      if (secondAvg < firstAvg * 0.7) {
+        patterns.alerts.push({
+          type: 'energy_decline',
+          severity: 'medium',
+          message: `Session duration declining: ${Math.round(firstAvg)}min → ${Math.round(secondAvg)}min. You may be burning out.`,
+          recommendation: 'Take 2 rest days before next session.'
+        });
+      }
+    }
+  }
+  
+  // RECOVERY TRENDS - Do they bounce back after bad sessions?
+  for (let i = 1; i < recent.length; i++) {
+    const prev = recent[i - 1];
+    const curr = recent[i];
+    
+    if ((prev.rating || 3) <= 3 && (curr.rating || 3) <= 3) {
+      // Two consecutive bad sessions = poor recovery
+      const spiralCount = recent.filter((s, idx) => idx >= i - 1 && (s.rating || 3) <= 3).length;
+      if (spiralCount >= 3) {
+        patterns.alerts.push({
+          type: 'recovery_failure',
+          severity: 'high',
+          message: `${spiralCount} consecutive low-rated sessions. You're spiraling, not recovering.`,
+          recommendation: 'Stop competitive play. Drill-only for 2 days.'
+        });
+        break;
+      }
+    }
+  }
+  
+  // TILT CHECK
   const tiltCount = recent.filter(s => (s.notes.mental || '').toLowerCase().includes('tilt')).length;
   if (tiltCount >= 3) {
     patterns.mental.push({ trend: 'tilt', msg: `Tilt mentioned in ${tiltCount}/${recent.length} sessions` });
@@ -10878,6 +10996,13 @@ function saveMatchSession() {
     newSec.className = ps.className;
     ps.replaceWith(newSec);
   }
+  
+  // CHECK FOR INTERVENTIONS
+  setTimeout(() => {
+    checkInterventionProgress();
+    checkForActiveAlerts();
+    calculatePerformanceScore();
+  }, 500);
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -13236,9 +13361,603 @@ function analyzeVODCorrelations(entries) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// ELITE COACHING ENGINE
+// PRESCRIPTIVE DRILL SYSTEM
+// ═══════════════════════════════════════════════════════════════════════
+
+const DRILL_LIBRARY = {
+  'Grab Vulnerability': [
+    {
+      title: 'Platform Landing Mixup Drill',
+      reps: 20,
+      duration: 15,
+      description: 'Land on platform 20 times. Mix: fastfall through (5x), waveland off (5x), aerial from platform (5x), stay and shield (5x).',
+      test: 'Next session: Count grabs. Target: < 2 per game.',
+      frameData: 'Most grabs are 7-8 frame startup. Your landing lag is 4-15 frames depending on move.',
+      video: 'Search: "[character] platform movement guide"'
+    },
+    {
+      title: 'Approach Spacing Drill',
+      reps: 15,
+      duration: 10,
+      description: '15 approaches vs CPU. Stay just outside grab range. If grabbed, too close.',
+      test: 'Measure your spacing: Can you react to grab startup?',
+      frameData: 'Grab range: ~1.5 character widths. Your dash speed determines safe distance.',
+      video: 'Search: "[character] dash dance spacing"'
+    },
+    {
+      title: 'Grab Escape Options',
+      reps: 10,
+      duration: 10,
+      description: 'Get grabbed by CPU 10x. DI: away (3x), up (3x), down (4x). Note which DI gives best escape.',
+      test: 'Next session: Use optimal DI, track combo damage taken.',
+      frameData: 'Throws have different trajectories. DI away usually best for low%, up for high%.',
+      video: 'Search: "throw DI guide melee"'
+    }
+  ],
+  'Edgeguard Weakness': [
+    {
+      title: 'Recovery Angle Mixups',
+      reps: 20,
+      duration: 15,
+      description: 'Recover from ledge 20x. Angles: low (5x), high (5x), to platform (5x), ledge snap (5x).',
+      test: 'Next session: Track edgeguard deaths. Target: < 1 per game.',
+      frameData: 'Your up-B has [X] frames vulnerability before snap. Mix timing.',
+      video: 'Search: "[character] recovery mixups"'
+    },
+    {
+      title: 'DI Survival Practice',
+      reps: 15,
+      duration: 10,
+      description: 'Get hit offstage 15x at kill %. DI: survival angle each time.',
+      test: 'Note kill % with optimal DI vs no DI.',
+      frameData: 'DI can change kill % by 20-40%. Perpendicular to knockback = max survival.',
+      video: 'Search: "melee DI survival guide"'
+    }
+  ],
+  'Combo Drops': [
+    {
+      title: 'Bread & Butter Consistency',
+      reps: 20,
+      duration: 20,
+      description: 'Practice your 3 most common combos 20x each against CPU. Track drops.',
+      test: 'Target: 18/20 success rate (90%)',
+      frameData: 'Your [move] has [X] frame advantage on hit. Follow-up window is [Y] frames.',
+      video: 'Search: "[character] bread and butter combos"'
+    },
+    {
+      title: 'DI React Drill',
+      reps: 15,
+      duration: 15,
+      description: 'Combo CPU 15x. They DI randomly. Adapt follow-up based on DI direction.',
+      test: 'Track: Did you adjust to DI? How many times?',
+      frameData: 'DI in = combo continues, DI away = needs dash/jump adjustment.',
+      video: 'Search: "reading DI melee"'
+    }
+  ],
+  'Neutral Game': [
+    {
+      title: 'Dash Dance Timing',
+      reps: 50,
+      duration: 10,
+      description: 'Dash dance in neutral 50x. Bait approach, punish startup. Count whiff punishes.',
+      test: 'Target: 8+ whiff punishes out of 50',
+      frameData: 'Your dash takes [X] frames to turn around. Time baits accordingly.',
+      video: 'Search: "[character] dash dance punish"'
+    },
+    {
+      title: 'Spacing Consistency',
+      reps: 30,
+      duration: 15,
+      description: 'Throw out your best poke 30x. Stay at max range. If opponent hits you, too close.',
+      test: 'Target: 0 getting hit while poking',
+      frameData: '[Move] range is [X] distance. Outside this = safe.',
+      video: 'Search: "[character] neutral spacing"'
+    }
+  ],
+  'Shield Pressure': [
+    {
+      title: 'OOS Option Practice',
+      reps: 20,
+      duration: 15,
+      description: 'Shield 20 attacks. React: grab (7x), WD back (7x), roll (3x), jump (3x).',
+      test: 'Next session: Track successful escapes from pressure.',
+      frameData: 'Your fastest OOS option is [X] (Y frames). Use vs unsafe moves.',
+      video: 'Search: "[character] out of shield options"'
+    }
+  ],
+  'Tech Execution': [
+    {
+      title: 'L-Cancel Consistency',
+      reps: 50,
+      duration: 10,
+      description: 'Short hop aerial 50x. L-cancel every landing. Miss = restart count at 0.',
+      test: 'Target: 50 in a row without miss',
+      frameData: 'L-cancel timing: 7 frames before landing. Visual cue: [character posture].',
+      video: 'Search: "L-cancel timing visual cues"'
+    },
+    {
+      title: 'Wavedash Under Pressure',
+      reps: 30,
+      duration: 10,
+      description: 'Wavedash 30x while CPU attacks. Don\'t airdodge early (SD check).',
+      test: 'Target: 0 SDs, 28+ clean wavedashes',
+      frameData: 'Jumpsquat: [X] frames. Airdodge angle: 18-20 degrees for max distance.',
+      video: 'Search: "[character] wavedash tutorial"'
+    }
+  ],
+  'Landing Options': [
+    {
+      title: 'Landing Mixup Drill',
+      reps: 25,
+      duration: 15,
+      description: 'Jump 25x. Mix landings: FF through (8x), waveland (8x), aerial (9x). Never same twice.',
+      test: 'Next session: Count punishes on landing. Target: < 3',
+      frameData: 'FF landing lag: 4 frames. Aerial landing: varies per move.',
+      video: 'Search: "landing mixup flowchart"'
+    }
+  ],
+  'Mental Game': [
+    {
+      title: 'Conscious Reset Protocol',
+      reps: 5,
+      duration: 10,
+      description: 'After losing stock: Close eyes, deep breath (3 sec inhale, 3 sec exhale), 5x. Before next stock.',
+      test: 'Track: Did rating improve when using reset?',
+      frameData: 'N/A',
+      video: 'Search: "esports mental reset techniques"'
+    },
+    {
+      title: 'Tilt Trigger Tracking',
+      reps: 1,
+      duration: 5,
+      description: 'Write down: What made you tilt today? Specific situation, exact moment.',
+      test: 'Review weekly: Same triggers repeating?',
+      frameData: 'N/A',
+      video: 'Search: "competitor psychology tilt management"'
+    }
+  ]
+};
+
+function getPrescriptiveDrills(weakness) {
+  return DRILL_LIBRARY[weakness] || [];
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// PERFORMANCE SCORE SYSTEM
+// ═══════════════════════════════════════════════════════════════════════
+
+function calculatePerformanceScore() {
+  const score = {
+    overall: 0,
+    breakdown: {
+      vodStats: 0,
+      questQuality: 0,
+      consistency: 0,
+      mentalGame: 0
+    },
+    trend: 0,
+    previousScore: state.performanceScore?.overall || 0,
+    grade: 'F',
+    projectedRank: 'Unranked',
+    details: {}
+  };
+  
+  // 1. VOD STATS SCORE (0-100)
+  if (state.vodProjects && state.vodProjects.length > 0) {
+    const allEntries = [];
+    state.vodProjects.forEach(p => {
+      if (p.entries) allEntries.push(...p.entries);
+    });
+    
+    if (allEntries.length >= 3) {
+      const recentEntries = allEntries.slice(-10);
+      let metricScores = [];
+      
+      STAT_METRICS.forEach(metric => {
+        const values = recentEntries.map(e => e[metric.key]).filter(v => v != null);
+        if (values.length >= 3) {
+          const avg = values.reduce((a,b) => a+b, 0) / values.length;
+          const target = metric.target;
+          
+          let metricScore = 0;
+          if (metric.higherBetter) {
+            metricScore = Math.min(100, (avg / target) * 100);
+          } else {
+            metricScore = Math.min(100, (target / avg) * 100);
+          }
+          
+          metricScores.push(metricScore);
+        }
+      });
+      
+      score.breakdown.vodStats = metricScores.length > 0 
+        ? Math.round(metricScores.reduce((a,b) => a+b, 0) / metricScores.length)
+        : 0;
+      
+      score.details.vodStats = `${recentEntries.length} sessions analyzed`;
+    }
+  }
+  
+  // 2. QUEST QUALITY SCORE (0-100)
+  if (state.dayCompletions) {
+    const completedDays = Object.keys(state.dayCompletions).filter(k => k.startsWith('quest_')).length;
+    const totalQuestDays = Math.min(currentDay, 60);
+    const completionRate = totalQuestDays > 0 ? (completedDays / totalQuestDays) : 0;
+    
+    // Quality = completion rate (60%) + milestone progress (40%)
+    const milestoneProgress = getGlobalPct();
+    score.breakdown.questQuality = Math.round((completionRate * 60) + (milestoneProgress * 0.4));
+    score.details.questQuality = `${completedDays}/${totalQuestDays} quests | ${milestoneProgress}% milestones`;
+  }
+  
+  // 3. CONSISTENCY SCORE (0-100)
+  if (state.matchSessions && state.matchSessions.length >= 5) {
+    const last30Days = 30;
+    const sessionsLast30 = state.matchSessions.filter(s => {
+      const daysDiff = currentDay - s.day;
+      return daysDiff <= last30Days && daysDiff >= 0;
+    });
+    
+    // Expected: 10 sessions per 30 days (3-4 per week)
+    const sessionRate = (sessionsLast30.length / 10) * 100;
+    
+    // Rating consistency
+    const ratings = state.matchSessions.slice(-10).map(s => s.rating || 3);
+    const variance = Math.max(...ratings) - Math.min(...ratings);
+    const consistencyPenalty = variance * 10; // High variance = inconsistent
+    
+    score.breakdown.consistency = Math.round(Math.max(0, Math.min(100, sessionRate - consistencyPenalty)));
+    score.details.consistency = `${sessionsLast30.length} sessions in 30 days | Rating variance: ${variance}`;
+  }
+  
+  // 4. MENTAL GAME SCORE (0-100)
+  if (state.matchSessions && state.matchSessions.length >= 5) {
+    const recent = state.matchSessions.slice(-10);
+    const avgRating = recent.reduce((sum, s) => sum + (s.rating || 3), 0) / recent.length;
+    const ratingScore = (avgRating / 10) * 100; // Max 10 rating = 100 score
+    
+    // Tilt penalty
+    const tiltCount = recent.filter(s => (s.notes?.mental || '').toLowerCase().includes('tilt')).length;
+    const tiltPenalty = tiltCount * 10;
+    
+    // Recovery bonus - bouncing back after bad session
+    let recoveryBonus = 0;
+    for (let i = 1; i < recent.length; i++) {
+      if ((recent[i-1].rating || 3) <= 3 && (recent[i].rating || 3) >= 7) {
+        recoveryBonus += 10; // Bonus for recovering
+      }
+    }
+    
+    score.breakdown.mentalGame = Math.round(Math.max(0, Math.min(100, ratingScore - tiltPenalty + recoveryBonus)));
+    score.details.mentalGame = `Avg rating: ${avgRating.toFixed(1)}/10 | Tilt: ${tiltCount} sessions`;
+  }
+  
+  // CALCULATE OVERALL
+  const weights = { vodStats: 0.35, questQuality: 0.25, consistency: 0.2, mentalGame: 0.2 };
+  score.overall = Math.round(
+    score.breakdown.vodStats * weights.vodStats +
+    score.breakdown.questQuality * weights.questQuality +
+    score.breakdown.consistency * weights.consistency +
+    score.breakdown.mentalGame * weights.mentalGame
+  );
+  
+  // TREND
+  score.trend = score.overall - score.previousScore;
+  
+  // GRADE
+  if (score.overall >= 90) score.grade = 'S';
+  else if (score.overall >= 80) score.grade = 'A';
+  else if (score.overall >= 70) score.grade = 'B';
+  else if (score.overall >= 60) score.grade = 'C';
+  else if (score.overall >= 50) score.grade = 'D';
+  else score.grade = 'F';
+  
+  // PROJECTED RANK
+  if (score.overall >= 85) score.projectedRank = 'PR Top 10';
+  else if (score.overall >= 75) score.projectedRank = 'PR 10-20';
+  else if (score.overall >= 65) score.projectedRank = 'PR 20-30';
+  else if (score.overall >= 55) score.projectedRank = 'Local Threat';
+  else if (score.overall >= 45) score.projectedRank = 'Developing';
+  else score.projectedRank = 'Beginner';
+  
+  // Save for next calculation
+  state.performanceScore = score;
+  saveState();
+  
+  return score;
+}
 // User Profiling + Data Synthesis + Predictive Guidance + Psychological Modeling
 // ═══════════════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════════
+// ACTIVE INTERVENTION SYSTEM
+// ═══════════════════════════════════════════════════════════════════════
+
+function checkForActiveAlerts() {
+  const patterns = detectSessionPatterns();
+  if (!patterns || !patterns.alerts || patterns.alerts.length === 0) return false;
+  
+  if (!state.activeInterventions) state.activeInterventions = [];
+  if (!state.dismissedAlerts) state.dismissedAlerts = [];
+  
+  const criticalAlerts = patterns.alerts.filter(a => a.severity === 'critical');
+  const highAlerts = patterns.alerts.filter(a => a.severity === 'high');
+  const alert = criticalAlerts[0] || highAlerts[0] || patterns.alerts[0];
+  
+  if (!alert) return false;
+  
+  const hasActiveIntervention = state.activeInterventions.some(i => 
+    i.weakness === alert.weakness && (i.status === 'active' || i.status === 'improving')
+  );
+  
+  if (hasActiveIntervention) return false;
+  
+  const today = new Date().toDateString();
+  const dismissedToday = state.dismissedAlerts.some(d => 
+    d.weakness === alert.weakness && d.date === today
+  );
+  
+  if (dismissedToday) return false;
+  
+  showInterventionModal(alert);
+  return true;
+}
+
+function showInterventionModal(alert) {
+  const drills = getPrescriptiveDrills(alert.weakness);
+  
+  if (drills.length === 0) {
+    showToast(`⚠️ Chronic issue detected: ${alert.weakness}`, 'warning');
+    return;
+  }
+  
+  const modal = document.createElement('div');
+  modal.id = 'interventionModal';
+  modal.className = 'intervention-modal-overlay';
+  modal.innerHTML = `
+    <div class="intervention-modal">
+      <div class="intervention-header">
+        <div class="intervention-alert-badge ${alert.severity}">
+          ${alert.severity === 'critical' ? '🚨 CRITICAL' : '⚠️ HIGH PRIORITY'}
+        </div>
+        <div class="intervention-title">INTERVENTION BLOCK ACTIVATED</div>
+      </div>
+      
+      <div class="intervention-content">
+        <div class="intervention-issue">
+          <div class="intervention-issue-title">${alert.weakness}</div>
+          <div class="intervention-issue-msg">${alert.message}</div>
+        </div>
+        
+        ${alert.evidence ? `
+          <div class="intervention-evidence">
+            <div class="intervention-evidence-title">Evidence:</div>
+            ${alert.evidence.map(e => `<div class="intervention-evidence-item">• ${e}</div>`).join('')}
+          </div>
+        ` : ''}
+        
+        <div class="intervention-impact">
+          This is no longer situational. ${alert.impact === 'mental_performance_link' ? 'This weakness is directly affecting your mental game.' : 'Immediate intervention required.'}
+        </div>
+        
+        <div class="intervention-drills-title">PRESCRIBED WORK (Pick 2):</div>
+        <div class="intervention-drills-list">
+          ${drills.map((drill, i) => `
+            <div class="intervention-drill-card" onclick="toggleInterventionDrill(${i})" id="intDrill${i}">
+              <div class="intervention-drill-check" id="intDrillCheck${i}"></div>
+              <div class="intervention-drill-content">
+                <div class="intervention-drill-title">${drill.title}</div>
+                <div class="intervention-drill-meta">${drill.reps} reps • ${drill.duration} min</div>
+                <div class="intervention-drill-desc">${drill.description}</div>
+                <div class="intervention-drill-test"><strong>Test:</strong> ${drill.test}</div>
+                ${drill.frameData !== 'N/A' ? `<div class="intervention-drill-frame">💡 ${drill.frameData}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="intervention-actions">
+          <button class="intervention-commit-btn" id="interventionCommitBtn" disabled onclick="commitIntervention('${alert.weakness.replace(/'/g, "\\'")}', '${(alert.context || '').replace(/'/g, "\\'")}')">
+            COMMIT TO INTERVENTION
+          </button>
+          <button class="intervention-dismiss-btn" onclick="dismissIntervention('${alert.weakness.replace(/'/g, "\\'")}')">
+            Dismiss for Today
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  window.selectedInterventionDrills = [];
+  window.interventionDrillsData = drills;
+}
+
+function toggleInterventionDrill(index) {
+  if (!window.selectedInterventionDrills) window.selectedInterventionDrills = [];
+  
+  const idx = window.selectedInterventionDrills.indexOf(index);
+  if (idx >= 0) {
+    window.selectedInterventionDrills.splice(idx, 1);
+    document.getElementById(`intDrillCheck${index}`).textContent = '';
+    document.getElementById(`intDrill${index}`).classList.remove('selected');
+  } else {
+    if (window.selectedInterventionDrills.length >= 2) {
+      const oldIdx = window.selectedInterventionDrills.shift();
+      document.getElementById(`intDrillCheck${oldIdx}`).textContent = '';
+      document.getElementById(`intDrill${oldIdx}`).classList.remove('selected');
+    }
+    window.selectedInterventionDrills.push(index);
+    document.getElementById(`intDrillCheck${index}`).textContent = '✓';
+    document.getElementById(`intDrill${index}`).classList.add('selected');
+  }
+  
+  const btn = document.getElementById('interventionCommitBtn');
+  btn.disabled = window.selectedInterventionDrills.length !== 2;
+}
+
+function commitIntervention(weakness, context) {
+  if (!window.selectedInterventionDrills || window.selectedInterventionDrills.length !== 2) return;
+  
+  const selectedDrills = window.selectedInterventionDrills.map(i => window.interventionDrillsData[i]);
+  
+  if (!state.activeInterventions) state.activeInterventions = [];
+  
+  const intervention = {
+    weakness,
+    context,
+    startDay: currentDay,
+    prescribedDrills: selectedDrills.map(d => ({
+      title: d.title,
+      reps: d.reps,
+      duration: d.duration,
+      description: d.description,
+      test: d.test,
+      completions: []
+    })),
+    measurements: [],
+    status: 'active',
+    checkInDays: [currentDay + 3, currentDay + 7],
+    lastCheckIn: null
+  };
+  
+  state.activeInterventions.push(intervention);
+  saveState();
+  
+  document.getElementById('interventionModal')?.remove();
+  showToast(`🎯 Intervention started: ${weakness}`, 'success');
+  
+  const todaySec = document.getElementById('sec_today');
+  if (todaySec && todaySec.classList.contains('active')) {
+    const newToday = buildTodaySectionEnhanced();
+    newToday.classList.add('active');
+    todaySec.replaceWith(newToday);
+  }
+}
+
+function dismissIntervention(weakness) {
+  if (!state.dismissedAlerts) state.dismissedAlerts = [];
+  
+  state.dismissedAlerts.push({
+    weakness,
+    date: new Date().toDateString(),
+    day: currentDay
+  });
+  
+  saveState();
+  document.getElementById('interventionModal')?.remove();
+  showToast('Dismissed for today', 'info');
+}
+
+function checkInterventionProgress() {
+  if (!state.activeInterventions) return;
+  
+  const active = state.activeInterventions.filter(i => i.status === 'active' || i.status === 'improving');
+  
+  active.forEach(intervention => {
+    if (intervention.checkInDays.includes(currentDay) && intervention.lastCheckIn !== currentDay) {
+      const isDay3 = currentDay === intervention.checkInDays[0];
+      showInterventionCheckIn(intervention, isDay3 ? 3 : 7);
+    }
+  });
+}
+
+function showInterventionCheckIn(intervention, dayNum) {
+  const modal = document.createElement('div');
+  modal.className = 'intervention-modal-overlay';
+  modal.innerHTML = `
+    <div class="intervention-modal" style="max-width:500px;">
+      <div class="intervention-header">
+        <div class="intervention-title">DAY ${dayNum} CHECK-IN</div>
+        <div class="intervention-subtitle">${intervention.weakness}</div>
+      </div>
+      
+      <div class="intervention-content">
+        <div class="intervention-checkin-question">
+          <div class="intervention-q-title">Completed drills?</div>
+          ${intervention.prescribedDrills.map((drill, i) => `
+            <div class="intervention-checkin-drill">
+              <label>
+                <input type="checkbox" id="checkinDrill${i}">
+                ${drill.title}
+              </label>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="intervention-checkin-question">
+          <div class="intervention-q-title">How many times: "${intervention.context}"?</div>
+          <input type="number" id="checkinCount" class="intervention-count-input" min="0" max="99" placeholder="0">
+        </div>
+        
+        ${intervention.measurements.length > 0 ? `
+          <div class="intervention-progress-title">Progress:</div>
+          <div class="intervention-progress-nums">
+            ${intervention.measurements.map((m, i) => `<span>${m.count}${i < intervention.measurements.length - 1 ? ' → ' : ''}</span>`).join('')}
+          </div>
+        ` : ''}
+        
+        <button class="intervention-commit-btn" onclick="submitCheckIn(${intervention.startDay}, ${dayNum})" style="width:100%;margin-top:16px;">
+          SUBMIT
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
+
+function submitCheckIn(startDay, dayNum) {
+  const intervention = state.activeInterventions.find(i => i.startDay === startDay);
+  if (!intervention) return;
+  
+  intervention.prescribedDrills.forEach((drill, i) => {
+    const checkbox = document.getElementById(`checkinDrill${i}`);
+    if (checkbox?.checked && !drill.completions.includes(currentDay)) {
+      drill.completions.push(currentDay);
+    }
+  });
+  
+  const count = parseInt(document.getElementById('checkinCount')?.value || '0');
+  intervention.measurements.push({ day: currentDay, count });
+  intervention.lastCheckIn = currentDay;
+  
+  if (intervention.measurements.length >= 2) {
+    const recent = intervention.measurements.slice(-3);
+    const improving = recent[recent.length - 1].count <= recent[0].count;
+    intervention.status = improving ? 'improving' : 'stagnant';
+  }
+  
+  if (dayNum === 7) {
+    const avg = intervention.measurements.slice(-3).reduce((sum, m) => sum + m.count, 0) / 3;
+    
+    if (avg <= 2) {
+      intervention.status = 'resolved';
+      
+      if (!state.userProfile) state.userProfile = {};
+      if (!state.userProfile.successfulSolutions) state.userProfile.successfulSolutions = [];
+      
+      state.userProfile.successfulSolutions.push({
+        weakness: intervention.weakness,
+        drills: intervention.prescribedDrills.map(d => d.title),
+        resolvedDay: currentDay
+      });
+      
+      showToast(`🎉 ${intervention.weakness} RESOLVED!`, 'success');
+    }
+  }
+  
+  saveState();
+  document.querySelector('.intervention-modal-overlay')?.remove();
+  
+  showToast(`Check-in recorded. ${intervention.status === 'improving' ? '📈 Improving!' : '➡️ Continue work'}`, 'info');
+}
+
+function getActiveInterventions() {
+  if (!state.activeInterventions) return [];
+  return state.activeInterventions.filter(i => i.status === 'active' || i.status === 'improving');
+}
 
 function buildUserProfile() {
   if (!state.userProfile) {
