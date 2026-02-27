@@ -11823,6 +11823,9 @@ function showForcedVODReview(setData) {
     </div>
   `;
   document.body.appendChild(modal);
+  
+  // Setup listeners after modal is added
+  setTimeout(() => setupVODInputListeners(), 100);
 }
 
 function buildElitePostLossQuestions(setData) {
@@ -11943,20 +11946,57 @@ function submitForcedVOD() {
 function scoreEliteAnalysis(analysis) {
   let score = 0;
   
-  // Must answer all critical questions
-  if (analysis.turningPoint.length > 20) score += 1.5;
-  if (analysis.superiority.length > 30) score += 1.5;
-  if (analysis.noAnswer.length > 15) score += 1;
-  if (analysis.gameplan.length > 30) score += 1.5;
-  if (analysis.repetition.length > 30) score += 1.5;
-  if (analysis.habits.length > 20) score += 1;
-  if (analysis.rootCause.length > 40) score += 2;
+  // Must answer all critical questions (more lenient)
+  if (analysis.turningPoint.length > 15) score += 1.5;
+  if (analysis.superiority.length > 20) score += 1.5;
+  if (analysis.noAnswer.length > 10) score += 1;
+  if (analysis.gameplan.length > 20) score += 1.5;
+  if (analysis.repetition.length > 20) score += 1.5;
+  if (analysis.habits.length > 15) score += 1;
+  if (analysis.rootCause.length > 25) score += 2;
   
   // Bonus for selections
   if (analysis.conversionRate) score += 0.5;
   if (analysis.flowchart) score += 0.5;
   
   return Math.round(score);
+}
+
+function checkVODAnalysisComplete() {
+  const turningPoint = document.getElementById('vod_turningPoint')?.value.trim() || '';
+  const superiority = document.getElementById('vod_superiority')?.value.trim() || '';
+  const noAnswer = document.getElementById('vod_noAnswer')?.value.trim() || '';
+  const drops = document.getElementById('vod_drops')?.value.trim() || '';
+  const gameplan = document.getElementById('vod_gameplan')?.value.trim() || '';
+  const repetition = document.getElementById('vod_repetition')?.value.trim() || '';
+  const habits = document.getElementById('vod_habits')?.value.trim() || '';
+  const rootCause = document.getElementById('vod_rootCause')?.value.trim() || '';
+  
+  // All critical fields must have SOMETHING
+  const allAnswered = turningPoint.length > 0 && 
+                      superiority.length > 0 && 
+                      noAnswer.length > 0 && 
+                      gameplan.length > 0 && 
+                      repetition.length > 0 && 
+                      habits.length > 0 && 
+                      rootCause.length > 0;
+  
+  const btn = document.getElementById('vodAnalysisSubmit');
+  if (btn) btn.disabled = !allAnswered;
+}
+
+function setupVODInputListeners() {
+  const ids = ['vod_turningPoint', 'vod_superiority', 'vod_noAnswer', 'vod_drops', 
+               'vod_gameplan', 'vod_repetition', 'vod_habits', 'vod_rootCause',
+               'vod_conversionRate', 'vod_flowchart'];
+  
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', checkVODAnalysisComplete);
+      el.addEventListener('change', checkVODAnalysisComplete);
+    }
+  });
 }
 
 function addOpponentToLocalScene(opponent, setData) {
